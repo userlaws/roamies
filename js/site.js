@@ -5,7 +5,7 @@
 
 /* ---------- fill these in when there is something to hand out ---------- */
 const CONFIG = {
-  windowsUrl: '',   // link to the Windows installer. Empty: the button says "coming soon".
+  windowsUrl: 'https://github.com/userlaws/roamies/releases/latest/download/Roamies-Setup.exe',   // link to the Windows installer. Empty: the button says "coming soon".
   notifyUrl: '',    // a waitlist, newsletter or Discord link to offer until then. Empty: no second button.
 };
 
@@ -744,6 +744,8 @@ addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('reveal').hidd
 if (CONFIG.windowsUrl) {
   $('download').href = CONFIG.windowsUrl; $('downloadLabel').textContent = 'Download for Windows';
   $('downloadNote').textContent = 'Free. Windows 10 and 11.';
+  // The installer isn't code-signed yet, so say what the blue SmartScreen box is before it surprises anyone.
+  $('downloadNote').append(el('br'), el('span', 'fine', 'Windows may stop the installer the first time: press "More info", then "Run anyway".'));
   for (const a of document.querySelectorAll('a[href="#get"]')) if (a !== $('download') && a.classList.contains('big')) a.href = CONFIG.windowsUrl;
 } else {
   $('download').classList.add('waiting');
