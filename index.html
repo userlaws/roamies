@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roamies: a pet that lives on top of your desktop</title>
+<meta name="description" content="A pixel pet that walks your taskbar, climbs your windows, steps in when you've watched too much video, and can walk off your screen onto a friend's.">
+<meta property="og:title" content="Roamies: a pet that lives on top of your desktop">
+<meta property="og:description" content="It walks your taskbar, climbs your windows, nudges you off video, and visits your friends.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#221b2e">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/site.css">
+<script>document.documentElement.className = 'js';</script>
+</head>
+<body>
+<canvas id="sky" aria-hidden="true"></canvas>
+
+<main id="desk">
+
+  <!-- ============ 8:30 AM · hero ============ -->
+  <section class="scene hero" id="top" data-hour="8.5">
+    <div class="hero-copy">
+      <p class="stamp"><canvas class="ico" data-ico="paw"></canvas>Roamies v0.1 · a desktop pet</p>
+      <h1 class="sky-type">A pet that lives on top of your desktop.</h1>
+      <p class="caption">It walks your taskbar, climbs your windows and rides them when you drag them. It steps in when you've watched too much video. And it can walk off your screen and onto a friend's.</p>
+      <div class="cta-row">
+        <a class="btn big" href="#get" data-snd="click"><canvas class="ico" data-ico="down"></canvas>Get Roamies</a>
+        <a class="btn big ghost" href="#roam" data-snd="click">See what it does</a>
+      </div>
+    </div>
+
+    <div class="hero-wins">
+      <article class="win w-readme" data-perch="readme" data-title="readme.txt" style="--bar: var(--sun)">
+        <header class="win-bar"><canvas class="ico" data-ico="doc"></canvas><b>readme.txt</b></header>
+        <div class="win-body">
+          <h2 class="win-h">This page is a desktop.</h2>
+          <p>That's a real Roamie walking around down there. Same sprites, same sounds and the same physics as the app. Go on:</p>
+          <ul class="todo" id="todo">
+            <li data-quest="pat"><i></i>Poke it for hearts</li>
+            <li data-quest="purr"><i></i>Rub your mouse over it until it purrs</li>
+            <li data-quest="throw"><i></i>Pick it up and throw it</li>
+            <li data-quest="ride"><i></i>Drag a window while it's standing on it</li>
+          </ul>
+          <p class="fine" id="todoNote">Each one pays 15 coins. You'll want them further down.</p>
+        </div>
+      </article>
+
+      <article class="win term w-status" data-perch="status" data-title="status" style="--bar: var(--mint)">
+        <header class="win-bar"><canvas class="ico" data-ico="paw"></canvas><b><span data-petname>Pip</span>.status</b></header>
+        <div class="win-body">
+          <dl class="readout">
+            <div><dt>doing</dt><dd id="stDoing">falling in</dd></div>
+            <div><dt>where</dt><dd id="stWhere">mid-air</dd></div>
+            <div><dt>sound</dt><dd><button class="linkish" id="stSound" data-snd="none">off. turn it on?</button></dd></div>
+          </dl>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ 10 AM · roam ============ -->
+  <section class="scene" id="roam" data-hour="10">
+    <div class="scene-head">
+      <p class="stamp"><canvas class="ico" data-ico="sun"></canvas><time>10:02 AM</time></p>
+      <h2 class="sky-type">Your windows are its furniture.</h2>
+      <p class="caption">Roamies draws one click-through layer over your whole desktop. The pet in it knows where your windows are and treats their top edges as ledges.</p>
+    </div>
+
+    <div class="scatter roam-grid">
+      <article class="win w-a" data-perch="taskbar-note" data-title="taskbar" style="--bar: var(--mint)">
+        <header class="win-bar"><canvas class="ico" data-ico="win"></canvas><b>taskbar</b></header>
+        <div class="win-body">
+          <h3 class="win-h">Home is the taskbar</h3>
+          <p>It walks along the top of it. If your taskbar auto-hides, it uses the bottom edge of the screen instead.</p>
+        </div>
+      </article>
+
+      <article class="win w-b" data-perch="ledges" data-title="ledges" style="--bar: var(--sky)">
+        <header class="win-bar"><canvas class="ico" data-ico="win"></canvas><b>ledges</b></header>
+        <div class="win-body">
+          <h3 class="win-h">Every title bar is a ledge</h3>
+          <p>It jumps up, wanders along, sits down, sometimes falls asleep there. Maximized windows have no top edge to reach, so it leaves those alone.</p>
+        </div>
+      </article>
+
+      <article class="win w-c" data-perch="drag-me" data-title="drag me" style="--bar: var(--orange)">
+        <header class="win-bar"><canvas class="ico" data-ico="hand"></canvas><b>drag me</b></header>
+        <div class="win-body">
+          <h3 class="win-h">It rides</h3>
+          <p>Drag a window with the pet on it and the pet comes along. Close the window and it drops to whatever is underneath.</p>
+          <p class="fine drag-hint">Every window on this page drags by its title bar. Double-click one to put it back.</p>
+        </div>
+      </article>
+
+      <article class="win w-d" data-perch="monitors" data-title="monitors" style="--bar: var(--pink)">
+        <header class="win-bar"><canvas class="ico" data-ico="monitor"></canvas><b>monitors</b></header>
+        <div class="win-body split">
+          <div class="mons" aria-hidden="true">
+            <div class="mon m1"></div><div class="mon m2"></div><div class="mon m3"></div>
+            <canvas class="mon-pet" id="monPet" width="16" height="23"></canvas>
+          </div>
+          <div>
+            <h3 class="win-h">All your monitors</h3>
+            <p>It walks between side-by-side screens, jumps up or drops down to stacked ones, and poofs across gaps it can't walk.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="win w-e" data-perch="games" data-title="games" style="--bar: var(--grape)">
+        <header class="win-bar"><canvas class="ico" data-ico="pad"></canvas><b>games</b></header>
+        <div class="win-body">
+          <h3 class="win-h">It gets out of the way</h3>
+          <p>Over a fullscreen game it moves to another monitor, or hides until the game closes. Fullscreen video, slides and F11 browsers don't count as games.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ 12:30 PM · play ============ -->
+  <section class="scene" id="play" data-hour="12.5">
+    <div class="scene-head right">
+      <p class="stamp"><canvas class="ico" data-ico="sun"></canvas><time>12:30 PM</time></p>
+      <h2 class="sky-type">It notices you.</h2>
+      <p class="caption">It watches your mouse when you're close, and has opinions about the apps you open. These buttons are the app's Play tab, wired to the pet on this page.</p>
+    </div>
+
+    <div class="scatter play-grid">
+      <article class="win w-a" data-perch="play" data-title="Play" style="--bar: var(--orange)">
+        <header class="win-bar"><canvas class="ico" data-ico="pad"></canvas><b>Play</b></header>
+        <div class="win-body">
+          <div class="actions" id="actions">
+            <button data-act="feed" data-snd="click"><canvas class="art" data-art="food"></canvas><span><b>Drop a snack</b><small>A fish falls from the top of the screen.</small></span></button>
+            <button data-act="ball" data-snd="click"><canvas class="art" data-art="ball"></canvas><span><b>Throw a ball</b><small>It chases it and kicks it around.</small></span></button>
+            <button data-act="pet" data-snd="none"><canvas class="art" data-art="heart"></canvas><span><b>Give pets</b><small>A happy little hop.</small></span></button>
+            <button data-act="come" data-snd="click"><canvas class="art" data-art="paw"></canvas><span><b>Come here</b><small>In the app: <kbd>Ctrl</kbd> <kbd>Alt</kbd> <kbd>P</kbd>, from anywhere.</small></span></button>
+          </div>
+          <p class="label">Emotes</p>
+          <div class="emotes" id="emotes">
+            <button class="btn small ghost" data-act="emote:dance" data-snd="click">Dance</button>
+            <button class="btn small ghost" data-act="emote:flip" data-snd="click">Flip</button>
+            <button class="btn small ghost" data-act="emote:love" data-snd="none">Love</button>
+            <button class="btn small ghost" data-act="emote:nap" data-snd="click">Nap</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="win w-b" data-perch="mouse" data-title="mouse.txt" style="--bar: var(--sun)">
+        <header class="win-bar"><canvas class="ico" data-ico="doc"></canvas><b>mouse.txt</b></header>
+        <div class="win-body">
+          <h3 class="win-h">With the mouse</h3>
+          <ul class="plain">
+            <li><b>Click</b> it for hearts.</li>
+            <li><b>Rub</b> back and forth over it and it purrs.</li>
+            <li><b>Grab and throw</b> it.</li>
+            <li><b>Drop it from too high</b> and it yelps "ow" and sees stars.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="win w-c" data-perch="quips" data-title="it says" style="--bar: var(--sky)">
+        <header class="win-bar"><canvas class="ico" data-ico="chat"></canvas><b>it says</b></header>
+        <div class="win-body">
+          <h3 class="win-h">When you switch apps</h3>
+          <ul class="quips">
+            <li><span>your code editor</span><q>ship it!</q></li>
+            <li><span>Spotify</span><q>turn it up</q> <em>and it dances</em></li>
+            <li><span>Discord, Slack, Teams</span><q>say hi for me</q></li>
+            <li><span>File Explorer</span><q>looking for snacks?</q></li>
+            <li><span>Figma, Photoshop</span><q>ooh, pretty</q></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="win w-d" data-perch="voices" data-title="voices" style="--bar: var(--pink)">
+        <header class="win-bar"><canvas class="ico" data-ico="note"></canvas><b>voices</b></header>
+        <div class="win-body">
+          <h3 class="win-h">Twelve characters, twelve voices</h3>
+          <p>Every sound is synthesized in code. There isn't a single audio file in the app. Tap a face to hear it.</p>
+          <div class="voices" id="voices"></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ 4:45 PM · breaks ============ -->
+  <section class="scene" id="breaks" data-hour="16.75">
+    <div class="scene-head">
+      <p class="stamp"><canvas class="ico" data-ico="clock"></canvas><time>4:45 PM</time></p>
+      <h2 class="sky-type">It knows how long you've been watching.</h2>
+    </div>
+
+    <div class="scatter breaks-grid">
+      <article class="win app w-a" data-perch="video" data-title="fish cam" style="--bar: var(--sky)">
+        <header class="win-bar"><canvas class="ico" data-ico="play"></canvas><b>fish cam · LIVE</b></header>
+        <div class="video">
+          <canvas id="fishcam" width="128" height="72"></canvas>
+          <div class="video-ui">
+            <span class="live">LIVE</span>
+            <div class="scrub"><i id="scrub"></i></div>
+            <span class="timecode" id="timecode">44:38</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="win w-b" data-perch="breaks-note" data-title="break timer" style="--bar: var(--orange)">
+        <header class="win-bar"><canvas class="ico" data-ico="clock"></canvas><b>break timer</b></header>
+        <div class="win-body">
+          <p>After 45 minutes of YouTube, Twitch, Netflix and the like in front, it climbs onto the video and asks if you want a stretch.</p>
+          <ul class="outcomes">
+            <li><b>Take a break</b><span>"proud of you!" and 40 coins</span></li>
+            <li><b>5 more min</b><span>"fine. five." It's back in five.</span></li>
+            <li><b>Ignore it</b><span>It starts stomping.</span></li>
+          </ul>
+          <button class="btn" id="nagTry" data-snd="click">Try the break nudge</button>
+          <p class="fine">45 is the default. You pick the number in Settings.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ 8 PM · friends ============ -->
+  <section class="scene" id="friends" data-hour="20">
+    <div class="scene-head">
+      <p class="stamp"><canvas class="ico" data-ico="moon"></canvas><time>8:10 PM</time></p>
+      <h2 class="sky-type">It can leave your screen. It always comes back.</h2>
+      <p class="caption">Add a friend and your pets can walk onto each other's desktops. Yours strolls off the edge of your screen, turns up on theirs, leaves a gift box and comes home with a postcard.</p>
+    </div>
+
+    <div class="scatter friends-grid">
+      <article class="win app w-a" data-perch="friends" data-title="Friends" style="--bar: var(--pink)">
+        <header class="win-bar"><canvas class="ico" data-ico="heart"></canvas><b>Friends</b></header>
+        <div class="win-body">
+          <p class="label">A friend code looks like this</p>
+          <div class="code" id="code" aria-label="Example friend code"></div>
+          <p class="muted">Eight letters and numbers, made on your computer the first time the app runs. No sign-up.</p>
+          <p class="label">Friends</p>
+          <div class="person">
+            <canvas id="daniFace" width="16" height="23"></canvas>
+            <div class="who"><b>Dani</b><small id="daniLine"><i class="dot on"></i>Online</small></div>
+            <button class="btn small" id="sendPet" data-snd="click">Send pet</button>
+            <button class="btn small ghost" id="inviteDani" data-snd="click">Invite over</button>
+          </div>
+          <p class="fine muted" id="visitNote">Dani isn't a real person. This is a rehearsal of what a visit looks like.</p>
+        </div>
+      </article>
+
+      <article class="win app w-b" data-perch="dani" data-title="Dani's desktop" style="--bar: var(--grape)">
+        <header class="win-bar"><canvas class="ico" data-ico="monitor"></canvas><b>Dani's desktop</b></header>
+        <div class="monitor"><canvas id="daniScreen" width="160" height="90"></canvas></div>
+      </article>
+
+      <article class="win w-c" data-perch="rules" data-title="rules.txt" style="--bar: var(--mint)">
+        <header class="win-bar"><canvas class="ico" data-ico="doc"></canvas><b>rules.txt</b></header>
+        <div class="win-body">
+          <h3 class="win-h">Safe to hand your code around</h3>
+          <ul class="plain">
+            <li><b>Nobody is your friend until you accept.</b> Decline once and their later requests are ignored.</li>
+            <li><b>A pet that leaves always comes back.</b> When the friend sends it home, if either side drops, or after 100 seconds at the latest.</li>
+            <li><b>Napping or mid-game?</b> A visitor is sent straight home instead of left waiting.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="win term w-d" data-perch="relay" data-title="relay" style="--bar: var(--sky)">
+        <header class="win-bar"><canvas class="ico" data-ico="monitor"></canvas><b>what the server sees</b></header>
+        <div class="win-body">
+          <dl class="readout tall">
+            <div><dt>sees</dt><dd>pet names, outfits, who is friends with whom</dd></div>
+            <div><dt>never</dt><dd>window titles, or anything else about your screen</dd></div>
+            <div><dt>keeps</dt><dd>nothing on disk</dd></div>
+          </dl>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ 10:30 PM · wardrobe ============ -->
+  <section class="scene" id="wardrobe" data-hour="22.5">
+    <div class="scene-head">
+      <p class="stamp"><canvas class="ico" data-ico="moon"></canvas><time>10:30 PM</time></p>
+      <h2 class="sky-type">Any character wears any color, any hat.</h2>
+      <p class="caption"><span id="counts">12 characters, 14 colors, 22 hats, 6 face items and 7 buddies.</span> In the app you earn them. On this page everything is unlocked, and whatever you pick goes straight onto the pet walking around.</p>
+    </div>
+
+    <article class="win app w-wardrobe" data-perch="wardrobe" data-title="Wardrobe" style="--bar: var(--orange)">
+      <header class="win-bar"><canvas class="ico" data-ico="shirt"></canvas><b>Wardrobe</b></header>
+      <div class="wardrobe">
+        <aside class="side">
+          <div class="stage" id="stage" title="Click to pet">
+            <div class="moon"></div>
+            <canvas id="preview"></canvas>
+          </div>
+          <input id="name" class="name" maxlength="16" spellcheck="false" aria-label="Pet name" title="Click to rename">
+          <p class="hint">Click the name to change it. Click an item to wear it; click it again to take it off.</p>
+          <button class="btn small ghost" id="shuffle" data-snd="none">Surprise me</button>
+        </aside>
+        <div class="closet">
+          <div class="kinds" id="kinds" role="tablist"></div>
+          <div class="grid" id="grid"></div>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <!-- ============ 11:20 PM · capsules ============ -->
+  <section class="scene" id="capsules" data-hour="23.3">
+    <div class="scene-head narrow">
+      <p class="stamp"><canvas class="ico" data-ico="moon"></canvas><time>11:20 PM</time></p>
+      <h2 class="sky-type">A capsule machine with the odds printed on it.</h2>
+    </div>
+
+    <div class="scatter capsule-grid">
+      <article class="win app w-a" data-perch="capsule" data-title="Capsules" style="--bar: var(--pink)">
+        <header class="win-bar"><canvas class="ico" data-ico="capsule"></canvas><b>Capsules</b></header>
+        <div class="win-body capsule-wrap">
+          <div class="machine" id="machine">
+            <div class="dome"><div id="balls"></div><div class="shine"></div></div>
+            <div class="base">
+              <div class="plate">CAPSULES</div>
+              <button class="knob" id="knob" data-snd="none" title="Spin" aria-label="Spin the capsule machine"><span></span></button>
+              <div class="chute"><button class="prize" id="prize" data-snd="none" hidden><span>Open!</span></button></div>
+            </div>
+          </div>
+          <div class="capsule-side">
+            <p>Every capsule holds one thing you don't own yet: a character, a color, a hat, a face item or a buddy. No duplicates, ever.</p>
+            <button id="spin" class="btn big" data-snd="none">Spin · 120 coins</button>
+            <p class="muted" id="capsuleLeft"></p>
+            <div class="odds">
+              <span class="r-common">Common 60%</span><span class="r-rare">Rare 28%</span><span class="r-epic">Epic 10%</span><span class="r-legendary">Legendary 2%</span>
+            </div>
+            <p class="muted fine">When a tier runs out, its share goes to the others. This machine runs on the coins in the taskbar.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="win w-b" data-perch="coins" data-title="coins.txt" style="--bar: var(--sun)">
+        <header class="win-bar"><canvas class="ico" data-ico="coin"></canvas><b>coins.txt</b></header>
+        <div class="win-body">
+          <h3 class="win-h">Coins come from using it</h3>
+          <table class="ledger">
+            <tr><td>Starting balance</td><td>600</td></tr>
+            <tr><td>Pet out on the desktop</td><td>1 a minute</td></tr>
+            <tr><td>Taking a video break</td><td>40</td></tr>
+            <tr><td>Your pet coming home from a visit</td><td>25</td></tr>
+            <tr><td>Opening a gift a visitor left</td><td>10 to 40</td></tr>
+            <tr><td>Daily reward, day 1 to day 7</td><td>20 to 150</td></tr>
+            <tr><td>Daily quests</td><td>25 to 60</td></tr>
+            <tr><td>Achievements</td><td>50 to 200</td></tr>
+          </table>
+          <p class="stampline">There is no real-money purchase anywhere.</p>
+        </div>
+      </article>
+
+      <article class="win w-c" data-perch="earned" data-title="earned" style="--bar: var(--mint)">
+        <header class="win-bar"><canvas class="ico" data-ico="star"></canvas><b>earned, not bought</b></header>
+        <div class="win-body">
+          <p>Four things never show up in a capsule or the shop.</p>
+          <ul class="earned" id="earned"></ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ midnight · get it ============ -->
+  <section class="scene finale" id="get" data-hour="24">
+    <p class="stamp"><canvas class="ico" data-ico="moon"></canvas><time>12:00 AM</time></p>
+    <h2 class="sky-type huge">Give your desktop a pet.</h2>
+    <div class="cta-row center">
+      <a class="btn huge" id="download" href="#get" data-snd="none"><canvas class="ico" data-ico="down"></canvas><span id="downloadLabel">Windows build coming soon</span></a>
+    </div>
+    <p class="caption center" id="downloadNote">Roamies is at v0.1 and the installer isn't out yet. Windows comes first.</p>
+
+    <div class="scatter finale-grid">
+      <article class="win w-a" data-perch="windows" data-title="windows" style="--bar: var(--sky)">
+        <header class="win-bar"><canvas class="ico" data-ico="win"></canvas><b>on Windows</b></header>
+        <div class="win-body">
+          <p>Built and tested here. The pet walks the taskbar, or the bottom screen edge if the taskbar auto-hides.</p>
+          <p class="fine">Not handled yet: monitors with different scaling side by side (100% next to 150%).</p>
+        </div>
+      </article>
+      <article class="win w-b" data-perch="mac" data-title="macOS" style="--bar: var(--grape)">
+        <header class="win-bar"><canvas class="ico" data-ico="win"></canvas><b>on macOS</b></header>
+        <div class="win-body">
+          <p>Planned, not tested yet. To see your windows it will need the Screen Recording permission; without it the pet stays on the dock line.</p>
+        </div>
+      </article>
+      <article class="win term w-c" data-perch="inside" data-title="inside" style="--bar: var(--mint)">
+        <header class="win-bar"><canvas class="ico" data-ico="gear"></canvas><b>what's in the box</b></header>
+        <div class="win-body">
+          <dl class="readout tall">
+            <div><dt>tabs</dt><dd>Wardrobe, Capsules, Friends, Quests, Play, Settings</dd></div>
+            <div><dt>daily</dt><dd>a 7-day reward streak and three quests</dd></div>
+            <div><dt>hotkey</dt><dd>Ctrl+Alt+P calls the pet to your mouse</dd></div>
+            <div><dt>price</dt><dd>coins only. Nothing to buy with real money.</dd></div>
+          </dl>
+        </div>
+      </article>
+    </div>
+
+    <footer class="foot">
+      <canvas id="footPet" width="16" height="23" aria-hidden="true"></canvas>
+      <p>Roamies v0.1. The pet on this page is drawn from the app's own sprite sheet and makes the app's own noises.</p>
+      <p><button class="linkish" id="resetSite" data-snd="click">Reset this page's coins and outfit</button></p>
+    </footer>
+  </section>
+</main>
+
+<!-- ============ the taskbar is the nav ============ -->
+<nav class="taskbar" id="taskbar" aria-label="Sections">
+  <a class="tb-start" href="#top" data-snd="click" aria-label="Roamies, back to the top"><canvas id="brandFace" width="16" height="14"></canvas><b>Roamies</b></a>
+  <div class="tb-apps" id="tbApps">
+    <a href="#roam" data-snd="tab"><canvas class="ico" data-ico="win"></canvas><span>Roam</span></a>
+    <a href="#play" data-snd="tab"><canvas class="ico" data-ico="pad"></canvas><span>Play</span></a>
+    <a href="#breaks" data-snd="tab"><canvas class="ico" data-ico="clock"></canvas><span>Breaks</span></a>
+    <a href="#friends" data-snd="tab"><canvas class="ico" data-ico="heart"></canvas><span>Friends</span></a>
+    <a href="#wardrobe" data-snd="tab"><canvas class="ico" data-ico="shirt"></canvas><span>Wardrobe</span></a>
+    <a href="#capsules" data-snd="tab"><canvas class="ico" data-ico="capsule"></canvas><span>Capsules</span></a>
+  </div>
+  <div class="tb-tray">
+    <a class="tb-pill" id="coinPill" href="#capsules" title="Coins. Earn them by playing, spend them at the capsule machine." data-snd="click"><span class="coin"></span><b id="coins">600</b></a>
+    <button class="tb-btn" id="sound" aria-pressed="false" title="Sound on or off" data-snd="none"><canvas class="ico" data-ico="note"></canvas></button>
+    <time class="tb-clock" id="clock" title="It gets later as you scroll">8:30 AM</time>
+    <a class="btn small tb-get" href="#get" data-snd="click">Get it</a>
+  </div>
+</nav>
+
+<div id="toasts" aria-live="polite"></div>
+
+<!-- Reveal: what came out of the capsule -->
+<div class="veil" id="reveal" hidden>
+  <div class="reveal-box" role="dialog" aria-modal="true" aria-labelledby="revealName">
+    <div class="rays"></div>
+    <div class="reveal-rarity" id="revealRarity"></div>
+    <canvas id="revealArt"></canvas>
+    <h2 id="revealName"></h2>
+    <p class="muted" id="revealKind"></p>
+    <div class="row-btns center">
+      <button class="btn" id="revealWear" data-snd="none">Wear it</button>
+      <button class="btn ghost" id="revealOk" data-snd="click">Nice!</button>
+    </div>
+  </div>
+</div>
+
+<noscript><p class="noscript">The pet needs JavaScript to walk around. Everything else on this page still reads fine without it.</p></noscript>
+
+<script src="js/sprites.js"></script>
+<script src="js/sfx.js"></script>
+<script src="js/pet-web.js"></script>
+<script src="js/site.js"></script>
+</body>
+</html>
