@@ -620,7 +620,7 @@ function draw() {
 }
 
 /* ---------- loop ---------- */
-let last = performance.now();
+let last = performance.now(), spawnAt = 0;
 // Whatever goes wrong in one frame, the next one still runs: a single bad frame must never freeze the pet for good.
 function frame(now) {
   try { step(now); }
@@ -629,6 +629,8 @@ function frame(now) {
 }
 function step(now) {
   const dt = clamp((now - last) / 1000, 0, .05); last = now;
+  // A tab loaded in the background can start with no size. Drop the pet in once there is a screen to drop it into.
+  if (spawnAt) { if (document.documentElement.clientWidth < 50) return; resize(); me.x = world.w * spawnAt; spawnAt = 0; }
   readSurfaces();
   for (const p of [...world.pets]) {
     p.anim += dt; p.jumpCd -= dt; p.squash = Math.max(0, p.squash - dt * 4); p.dizzy = Math.max(0, p.dizzy - dt);
@@ -685,7 +687,8 @@ function start(o) {
     if (p && p.bubble && p.bubble.onPick) p.bubble.onPick(b.dataset.act);
   });
   resize();
-  me = makePet({ name: o.name, ...cleanLook(o.look), x: world.w * (o.x || .5), y: 60 });
+  spawnAt = o.x || .5;
+  me = makePet({ name: o.name, ...cleanLook(o.look), x: world.w * spawnAt, y: 60 });
   world.pets.push(me);
   const hour = new Date().getHours();
   say(me, hour < 5 ? 'up late, huh?' : hour < 11 ? 'good morning!' : hour >= 22 ? 'getting late...' : `hi! I'm ${o.name}`, 2.4);
