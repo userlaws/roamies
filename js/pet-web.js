@@ -429,7 +429,7 @@ function comeHome({ gift, coins }) {
 }
 function openGift(g) {
   removeItem(g);
-  sfx('gift');
+  sfx('unwrap');
   burst('star', g.x, g.y - 14, 10, { vx: 120, vy1: -260, vy2: -80, max: .9 });
   emit('earn', g.value);
   if (!away() && !(me.bubble && me.bubble.buttons)) say(me, `ooh!  +${g.value} coins`, 2);
