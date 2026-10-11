@@ -15,31 +15,39 @@ const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ---------- what this page remembers about you ---------- */
 const STORE = 'roamies-site-v1';
-const blank = () => ({ coins: 600, name: 'Pip', look: { char: 'cat', skin: 'classic', hat: null, face: null, buddy: null }, won: [], quests: [], sound: false, nagPaid: false, code: '' });
+const blank = () => ({ coins: 600, name: 'Pip', look: { char: 'cat', skin: 'classic', hat: null, face: null, buddy: null }, won: [], quests: [], sound: true, soundSet: false, nagPaid: false, code: '' });
 function load() {
-  try { const s = Object.assign(blank(), JSON.parse(localStorage.getItem(STORE)) || {}); s.look = Object.assign(blank().look, s.look); return s; }
+  try {
+    const s = Object.assign(blank(), JSON.parse(localStorage.getItem(STORE)) || {}); s.look = Object.assign(blank().look, s.look);
+    if (!s.soundSet) s.sound = true;   // sound is on unless this visitor has used the switch themselves
+    return s;
+  }
   catch (err) { return blank(); }
 }
 const state = load();
 function save() { try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (err) { /* private window: fine, nothing persists */ } }
 
-/* ---------- sound: off until asked for, and never before the first click ---------- */
-// Web Audio can't start before a gesture, and anything scheduled early all plays at once when it does.
+/* ---------- sound: on by default, from the visitor's first click, tap or key press ---------- */
+// Browsers don't let a page make noise before that, and anything scheduled early would all play at once when they do.
 let armed = false;
 SFX.set({ enabled: false, volume: .55 });
 function applySound() {
   SFX.set({ enabled: armed && state.sound });
   $('sound').setAttribute('aria-pressed', String(state.sound));
   paintIcon($('sound').firstElementChild);
-  $('stSound').textContent = state.sound ? 'on' : 'off. turn it on?';
+  $('stSound').textContent = state.sound ? 'on. turn it off?' : 'off. turn it on?';
 }
 function setSound(on) {
-  state.sound = on; armed = true; applySound(); save();
+  state.sound = on; state.soundSet = true; armed = true; applySound(); save();
   if (on) SFX.play('on');
 }
-const arm = () => { if (!armed) { armed = true; applySound(); } };
-addEventListener('pointerdown', arm, { capture: true });
-addEventListener('keydown', arm, { capture: true });
+const arm = () => {
+  if (armed) return;
+  // Wait for an action the browser itself counts (a scroll or a Tab press doesn't), or the audio stays suspended.
+  if (navigator.userActivation && !navigator.userActivation.hasBeenActive) return;
+  armed = true; applySound();
+};
+for (const type of ['pointerdown', 'pointerup', 'keydown', 'click']) addEventListener(type, arm, { capture: true });
 $('sound').addEventListener('click', () => setSound(!state.sound));
 $('stSound').addEventListener('click', () => setSound(!state.sound));
 // Anything with data-snd makes that sound when clicked, like the app window does.
