@@ -7,6 +7,7 @@
 const CONFIG = {
   windowsUrl: 'https://github.com/userlaws/roamies/releases/latest/download/Roamies-Setup.exe',   // link to the Windows installer. Empty: the button says "coming soon".
   notifyUrl: '',    // a waitlist, newsletter or Discord link to offer until then. Empty: no second button.
+  releases: 'userlaws/roamies',   // the GitHub repo whose releases are the app's versions. The page shows the newest one's tag.
 };
 
 const $ = (id) => document.getElementById(id);
@@ -743,7 +744,8 @@ addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('reveal').hidd
 /* ---------- getting it ---------- */
 if (CONFIG.windowsUrl) {
   $('download').href = CONFIG.windowsUrl; $('downloadLabel').textContent = 'Download for Windows';
-  $('downloadNote').textContent = 'Free. Windows 10 and 11.';
+  const shipped = el('span', null, document.querySelector('[data-version]').textContent); shipped.dataset.version = '';
+  $('downloadNote').replaceChildren('Free. Windows 10 and 11. The latest is ', shipped, '.');
   // The installer isn't code-signed yet, so say what the blue SmartScreen box is before it surprises anyone.
   $('downloadNote').append(el('br'), el('span', 'fine', 'Windows may stop the installer the first time: press "More info", then "Run anyway".'));
   for (const a of document.querySelectorAll('a[href="#get"]')) if (a !== $('download') && a.classList.contains('big')) a.href = CONFIG.windowsUrl;
@@ -758,6 +760,27 @@ if (CONFIG.windowsUrl) {
     $('download').after(a);
   }
 }
+
+/* ---------- which version is out ---------- */
+// Every release is tagged v<version> on GitHub, so the page asks there and never needs editing for a release.
+// The number written into the HTML is only what shows until the answer arrives, or if it never does.
+(async () => {
+  const KEY = 'roamies-latest';
+  const show = (v) => { for (const n of document.querySelectorAll('[data-version]')) n.textContent = v; };
+  try {
+    const kept = JSON.parse(localStorage.getItem(KEY));
+    if (kept && kept.v) { show(kept.v); if (Date.now() - kept.at < 10 * 60 * 1000) return; }   // asked within the last ten minutes
+  } catch (err) { /* nothing kept */ }
+  try {
+    const r = await fetch(`https://api.github.com/repos/${CONFIG.releases}/releases/latest`, { headers: { Accept: 'application/vnd.github+json' } });
+    if (!r.ok) return;
+    const tag = String((await r.json()).tag_name || '');
+    if (!/^v\d+(\.\d+){1,3}$/.test(tag)) return;
+    show(tag);
+    try { localStorage.setItem(KEY, JSON.stringify({ v: tag, at: Date.now() })); } catch (err) { /* private window */ }
+  } catch (err) { /* offline, or GitHub is busy: the written-in number stays */ }
+})();
+
 $('resetSite').addEventListener('click', () => { try { localStorage.removeItem(STORE); } catch (err) { /* nothing to clear */ } location.reload(); });
 
 /* ---------- the pet ---------- */
