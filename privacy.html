@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roamies: what it knows about you</title>
+<meta name="description" content="What the Roamies desktop pet keeps on your computer, what its friend server holds, and how to have it removed.">
+<link rel="canonical" href="https://userlaws.github.io/roamies/privacy.html">
+<meta name="theme-color" content="#221b2e">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/site.css">
+<style>
+/* The fine print is read after hours: the same desktop, at night, with one stack of windows on it. */
+body { background: var(--night); color: var(--moonlit);
+  background-image:
+    radial-gradient(var(--moonlit) 0 2px, transparent 2px), radial-gradient(#b08bff 0 2px, transparent 2px), radial-gradient(#6ec1ff 0 2px, transparent 2px),
+    linear-gradient(#17131f, #221b2e 70%, #2d2440);
+  background-size: 388px 332px, 524px 468px, 692px 596px, 100% 100%;
+  background-position: 40px 60px, 210px 190px, 420px 30px, 0 0;
+  background-attachment: fixed; image-rendering: pixelated; }
+.fine-desk { max-width: 860px; margin: 0 auto; padding: 72px 20px 140px; }
+.fine-desk h1.sky-type { font-size: clamp(40px, 6.4vw, 84px); }
+.fine-desk .caption { margin-bottom: 56px; }
+.fine-desk .win { margin-bottom: 52px; max-width: 640px; }
+.fine-desk .win:nth-of-type(even) { margin-left: auto; }
+.fine-desk .win:nth-of-type(3n) { max-width: 700px; }
+.fine-desk .win-bar { cursor: default; }
+.fine-desk ul { margin: 0 0 12px; padding: 0; list-style: none; }
+.fine-desk li { position: relative; margin: 0 0 9px; padding-left: 22px; }
+.fine-desk li::before { content: ""; position: absolute; left: 2px; top: .52em; width: 8px; height: 8px; background: var(--bar); box-shadow: 0 0 0 2px var(--ink); }
+.fine-desk .term li::before { box-shadow: 0 0 0 2px var(--night); }
+.fine-desk a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.fine-desk code { padding: 1px 6px 2px; background: var(--paper-2); font: 600 15px/1 var(--f-pixel); }
+.fine-desk .term code { background: var(--raised); }
+/* the reader: a Roamie in round glasses, sitting on the first title bar as on any other ledge */
+.reader { position: absolute; right: 28px; bottom: 100%; width: 96px; height: auto; margin-bottom: 4px; pointer-events: none; }
+/* two things on this taskbar, so their names always fit */
+.taskbar .tb-apps a span { display: inline; }
+.taskbar .tb-apps a { color: var(--moonlit); }
+@media (max-width: 560px) { .reader { width: 64px; right: 16px; } .fine-desk { padding-top: 48px; } }
+</style>
+</head>
+<body>
+
+<main class="fine-desk">
+  <p class="stamp"><span>privacy.txt · last changed 12 October 2026</span></p>
+  <h1 class="sky-type">The fine print, in plain words.</h1>
+  <p class="caption">Roamies is a pet that lives on your desktop. Most of what it knows stays on your computer. This page says what doesn't, where it goes, and how to have it removed.</p>
+
+  <article class="win" style="--bar: var(--mint)">
+    <canvas class="reader" id="reader" width="16" height="23" aria-hidden="true"></canvas>
+    <header class="win-bar"><b>stays on your computer</b></header>
+    <div class="win-body">
+      <h2 class="win-h">Never sent anywhere</h2>
+      <ul>
+        <li><b>Your save.</b> Coins, wardrobe, streaks, quests, friends list and settings are one file on your computer.</li>
+        <li><b>Your open windows.</b> The pet reads their titles and positions so it can walk on them, notice a video site in front, and keep out of the way of a game. It reads the title bar, not what is inside the window.</li>
+        <li><b>What is playing.</b> The name of the song, so the pet can nod along. <b>Settings &gt; React to music</b> turns that off.</li>
+      </ul>
+      <p>The app has no analytics, no ads and no tracking.</p>
+    </div>
+  </article>
+
+  <article class="win" style="--bar: var(--sky)">
+    <header class="win-bar"><b>the friend server</b></header>
+    <div class="win-body">
+      <h2 class="win-h">What friends need, and no more</h2>
+      <p>While Roamies runs it is connected to the Roamies friend server, so friends can see who is around and pets can visit. The server keeps:</p>
+      <ul>
+        <li>your <b>friend code</b>, which your copy makes up by itself. It is not your name.</li>
+        <li>your <b>pet's name</b> and what it is wearing.</li>
+        <li>which <b>version</b> of Roamies you run, and when your copy first and last connected.</li>
+        <li>while you are connected, the friend codes on your friends list.</li>
+        <li>friend requests, accepts and unfriends on their way to someone who is offline, for up to 30 days.</li>
+        <li>gifts Roamies has sent your copy, and whether they arrived.</li>
+        <li>a ban and its reason, if a code or an account has ever been shut out.</li>
+      </ul>
+      <p>Window titles, song names and anything else about your screen never reach it. Coins and ordinary items aren't there either: those live in your save.</p>
+      <p class="fine">The server's own code does not store your IP address. It runs at Neon, in the United States, and the host handles each connection the way any host does.</p>
+    </div>
+  </article>
+
+  <article class="win" style="--bar: var(--grape)">
+    <header class="win-bar"><b>signing in with Discord</b></header>
+    <div class="win-body">
+      <h2 class="win-h">Only if you choose to</h2>
+      <p>Signing in is optional. It lets friends add you by your Discord name instead of your code.</p>
+      <ul>
+        <li>Roamies asks Discord one thing: who you are. It receives your <b>Discord id, username, display name and avatar</b>. It does not get your email, your servers or your messages.</li>
+        <li>The friend server keeps those next to your friend code, and a sign-in token that is stored only in scrambled form. Discord's own token is used once and thrown away.</li>
+        <li>Your Discord name shows on your pet card and next to your pet in your friends' lists.</li>
+        <li><b>Signing out</b> in Roamies removes the link between your Discord account and your friend code.</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="win" style="--bar: var(--sun)">
+    <header class="win-bar"><b>updates, and this website</b></header>
+    <div class="win-body">
+      <h2 class="win-h">Other places Roamies talks to</h2>
+      <ul>
+        <li><b>Updates.</b> A copy from the installer looks for new versions on GitHub and downloads them from there. A copy from the Microsoft Store is updated by the Store. GitHub and Microsoft see those requests as they see any download.</li>
+        <li><b>This website.</b> The demo pet's coins and outfit are kept in your own browser and sent nowhere. The page asks GitHub what the newest version is. It sets no cookies and has no analytics. It is hosted by GitHub Pages, and its fonts come from Google Fonts.</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="win term" style="--bar: var(--orange)">
+    <header class="win-bar"><b>never</b></header>
+    <div class="win-body">
+      <h2 class="win-h">What Roamies does not do</h2>
+      <ul>
+        <li>It does not sell or hand on anything about you.</li>
+        <li>It does not show ads, in the app or here.</li>
+        <li>It does not read your files, or what is inside your windows.</li>
+        <li>It takes no payment: coins are earned by using the app, and there is nothing to buy with money.</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="win" style="--bar: var(--pink)">
+    <header class="win-bar"><b>your say</b></header>
+    <div class="win-body">
+      <h2 class="win-h">Asking, and having things removed</h2>
+      <ul>
+        <li>To have what the friend server holds about your friend code or your Discord account removed, or to ask anything about this page, message <a href="https://x.com/roamiesapp">@roamiesapp</a> on X or open an issue at <a href="https://github.com/userlaws/roamies/issues">github.com/userlaws/roamies</a>. Your friend code is on the Friends tab; include it.</li>
+        <li>To remove everything on your computer, uninstall Roamies. The installer's copy leaves your save behind in <code>%APPDATA%\roamies</code> so that installing again brings the same pet back; delete that folder to remove it. The Microsoft Store's copy takes its save with it.</li>
+      </ul>
+      <p class="fine">If this page changes, the date at the top changes with it.</p>
+    </div>
+  </article>
+</main>
+
+<nav class="taskbar" aria-label="Back">
+  <a class="tb-start" href="./" aria-label="Roamies, back to the desktop"><canvas id="brandFace" width="16" height="14"></canvas><b>Roamies</b></a>
+  <div class="tb-apps"><a href="./"><span>Back to the desktop</span></a><a class="on" href="privacy.html"><span>privacy.txt</span></a></div>
+</nav>
+
+<script src="js/sprites.js"></script>
+<script>
+// The pet from the app's own sprite sheet: reading, in round glasses, on the first window; and its face on the taskbar.
+(() => {
+  const pet = sprite({ char: 'cat', skin: 'classic', hat: '', face: 'glasses' }, 'base');
+  const reader = document.getElementById('reader');
+  reader.width = pet.width; reader.height = pet.height;
+  reader.getContext('2d').drawImage(pet, 0, 0);
+  const face = document.getElementById('brandFace'), plain = sprite({ char: 'cat', skin: 'classic', hat: '', face: '' }, 'base');
+  face.getContext('2d').drawImage(plain, 0, plain.height - 14, 16, 14, 0, 0, 16, 14);
+})();
+</script>
+</body>
+</html>
