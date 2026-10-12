@@ -394,6 +394,10 @@ kbd { padding: 1px 5px 2px; background: var(--ink); color: var(--cream); font: 6
 .reveal-box h2, .reveal-box p, .reveal-box .row-btns { position: relative; }
 .reveal-box h2 { margin: 0 0 4px; font: 700 34px/1.1 var(--f-pixel); }
 .reveal-box p { margin-bottom: 18px; }
+.reveal-box.dupe .rays { display: none; }
+.reveal-box.dupe #revealArt { opacity: .55; filter: grayscale(.5); animation: none; }
+.reveal-box.dupe .reveal-rarity { background: var(--sun); }
+.veil .reveal-box.dupe #revealOk { --b: var(--sun); --d: #c99a1e; color: var(--ink); }
 
 /* ---------- smaller screens ---------- */
 @media (max-width: 1080px) {

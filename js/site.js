@@ -119,7 +119,7 @@ function toast(text) {
 
 /* ---------- coins ---------- */
 function showCoins(bump) {
-  $('coins').textContent = state.coins;
+  $('coins').textContent = state.coins - capsuleHeld;
   if (bump) { const p = $('coinPill'); p.classList.remove('bump'); void p.offsetWidth; p.classList.add('bump'); }
   renderCapsule();
 }
@@ -654,13 +654,15 @@ $('counts').textContent = `${Object.keys(CHARS).length} characters, ${Object.key
 /* ---------- Capsules ---------- */
 const CAPSULE_COST = 120;
 const CAPSULE_ODDS = { common: 60, rare: 28, epic: 10, legendary: 2 };
-const owns = (k, id) => state.won.includes(wonKey(k, id)) || (k === 'char' && id === 'cat') || (k === 'skin' && id === 'classic');
+// What a capsule pays when it holds something this visitor has won already (CAPSULE.dupe in the app's game.mjs).
+const CAPSULE_DUPE = { common: 30, rare: 50, epic: 80, legendary: 110 };
+// Everything a capsule may hold: whatever costs coins, won already or not.
 function capsulePool() {
   const pool = [];
-  for (const K of KIND_LIST) for (const [id, item] of Object.entries(KINDS[K.key])) if (item.price != null && !owns(K.key, id)) pool.push({ k: K.key, id, item, r: rarityOf(item) });
+  for (const K of KIND_LIST) for (const [id, item] of Object.entries(KINDS[K.key])) if (item.price > 0) pool.push({ k: K.key, id, item, r: rarityOf(item) });
   return pool;
 }
-// Pick a tier by the printed odds (a tier with nothing left gives its share to the others), then anything in it.
+// Pick a tier by the printed odds, then anything in it.
 function drawCapsule() {
   const pool = capsulePool(), tiers = RARITIES.filter(r => pool.some(p => p.r === r));
   if (!tiers.length) return null;
@@ -669,21 +671,26 @@ function drawCapsule() {
   return pick(pool.filter(p => p.r === tier));
 }
 let spinning = false, prize = null;
+// Coins a duplicate has paid that the taskbar counter is not showing yet.
+let capsuleHeld = 0;
 function renderCapsule() {
   const b = $('spin'); if (!b) return;
-  const left = capsulePool().length;
-  b.disabled = !left || spinning;
-  b.textContent = !left ? 'You found everything!' : prize ? 'Open your capsule!' : spinning ? '...' : `Spin · ${CAPSULE_COST} coins`;
+  b.disabled = spinning;
+  b.textContent = prize ? 'Open your capsule!' : spinning ? '...' : `Spin · ${CAPSULE_COST} coins`;
   b.classList.toggle('ready', !b.disabled && (!!prize || state.coins >= CAPSULE_COST));
-  $('capsuleLeft').textContent = left ? `${left} things left to find.` : 'Every capsule item is yours. Legend.';
+  $('capsuleDupe').textContent = `A duplicate pays ${RARITIES.map(r => CAPSULE_DUPE[r]).join(', ').replace(/, (\d+)$/, ' or $1')} coins, by how rare it is.`;
 }
 function spin() {
   if (spinning) return;
   if (prize) { openPrize(); return; }
   if (state.coins < CAPSULE_COST) { SFX.play('deny'); toast(`A capsule costs ${CAPSULE_COST} coins. ${CAPSULE_COST - state.coins} to go: play with the pet to earn more.`); return; }
   const won = drawCapsule(); if (!won) return;
-  // Paid for and recorded up front, so a reload mid-spin can't eat the coins.
-  state.coins -= CAPSULE_COST; state.won.push(wonKey(won.k, won.id)); save();
+  // Paid for and recorded up front, so a reload mid-spin can't eat the coins. A duplicate's coins go in now too;
+  // the counter in the taskbar keeps them back until the capsule has been opened, so it doesn't give it away.
+  state.coins -= CAPSULE_COST;
+  if (state.won.includes(wonKey(won.k, won.id))) { won.coins = CAPSULE_DUPE[won.r]; state.coins += won.coins; capsuleHeld = won.coins; }
+  else state.won.push(wonKey(won.k, won.id));
+  save();
   spinning = true; showCoins(true);
   $('machine').classList.add('spinning'); $('knob').classList.add('turn');
   SFX.play('crank'); setTimeout(() => SFX.play('rattle'), 380);
@@ -697,7 +704,7 @@ function spin() {
 function openPrize() {
   if (!prize) return;
   const won = prize; prize = null; $('prize').hidden = true;
-  SFX.play('pop'); showReveal(won.k, won.id); renderCapsule();
+  SFX.play('pop'); showReveal(won.k, won.id, won.coins); renderCapsule();
 }
 $('spin').addEventListener('click', spin);
 $('knob').addEventListener('click', spin);
@@ -719,23 +726,32 @@ for (const [k, id] of [['skin', 'gold'], ['hat', 'nightcap'], ['face', 'bandage'
 
 /* ---------- reveal: the big moment for a new item ---------- */
 let revealed = null;
-function showReveal(k, id) {
+// dupe: the coins the capsule paid because this one was won already. It is shown as what it was and what it
+// turned into; there is nothing new to wear.
+function showReveal(k, id, dupe) {
   const item = KINDS[k][id], r = rarityOf(item), box = $('reveal').firstElementChild;
   revealed = { k, id };
-  box.className = 'reveal-box r-' + r;
-  $('revealRarity').textContent = r;
+  box.className = 'reveal-box r-' + r + (dupe ? ' dupe' : '');
+  $('revealRarity').textContent = dupe ? 'duplicate' : r;
   $('revealName').textContent = item.name;
-  $('revealKind').textContent = 'New ' + KIND_LIST.find(K => K.key === k).one;
+  $('revealKind').textContent = dupe ? `You have this one already, so it turned into ${dupe} coins.` : 'New ' + KIND_LIST.find(K => K.key === k).one;
+  $('revealWear').hidden = !!dupe;
+  $('revealOk').textContent = dupe ? `+${dupe} coins` : 'Nice!';
   const art = $('revealArt'), x = art.getContext('2d'); art.width = SPR_W; art.height = SPR_H;
   x.drawImage(thumb(k, id, { ...state.look, [k]: id }), 0, 0);
   $('reveal').hidden = false;
+  if (dupe) { $('revealOk').focus(); SFX.play('coins'); Pet.sparks(innerWidth / 2, innerHeight / 2 - 40, 18, ['#ffd34d', '#fffdf7'], 240); return; }
   $('revealWear').focus();
   const big = r === 'epic' || r === 'legendary';
   SFX.play(big ? 'fanfare' : 'buy');
   Pet.sparks(innerWidth / 2, innerHeight / 2 - 40, big ? 50 : 26, [RARITY_COLOR[r], '#fffdf7', '#ffd34d'], big ? 420 : 300);
   if (big) Pet.confetti(r === 'legendary' ? 160 : 90);
 }
-function closeReveal() { $('reveal').hidden = true; revealed = null; renderWardrobe(false); $('spin').focus({ preventScroll: true }); }
+function closeReveal() {
+  $('reveal').hidden = true; revealed = null;
+  if (capsuleHeld) { capsuleHeld = 0; showCoins(true); }   // the taskbar is back in view: now the duplicate's coins land
+  renderWardrobe(false); $('spin').focus({ preventScroll: true });
+}
 $('revealOk').addEventListener('click', closeReveal);
 $('revealWear').addEventListener('click', () => { const r = revealed; closeReveal(); if (r) { kind = KIND_LIST.find(K => K.key === r.k); wear(r.k, r.id); renderWardrobe(false); } });
 $('reveal').addEventListener('click', (e) => { if (e.target === $('reveal')) closeReveal(); });
