@@ -10,6 +10,10 @@ const CONFIG = {
   releases: 'userlaws/roamies',   // the GitHub repo whose releases are the app's versions. The page shows the newest one's tag.
 };
 
+// The sprite sheet holds a few characters the app keeps back: a pack that isn't open yet, and a fox that is only
+// ever handed out. Nobody can get them in the app, so they aren't on this page either.
+for (const id of Object.keys(CHARS)) if (CHARS[id].season === 'SAO' || id === 'kurama') delete CHARS[id];
+
 const $ = (id) => document.getElementById(id);
 const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
 const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -716,7 +720,7 @@ for (let i = 0; i < 14; i++) {
   b.style.setProperty('--rot', Math.round(Math.random() * 360) + 'deg'); b.style.setProperty('--i', i);
   $('balls').appendChild(b);
 }
-// The four things you can't buy or win, each on a cat.
+// Four of the things you can't buy or win, each on a cat.
 for (const [k, id] of [['skin', 'gold'], ['hat', 'nightcap'], ['face', 'bandage'], ['buddy', 'heart']]) {
   const item = KINDS[k][id], li = el('li'), text = el('div');
   text.append(el('b', null, item.name), el('span', null, item.unlock));

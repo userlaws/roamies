@@ -135,8 +135,13 @@ const SFX = (() => {
     // world
     jump: () => tone({ type: 'square', f: 300, f2: 620, dur: .09, gain: .05 }),
     land: () => { noise({ dur: .05, gain: .1, f: 260, type: 'lowpass' }); tone({ type: 'sine', f: 130, f2: 70, dur: .07, gain: .12 }); },
+    thunder: () => { noise({ dur: .5, gain: .1, f: 140, f2: 60, type: 'lowpass', attack: .03 }); noise({ t: .12, dur: .7, gain: .06, f: 90, type: 'lowpass', attack: .1 }); },   // far off: the storm cloud hat
     thud: () => { noise({ dur: .09, gain: .22, f: 200, type: 'lowpass' }); tone({ type: 'sine', f: 110, f2: 50, dur: .14, gain: .25 }); },
     bonk: () => { tone({ type: 'triangle', f: 240, f2: 90, dur: .1, gain: .2 }); noise({ dur: .03, gain: .1, f: 1200 }); },
+    // building the update house: a hammer on a nail, a hammer on something bigger, and the house at work
+    tink: () => { const f = 1900 + Math.random() * 500; tone({ type: 'triangle', f, f2: f * .97, dur: .09, gain: .11 }); noise({ dur: .02, gain: .07, f: 5200, type: 'highpass' }); },
+    clank: () => { tone({ type: 'square', f: 620, f2: 540, dur: .07, gain: .07 }); tone({ type: 'triangle', f: 930, f2: 880, dur: .12, gain: .08 }); noise({ dur: .04, gain: .09, f: 2600, q: 3 }); },
+    whirr: () => { tone({ type: 'sawtooth', f: 180, f2: 420, dur: .26, gain: .05, trem: 46, attack: .03 }); noise({ dur: .24, gain: .03, f: 1400, f2: 3200, q: 4, attack: .04 }); },
     poof: () => noise({ dur: .26, gain: .13, f: 400, f2: 2600, q: .8 }),
     whoosh: () => {                                  // air rushing past: swells in, sweeps over, trails away
       noise({ dur: .2, gain: .07, f: 500, f2: 3200, q: 1.4, attack: .09 }); noise({ t: .17, dur: .26, gain: .055, f: 3000, f2: 500, q: 1.4, attack: .03 });
@@ -161,6 +166,21 @@ const SFX = (() => {
     dance: () => arp([12, 12, 19, 19, 21, 21, 19], { step: .16, dur: .14, type: 'square', gain: .06 }),
     zip: () => tone({ type: 'sawtooth', f: 200, f2: 1400, dur: .25, gain: .05 }),
     star: () => sparkle(0, 5, .07),
+    // mischief
+    splat: () => { noise({ dur: .07, gain: .16, f: 520, f2: 170, q: 1.1 }); tone({ type: 'sine', f: 210, f2: 80, dur: .09, gain: .14 }); },   // mud, landing
+    scribble: () => { for (let i = 0; i < 4; i++) noise({ t: i * .075, dur: .06, gain: .05, f: 2100 + Math.random() * 1500, q: 5, attack: .012 }); },   // a crayon, back and forth
+    rumble: () => {                                  // the whole desk shaking
+      noise({ dur: .9, gain: .2, f: 90, f2: 55, type: 'lowpass', attack: .05 });
+      tone({ type: 'sawtooth', f: 58, f2: 40, dur: .9, gain: .12, trem: 17, attack: .05 });
+    },
+    creak: () => { tone({ type: 'sawtooth', f: 150, f2: 235, dur: .28, gain: .045, trem: 30, attack: .03 }); noise({ dur: .22, gain: .025, f: 900, q: 6, attack: .04 }); },   // a rope pulled tight
+    scrape: () => noise({ dur: .5, gain: .1, f: 320, f2: 180, q: 1.6, attack: .06 }),   // something heavy pushed along
+    // Snack Catch
+    catch: (n = 0) => { const k = Math.min(12, n); tone({ type: 'triangle', f: hz(5 + k), f2: hz(12 + k), dur: .07, gain: .13 }); },   // a snack caught: the note climbs with the streak
+    golden: () => { coin(0, .12); sparkle(.05, 5, .06); },
+    spike: () => { noise({ dur: .05, gain: .16, f: 900, q: 2 }); tone({ type: 'square', f: 300, f2: 90, dur: .16, gain: .12 }); },
+    go: () => { tone({ type: 'square', f: hz(3), dur: .09, gain: .08 }); tone({ type: 'square', f: hz(3), t: .16, dur: .09, gain: .08 }); tone({ type: 'square', f: hz(15), t: .32, dur: .26, gain: .09, hold: .08 }); },
+    timeup: () => { [12, 7, 3].forEach((n, i) => tone({ type: 'triangle', f: hz(n), t: i * .13, dur: i === 2 ? .4 : .14, gain: .12 })); },
   };
 
   /* ---------- pet voices: every character has a pitch and a timbre ---------- */
@@ -172,7 +192,24 @@ const SFX = (() => {
     // drop: every phrase ends lower (a woof). chiff: a puff of noise on the front. air: breath around the note. bub: the line comes out as bubbles.
     dog: { type: 'sawtooth', f: 340, soft: .55, drop: .85, chiff: .5 }, panda: { type: 'triangle', f: 290, vib: { rate: 24, depth: .05 } },
     owl: { type: 'sine', f: 400, air: .35, attack: .025 }, axolotl: { type: 'sine', f: 1040, bub: true },
+    capy: { type: 'triangle', f: 250, soft: .8 }, cactus: { type: 'square', f: 610, soft: .5 }, crab: { type: 'square', f: 760, soft: .45, chiff: .6 },
+    dino: { type: 'sawtooth', f: 150, soft: .6, drop: .8 }, toasty: { type: 'square', f: 330, soft: .55, steps: true },
+    octo: { type: 'sine', f: 520, bub: true }, puffer: { type: 'sine', f: 900, bub: true }, jelly: { type: 'sine', f: 760, vib: true },
+    moth: { type: 'triangle', f: 980, air: .3 }, shark: { type: 'sawtooth', f: 190, soft: .6, chiff: .3 },
+    wisp: { type: 'sine', f: 1180, vib: { rate: 14, depth: .04 } }, dragon: { type: 'sawtooth', f: 300, soft: .6, air: .3 },
+    monkey: { type: 'triangle', f: 820, chiff: .3 }, gorilla: { type: 'sawtooth', f: 120, soft: .7, drop: .85 },
+    batty: { type: 'square', f: 1320, soft: .4, chiff: .4 }, reindeer: { type: 'triangle', f: 360, vib: { rate: 20, depth: .04 } },
+    santa: { type: 'sawtooth', f: 170, soft: .65 }, kurama: { type: 'sawtooth', f: 130, soft: .7, drop: .8, air: .3 },
+    // The Naruto pack's people: one kind of voice, each at a pitch of its own.
+    ...Object.fromEntries([['naruto', 'square', 620], ['sasuke', 'triangle', 400], ['sakura', 'triangle', 880], ['kakashi', 'square', 360], ['hinata', 'triangle', 940], ['itachi', 'square', 380], ['konan', 'triangle', 760]]
+      .map(([id, type, f]) => [id, { type, f, soft: type === 'square' ? .5 : 1, chiff: .5 }])),
   };
+  // The Sword Art Online and Seven Deadly Sins packs: one kind of voice, each at a pitch of its own.
+  ['kirito', 'asuna', 'sinon', 'leafa', 'yui', 'eugeo', 'strea', 'rain', 'seven', 'alice', 'meliodas', 'diane', 'ban', 'king', 'gowther', 'merlin', 'escanor']
+    .forEach((id, i) => { VOICES[id] = { type: i % 3 ? 'triangle' : 'square', f: [420, 840, 780, 900, 1180, 480, 860, 700, 1020, 760, 640, 560, 300, 720, 600, 520, 170][i], soft: i % 3 ? 1 : .5, chiff: .4 }; });
+  // The Avatar pack: three people, a sky bison that rumbles and a lemur that chitters.
+  Object.assign(VOICES, { aang: { type: 'triangle', f: 700, chiff: .4, air: .2 }, katara: { type: 'triangle', f: 830, chiff: .4 }, sokka: { type: 'square', f: 500, soft: .5, chiff: .4 },
+    appa: { type: 'sawtooth', f: 105, soft: .75, drop: .85, air: .35 }, momo: { type: 'triangle', f: 1250, chiff: .4 } });
   const voiceOf = (ch) => VOICES[ch] || VOICES.cat;
   function say(v, { up = 1, down = 1, t = 0, dur = .12, gain = .16 }) {
     const g = gain * (v.soft || 1), end = down * (v.drop || 1);
@@ -219,6 +256,30 @@ const SFX = (() => {
       happy: (v) => { [[0, .16], [.22, .09], [.33, .26]].forEach(([t, dur]) => say(v, { up: 1, down: .93, t, dur, gain: .14 })); },   // hoo, hoo-hoo
       whee: (v) => { say(v, { up: .9, down: 1.5, dur: .2, gain: .12 }); say(v, { up: 1.5, down: 1.35, t: .2, dur: .3, gain: .12 }); },   // whoo-OOO
     },
+    monkey: {
+      happy: (v) => { [[0, 1, 1.25], [.1, 1, 1.25], [.22, 1.5, 1.3], [.32, 1.5, 1.3]].forEach(([t, up, down]) => say(v, { up, down, t, dur: .07, gain: .15 })); },   // ooh ooh, ah ah
+    },
+    gorilla: {
+      happy: (v) => { for (let i = 0; i < 4; i++) noise({ t: i * .09, dur: .05, gain: .16, f: 160, type: 'lowpass' }); say(v, { up: 1, down: .8, t: .05, dur: .3, gain: .12 }); },   // a thump on the chest
+    },
+    batty: {
+      happy: (v) => { for (let i = 0; i < 4; i++) say(v, { up: 1 + i * .12, down: 1.25 + i * .12, t: i * .055, dur: .035, gain: .12 }); },   // a run of little squeaks
+    },
+    reindeer: {
+      happy: (v) => { say(v, { up: 1, down: 1.3, dur: .1 }); for (let i = 0; i < 3; i++) tone({ type: 'sine', f: 2600 + i * 500, t: .12 + i * .07, dur: .12, gain: .05 }); },   // a snort, and sleigh bells
+    },
+    santa: {
+      happy: (v) => { for (let i = 0; i < 3; i++) say(v, { up: 1.25 - i * .12, down: 1 - i * .1, t: i * .17, dur: .12, gain: .17 }); },   // ho, ho, ho
+    },
+    naruto: {
+      happy: (v) => { noise({ dur: .09, gain: .12, f: 2600, f2: 900, q: 1.5 }); say(v, { up: 1.5, down: 1.1, t: .07, dur: .07, gain: .14 }); },   // a swish, and "hah!"
+    },
+    appa: {
+      happy: (v) => tone({ type: 'sawtooth', f: v.f * .9, f2: v.f * 1.25, dur: .55, gain: .13, trem: 22, attack: .06 }),   // a long, pleased rumble
+    },
+    momo: {
+      happy: (v) => { for (let i = 0; i < 5; i++) say(v, { up: i % 2 ? 1.3 : 1, down: i % 2 ? 1 : 1.3, t: i * .06, dur: .04, gain: .12 }); },   // chittering
+    },
     axolotl: {
       purr: () => { for (let i = 0; i < 6; i++) { const f = 500 + Math.random() * 500; tone({ type: 'sine', f, f2: f * 2.2, t: i * .1 + Math.random() * .03, dur: .05, gain: .07 }); } },   // content bubbles
     },
@@ -234,7 +295,8 @@ const SFX = (() => {
   function attempt(fn) { try { fn(); } catch (err) { /* audio is never worth crashing over */ } }
 
   return {
-    play(name) { const s = SOUNDS[name]; if (s && ok(name)) attempt(s); },
+    // n: for the few sounds that change as something builds up (the streak in Snack Catch).
+    play(name, n) { const s = SOUNDS[name]; if (s && ok(name)) attempt(() => s(n)); },
     voice(name, ch) { const s = VOICED[name] && lineOf(name, ch); if (s && ok('v:' + name, .12)) attempt(() => s(voiceOf(ch))); },
     // Babble: the longer the line, the more blips. Robots stick to a few fixed pitches.
     talk(text, ch) {

@@ -189,7 +189,7 @@ kbd { padding: 1px 5px 2px; background: var(--ink); color: var(--cream); font: 6
 .quips span { display: block; margin-bottom: 6px; font: 500 15px/1 var(--f-pixel); color: #8a7a66; }
 .quips q { display: inline-block; margin: 0 var(--px); padding: 3px 9px 4px; background: var(--cream); font: 600 16px/1.2 var(--f-pixel); quotes: none; box-shadow: var(--edge-1); }
 .quips em { margin-left: 10px; font-size: 14px; opacity: .75; }
-.voices { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px 8px; margin-top: 16px; }
+.voices { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px 8px; margin-top: 16px; max-height: 322px; overflow-y: auto; padding-right: 6px; scrollbar-color: #cdb892 transparent; }
 .voices button { display: grid; justify-items: center; gap: 4px; padding: 8px 2px 6px; border: 0; background: transparent; font: 500 14px/1 var(--f-pixel); transition: transform .08s; }
 .voices button:hover { background: var(--paper-2); transform: translateY(-3px); }
 .voices button:active { transform: translateY(1px); }
