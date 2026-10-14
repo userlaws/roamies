@@ -14,6 +14,8 @@
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 48px; -webkit-text-size-adjust: 100%; }
 body { margin: 0; padding-bottom: var(--bar-h); background: #79c3f2; color: var(--ink); font: 400 17px/1.5 var(--f-body); overflow-x: hidden; }
+/* Pixelify Sans joins "fi" into one glyph that reads as an A ("Arst", "Ash!!"), so no common ligatures anywhere. */
+body, button, input { font-variant-ligatures: no-common-ligatures; }
 canvas { image-rendering: pixelated; }
 [hidden] { display: none !important; }
 button, input { font: inherit; color: inherit; }
