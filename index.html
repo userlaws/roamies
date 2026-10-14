@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roamies: a pet that lives on top of your desktop</title>
-<meta name="description" content="A pixel pet that walks your taskbar, climbs your windows, steps in when you've watched too much video, and can walk off your screen onto a friend's.">
+<meta name="description" content="A pixel pet that walks your taskbar, climbs your windows, gets you to stretch when you've been at the screen a while, and can walk off your screen onto a friend's.">
 <meta property="og:title" content="Roamies: a pet that lives on top of your desktop">
-<meta property="og:description" content="It walks your taskbar, climbs your windows, nudges you off video, and visits your friends.">
+<meta property="og:description" content="It walks your taskbar, climbs your windows, gets you to stretch, and visits your friends.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Roamies">
 <meta property="og:url" content="https://userlaws.github.io/roamies/">
@@ -18,7 +18,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@roamiesapp">
 <meta name="twitter:title" content="Roamies: a pet that lives on top of your desktop">
-<meta name="twitter:description" content="It walks your taskbar, climbs your windows, nudges you off video, and visits your friends.">
+<meta name="twitter:description" content="It walks your taskbar, climbs your windows, gets you to stretch, and visits your friends.">
 <meta name="twitter:image" content="https://userlaws.github.io/roamies/preview.png">
 <link rel="canonical" href="https://userlaws.github.io/roamies/">
 <meta name="theme-color" content="#221b2e">
@@ -39,7 +39,7 @@
     <div class="hero-copy">
       <p class="stamp"><canvas class="ico" data-ico="paw"></canvas><span>Roamies <span data-version>v1.2.0</span> · a desktop pet</span></p>
       <h1 class="sky-type">A pet that lives on top of your desktop.</h1>
-      <p class="caption">It walks your taskbar, climbs your windows and rides them when you drag them. It steps in when you've watched too much video. And it can walk off your screen and onto a friend's.</p>
+      <p class="caption">It walks your taskbar, climbs your windows and rides them when you drag them. It gets you to stretch when you've been at the screen a while. And it can walk off your screen and onto a friend's.</p>
       <div class="cta-row">
         <a class="btn big" href="#get" data-snd="click"><canvas class="ico" data-ico="down"></canvas>Get Roamies</a>
         <a class="btn big ghost" href="#roam" data-snd="click">See what it does</a>
@@ -203,33 +203,51 @@
   <section class="scene" id="breaks" data-hour="16.75">
     <div class="scene-head">
       <p class="stamp"><canvas class="ico" data-ico="clock"></canvas><time>4:45 PM</time></p>
-      <h2 class="sky-type">It knows how long you've been watching.</h2>
+      <h2 class="sky-type">Been at it a while? It stretches first.</h2>
+      <p class="caption">Half a minute of stretching, the pet going first. After an hour at the computer it asks if you'll join in, and you can start one whenever you like.</p>
     </div>
 
     <div class="scatter breaks-grid">
-      <article class="win app w-a" data-perch="video" data-title="fish cam" style="--bar: var(--sky)">
-        <header class="win-bar"><canvas class="ico" data-ico="play"></canvas><b>fish cam · LIVE</b></header>
-        <div class="video">
-          <canvas id="fishcam" width="128" height="72"></canvas>
-          <div class="video-ui">
-            <span class="live">LIVE</span>
-            <div class="scrub"><i id="scrub"></i></div>
-            <span class="timecode" id="timecode">44:38</span>
+      <article class="win w-a" data-perch="stretch" data-title="stretch.card" style="--bar: var(--mint)">
+        <header class="win-bar"><canvas class="ico" data-ico="stretch"></canvas><b>stretch.card</b></header>
+        <div class="win-body">
+          <ol class="moves" id="moves">
+            <li data-move="reach"><canvas aria-hidden="true"></canvas><p><b>1</b>Reach up</p><i></i></li>
+            <li data-move="lean"><canvas aria-hidden="true"></canvas><p><b>2</b>Lean to each side</p><i></i></li>
+            <li data-move="roll"><canvas aria-hidden="true"></canvas><p><b>3</b>Roll your shoulders</p><i></i></li>
+            <li data-move="look"><canvas aria-hidden="true"></canvas><p><b>4</b>Look far away</p><i></i></li>
+            <li data-move="breathe"><canvas aria-hidden="true"></canvas><p><b>5</b>A deep breath</p><i></i></li>
+          </ol>
+          <div class="stretch-go">
+            <div class="actions">
+              <button id="stretchTry" data-snd="click"><canvas class="art" data-art="stretch"></canvas><span><b>Stretch break</b><small id="stretchPay">+40 coins · 4 of 4 left today</small></span></button>
+            </div>
+            <p class="fine">The button from the app's Play tab, wired to the pet on this page. A bar under its feet shows how far along it is, and Stop ends it early.</p>
           </div>
         </div>
       </article>
 
-      <article class="win w-b" data-perch="breaks-note" data-title="break timer" style="--bar: var(--orange)">
-        <header class="win-bar"><canvas class="ico" data-ico="clock"></canvas><b>break timer</b></header>
+      <article class="win term w-b" id="deskClock" data-perch="desk-clock" data-title="at the screen" style="--bar: var(--sun)">
+        <header class="win-bar"><canvas class="ico" data-ico="clock"></canvas><b>at the screen</b></header>
         <div class="win-body">
-          <p>After 45 minutes of YouTube, Twitch, Netflix and the like in front, it climbs onto the video and asks if you want a stretch.</p>
+          <p class="desk-time"><b id="deskTime">59:38</b><span>at the computer</span></p>
+          <div class="hour" id="hour" aria-hidden="true"></div>
+          <p class="fine">It counts while the keyboard or mouse has been touched in the last two minutes, or while something is playing. Five minutes away starts it over.</p>
+          <p class="fine muted">This one starts at 59 minutes, so you don't have to wait the hour.</p>
+        </div>
+      </article>
+
+      <article class="win w-c" data-perch="break-rules" data-title="when it asks" style="--bar: var(--orange)">
+        <header class="win-bar"><canvas class="ico" data-ico="chat"></canvas><b>when it asks</b></header>
+        <div class="win-body">
+          <p class="ask-line">"60 min at the screen. Stretch with me?"</p>
           <ul class="outcomes">
-            <li><b>Take a break</b><span>"proud of you!" and 40 coins</span></li>
-            <li><b>5 more min</b><span>"fine. five." It's back in five.</span></li>
-            <li><b>Ignore it</b><span>It starts stomping.</span></li>
+            <li><b>Let's stretch</b><span>Half a minute, starting now.</span></li>
+            <li><b>Later</b><span>It asks again in a quarter of an hour.</span></li>
+            <li><b>No answer</b><span>The question goes away after 40 seconds and waits a whole spell before it comes back.</span></li>
           </ul>
-          <button class="btn" id="nagTry" data-snd="click">Try the break nudge</button>
-          <p class="fine">45 is the default. You pick the number in Settings.</p>
+          <p class="stampline">Seen through to the end: 40 coins. Up to four a day, half an hour apart.</p>
+          <p class="fine">It doesn't ask over a call, a slideshow or a fullscreen app. Settings has 30, 45, 60 or 90 minutes, or never.</p>
         </div>
       </article>
     </div>
@@ -357,7 +375,7 @@
           <table class="ledger">
             <tr><td>Starting balance</td><td>600</td></tr>
             <tr><td>Pet out on the desktop</td><td>1 a minute</td></tr>
-            <tr><td>Taking a video break</td><td>40</td></tr>
+            <tr><td>A stretch break, up to four a day</td><td>40</td></tr>
             <tr><td>Your pet coming home from a visit</td><td>25</td></tr>
             <tr><td>Opening a gift a visitor left</td><td>10 to 40</td></tr>
             <tr><td>Daily reward, day 1 to day 7</td><td>20 to 150</td></tr>
@@ -428,7 +446,7 @@
   <div class="tb-apps" id="tbApps">
     <a href="#roam" data-snd="tab"><canvas class="ico" data-ico="win"></canvas><span>Roam</span></a>
     <a href="#play" data-snd="tab"><canvas class="ico" data-ico="pad"></canvas><span>Play</span></a>
-    <a href="#breaks" data-snd="tab"><canvas class="ico" data-ico="clock"></canvas><span>Breaks</span></a>
+    <a href="#breaks" data-snd="tab"><canvas class="ico" data-ico="stretch"></canvas><span>Breaks</span></a>
     <a href="#friends" data-snd="tab"><canvas class="ico" data-ico="heart"></canvas><span>Friends</span></a>
     <a href="#wardrobe" data-snd="tab"><canvas class="ico" data-ico="shirt"></canvas><span>Wardrobe</span></a>
     <a href="#capsules" data-snd="tab"><canvas class="ico" data-ico="capsule"></canvas><span>Capsules</span></a>

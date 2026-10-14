@@ -199,16 +199,43 @@ kbd { padding: 1px 5px 2px; background: var(--ink); color: var(--cream); font: 6
 .voices button.said canvas { animation: said .3s steps(3); }
 @keyframes said { 50% { transform: translateY(-6px) scale(1.1, .92); } }
 
-.breaks-grid .w-a { grid-column: 1 / span 7; }
-.breaks-grid .w-b { grid-column: 8 / span 5; margin-top: 96px; }
-.video { position: relative; }
-#fishcam { display: block; width: 100%; aspect-ratio: 16 / 9; }
-.video-ui { display: flex; align-items: center; gap: 14px; padding: 10px 14px 11px; background: #0d0a14; font: 500 16px/1 var(--f-pixel); color: var(--moonlit); }
-.live { padding: 3px 7px 4px; background: #e5383b; color: #fff; font-weight: 700; }
-.scrub { flex: 1; height: 8px; background: var(--line); }
-.scrub i { display: block; width: 62%; height: 100%; background: #e5383b; box-shadow: 4px 0 0 #fff; }
-.timecode { font-variant-numeric: tabular-nums; min-width: 52px; text-align: right; }
-.timecode.hot { color: var(--sun); }
+.breaks-grid .w-a { grid-column: 1 / span 8; margin-top: 110px; }
+.breaks-grid .w-b { grid-column: 9 / span 4; margin-top: -40px; }
+.breaks-grid .w-c { grid-column: 4 / span 5; margin-top: -10px; }
+/* the stretch card: five panels like an exercise poster, each a little window onto the same afternoon */
+.moves { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
+.moves li { position: relative; display: flex; flex-direction: column; background: var(--cream); box-shadow: var(--edge-1); transition: opacity .2s, transform .12s steps(2); }
+.moves canvas { display: block; width: 100%; aspect-ratio: 4 / 5; }
+.moves p { flex: 1; display: flex; align-items: baseline; gap: 7px; margin: 0; padding: 8px 8px 9px; font: 600 15px/1.15 var(--f-pixel); }
+.moves p b { flex: none; display: grid; place-items: center; width: 20px; height: 20px; background: var(--ink); color: var(--cream); font-size: 13px; transform: translateY(2px); }
+/* the 30 seconds, a fifth under each panel */
+.moves i { display: block; height: 8px; margin: 0 8px 8px; background: #e6d8bf; }
+.moves i::after { content: ""; display: block; width: calc(var(--f, 0) * 100%); height: 100%; background: #8ee6a8; box-shadow: inset 0 -2px 0 #5cb87b; }
+.moves.live li { opacity: .5; }
+.moves.live li.now, .moves.live li.done { opacity: 1; }
+.moves li.now { transform: translateY(calc(var(--px) * -2)); box-shadow: var(--edge-1), 0 0 0 calc(var(--px) * 2) var(--mint), 0 calc(var(--px) * 3) 0 calc(var(--px) * 1) var(--ink); }
+.moves li.done p b { background: #5cb87b; color: var(--ink); }
+.stretch-go { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; margin-top: 22px; }
+.stretch-go .actions { flex: none; }
+.stretch-go .fine { flex: 1; min-width: 220px; }
+.actions button:disabled { cursor: default; background: var(--paper-2); transform: none; }
+.actions button:disabled b { opacity: .7; }
+/* the clock: an hour at the computer, ten minutes a row */
+.desk-time { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; }
+.desk-time b { font: 700 52px/1 var(--f-pixel); color: var(--mint); font-variant-numeric: tabular-nums; letter-spacing: 1px; }
+.desk-time span { color: var(--muted); font: 500 15px/1.1 var(--f-pixel); }
+#deskClock.hot .desk-time b { color: var(--sun); animation: ready 1.1s steps(2, jump-none) infinite; }
+.hour { display: grid; gap: 4px; margin-bottom: 16px; }
+.hr { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)) 34px; gap: 4px; align-items: center; }
+.hr i { aspect-ratio: 1; background: var(--night); box-shadow: inset 0 0 0 2px var(--line); }
+.hr i.on { background: var(--mint); box-shadow: inset 0 -4px 0 #4f9f7d; }
+.hr i.now { animation: minute 1s steps(2, jump-none) infinite; }
+@keyframes minute { 50% { background: #7fd6b066; } }
+#deskClock.hot .hr i.on { background: var(--sun); box-shadow: inset 0 -4px 0 #c99a1e; }
+.hr small { padding-left: 4px; color: var(--muted); font: 500 13px/1 var(--f-pixel); }
+#deskFace { width: 32px; height: 28px; }
+#deskClock.hot #deskFace { animation: said .5s steps(3) infinite; }
+.ask-line { margin: 0 var(--px) 14px; padding: 8px 12px 10px; background: var(--cream); font: 600 17px/1.25 var(--f-pixel); box-shadow: var(--edge-1), var(--px) calc(var(--px) * 2) 0 0 rgba(20, 10, 30, .18); }
 .outcomes { margin: 16px 0 18px; padding: 0; list-style: none; }
 .outcomes li { display: grid; grid-template-columns: 132px 1fr; gap: 12px; align-items: baseline; padding: 8px 0; border-bottom: 2px dashed #e3d2b3; }
 .outcomes b { font: 700 17px/1.1 var(--f-pixel); }
@@ -442,6 +469,14 @@ kbd { padding: 1px 5px 2px; background: var(--ink); color: var(--cream); font: 6
   .scatter > .win:nth-child(odd) { margin-right: 8px; }
   .voices { grid-template-columns: repeat(4, 1fr); }
   .outcomes li { grid-template-columns: 1fr; gap: 2px; }
+  /* three over two, the two centred under the three */
+  .moves { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px 10px; }
+  .moves li { grid-column: span 2; }
+  .moves li:nth-child(4) { grid-column: 2 / span 2; }
+  .moves p { flex-direction: column; gap: 5px; padding: 7px 7px 8px; font-size: 14px; }
+  .moves p b { width: 18px; height: 18px; font-size: 12px; transform: none; }
+  .moves i { height: 6px; margin: 0 7px 7px; }
+  .desk-time b { font-size: 42px; }
   .btn.big { font-size: 19px; padding: 11px 16px 13px; }
   .capsule-wrap { padding: 26px 14px 30px; }
   .grid { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); max-height: 440px; }

@@ -8,16 +8,27 @@ const GRAV = 2400;
 const VISIT_SECONDS = 9;     // 25 in the app; nobody waits that long on a web page
 const OUCH_SPEED = 1500;     // landing speed (px/s) that hurts: a drop of roughly 470 px
 const LIP = 8;               // a window's pixel outline sits this far outside its own box
+// A stretch break: the moves the pet goes through, in order, with what it says for each (moveShape has the shape
+// it makes), and how many seconds each one lasts. Half a minute in all. The same as the app's.
+const MOVES = [
+  ['reach', 'reach up high... and hold'],
+  ['lean', 'lean to one side... now the other'],
+  ['roll', 'roll your shoulders'],
+  ['look', 'look at something far away'],
+  ['breathe', 'deep breath in... and out'],
+];
+const MOVE_S = 6;
+const STRETCH_ASK_S = 40;    // "stretch with me?" left unanswered this long is a no for now
 
 let cv, ctx, bubbles, handles, floorEl;
 const world = { w: innerWidth, h: innerHeight, floors: [], wins: [], items: [], parts: [], pets: [], perches: [] };
 let S = 4;                   // sprite pixel size on screen
 const K = () => S / 4;       // everything measured against the pet scales by this
 let me = null;               // the visitor's own pet
-let nagging = false, drag = null;
+let drag = null;
 const mouse = { x: 0, y: 0, at: 0, stroke: 0 };
 
-// The page listens for these instead of the app's main process: 'stat', 'earn', 'left', 'visitor-left', 'nag-end', 'open-ui'.
+// The page listens for these instead of the app's main process: 'stat', 'earn', 'left', 'visitor-left', 'stretch-end', 'open-ui'.
 const listeners = {};
 const emit = (type, data) => { for (const fn of listeners[type] || []) fn(data); };
 
@@ -233,7 +244,7 @@ function ai(p, dt) {
     if (walkToward(p, speed)) { p.mode = null; p.exiting = false; p.state = 'idle'; p.t = .4; const f = p.afterEnter; p.afterEnter = null; if (f) f(); }
     return;
   }
-  if (p.mode === 'nag') { nagAI(p, dt); return; }
+  if (p.mode === 'stretch') { stretchAI(p, dt); return; }
   if (BUSY.includes(p.state)) {
     p.vx = 0;
     if (p.state === 'emote') emoteAI(p, dt);
@@ -311,7 +322,8 @@ function frameOf(p) {
     case 'drag': return Math.floor(p.anim * 7) % 2 ? 'dangle' : 'dangle2';
     case 'sit': case 'prep': return 'sit';
     case 'sleep': return 'sleep';
-    case 'nag': return 'grumpy';
+    // Stretching: arms up and pleased with itself, eyes shut for the deep breath.
+    case 'stretch': { const m = p.stretch && MOVES[p.stretch.move]; return m && m[0] === 'breathe' ? 'blink' : m && m[0] === 'reach' ? 'happy' : 'base'; }
     case 'ouch': return 'ouch';
     case 'eat': return Math.floor(p.anim * 8) % 2 ? 'happy' : 'base';
     case 'emote': return Math.floor(p.anim * 6) % 2 ? 'happy' : 'walkA';
@@ -322,7 +334,7 @@ function frameOf(p) {
 
 /* ---------- emotes ---------- */
 function emote(p, type, quiet) {
-  if (!p.grounded || p.mode === 'nag' || p.mode === 'leave' || p.mode === 'enter') return;
+  if (!p.grounded || p.mode === 'stretch' || p.mode === 'leave' || p.mode === 'enter') return;
   if (p.mode === 'go') { p.mode = null; p.go = null; }
   if (type === 'dance') { p.state = 'emote'; p.t = 2.4; p.emote = { type, beat: 0 }; if (!quiet) sfx('dance'); }
   else if (type === 'flip') { hop(p, 620); p.spin = { t: 0, dur: 2 * 620 / GRAV }; sfx('zip'); voice(p, 'whee'); }
@@ -336,44 +348,98 @@ function emoteAI(p, dt) {
   if (e.beat <= 0) { e.beat = .32; p.dir *= -1; p.squash = .55; burst('note', p.x + p.dir * 20 * K(), p.y - 62 * K(), 1, { vx: 40, vy1: -90, vy2: -50, max: 1 }); }
 }
 
-/* ---------- video nudge ---------- */
-// o: { perch, minutes, practice }. In the app this starts on its own after enough video; here the page starts it.
-function startNag(o) {
-  if (!me || away() || me.mode === 'nag' || me.mode === 'leave' || me.mode === 'enter' || me.state === 'drag') return false;
-  nagging = true; me.mode = 'nag'; me.go = null; me.nagT = 0; me.nagGone = 0; me.nag = o;
+/* ---------- stretch breaks ----------
+   Half a minute of stretching, the pet going first and whoever is at the screen doing it along with it. In the app
+   the pet suggests one after an hour at the computer and the Play tab starts one at any time; here the page does both.
+   While it has the pet it is in mode 'stretch', with me.stretch: { on, t, move, o }. on is false while the pet is still
+   asking, t the seconds it has asked or stretched for, move the one it is on (see MOVES), o what the page passed:
+   { minutes, perch }. perch names a window to jump onto first, so the stretch happens beside the page's own card.
+   Whether a break pays is the page's call: it hears 'stretch-end' and answers a finished one with 'stretched'. */
+const stretchFree = () => !away() && me.mode !== 'leave' && me.mode !== 'enter' && me.state !== 'drag';
+function askStretch(o) {
+  if (!stretchFree() || me.mode || (me.bubble && me.bubble.buttons)) return false;
+  me.mode = 'stretch'; me.go = null; me.stretch = { on: false, t: 0, move: -1, o: o || {} };
   if (me.state === 'sleep' || me.state === 'sit') me.state = 'idle';
-  sfx('alert'); voice(me, 'grumble');
+  sfx('hello'); voice(me, 'happy');
   return true;
 }
-function nagAI(p, dt) {
-  // Onto the video window itself, if its top edge is on screen.
-  const s = world.wins.find(w => w.wid === p.nag.perch);
-  p.nagT += dt;
-  if (!s) { p.vx = 0; p.nagGone += dt; if (p.nagGone > 2.5) endNag('gone'); return; }
-  p.nagGone = 0;
-  if (p.ride.id !== s.id) { if (p.jumpCd <= 0) jumpTo(p, (s.x1 + s.x2) / 2, s.y); return; }
-  p.vx = 0; p.state = 'nag';
-  if (!p.bubble || p.bubble.until !== Infinity) {
-    say(p, `That's ${p.nag.minutes} min of videos. Stretch break?`, 0, [['break', 'Take a break'], ['snooze', '5 more min']], endNag);
-  }
-  if (p.nagT > 20 && Math.random() < dt * 1.5) hop(p, 300);  // little stomps if ignored
+// Pressed while the pet is asking, it is a yes.
+function startStretch(o) {
+  if (!stretchFree() || (me.mode === 'stretch' && me.stretch.on)) return false;
+  if (me.mode === 'stretch') o = o || me.stretch.o;
+  me.mode = 'stretch'; me.go = null; me.bubble = null; me.stretch = { on: true, t: 0, move: -1, o: o || {} };
+  if (me.state === 'sleep' || me.state === 'sit') me.state = 'idle';
+  return true;
 }
-function endNag(kind) {
-  const o = me.nag || {};
-  nagging = false; me.mode = null; me.bubble = null; me.state = 'idle'; me.t = .5; me.nag = null;
-  emit('nag-end', { kind, practice: !!o.practice });
-  if (kind === 'gone') return;   // the video scrolled off screen: let it go
-  if (kind === 'snooze') { say(me, 'fine. five.', 2); return; }
-  // "Try the break nudge" is a preview: it pays nothing.
-  if (o.practice) { say(me, 'proud of you!', 2); voice(me, 'happy'); return; }
-  say(me, 'proud of you!  +40', 2.4); sfx('coin'); voice(me, 'happy'); hearts(me, 5);
-  emit('earn', 40); emit('stat', 'breaks');
-  if (me.grounded) hop(me, 380);
+function stretchAI(p, dt) {
+  const s = p.stretch;
+  p.vx = 0;
+  if (!s.on) {
+    // Still asking, and standing still for it, so the answer is easy to click.
+    s.t += dt;
+    if (!BUSY.includes(p.state)) p.state = 'idle';
+    if (!p.bubble || !p.bubble.buttons) say(p, `${s.o.minutes || 60} min at the screen. Stretch with me?`, 0, [['stretch', "Let's stretch"], ['later', 'Later']], answerStretch);
+    if (s.t > STRETCH_ASK_S) answerStretch('gone');
+    return;
+  }
+  // Up onto the card first, if its top edge is on screen. One jump: wherever it lands, it stretches there.
+  if (s.o.perch && !s.jumped) {
+    const w = world.wins.find(x => x.wid === s.o.perch);
+    if (w && p.ride.id !== w.id) { if (p.jumpCd <= 0) { s.jumped = true; jumpTo(p, (w.x1 + w.x2) / 2, w.y); } return; }
+    s.jumped = true;
+  }
+  s.t += dt;
+  const move = Math.floor(s.t / MOVE_S);
+  if (move >= MOVES.length) { endStretch(); return; }
+  p.state = 'stretch';
+  if (move !== s.move) { s.move = move; say(p, MOVES[move][1], 0, [['stop', 'Stop']], stopStretch); sfx('plop'); }
+  if (MOVES[move][0] === 'look') p.dir = s.t % MOVE_S < MOVE_S / 2 ? -1 : 1;   // one way, then the other
+}
+// The shape a move pulls the pet into, u of the way through it: sx and sy to scale it by, and lean, the angle it tips
+// over at from its feet. The page draws its card with this too.
+function moveShape(kind, u) {
+  const arc = Math.sin(u * Math.PI);   // out and back again, once a move
+  switch (kind) {
+    case 'reach': return { sx: 1 - .12 * arc, sy: 1 + .3 * arc, lean: 0 };
+    case 'lean': return { sx: 1, sy: 1 + .08 * Math.abs(Math.sin(u * Math.PI * 2)), lean: .32 * Math.sin(u * Math.PI * 2) };
+    case 'roll': return { sx: 1 + .05 * Math.sin(u * Math.PI * 6), sy: 1 - .05 * Math.sin(u * Math.PI * 6), lean: .07 * Math.cos(u * Math.PI * 6) };
+    case 'breathe': return { sx: 1 + .14 * arc, sy: 1 + .1 * arc, lean: 0 };
+    default: return { sx: 1, sy: 1, lean: 0 };
+  }
+}
+function stretchShape(p) {
+  const s = p.stretch;
+  if (p.state !== 'stretch' || !s || !MOVES[s.move]) return null;
+  return moveShape(MOVES[s.move][0], (s.t % MOVE_S) / MOVE_S);
+}
+function clearStretch(state) { me.mode = null; me.stretch = null; me.bubble = null; me.state = state; me.t = state === 'happy' ? 1.6 : .5; me.vx = 0; }
+// An answer to "stretch with me?": 'stretch', 'later', or 'gone' when nobody answered.
+function answerStretch(act) {
+  if (act === 'stretch') { startStretch(); return; }
+  clearStretch('idle');
+  if (act === 'later') say(me, 'ok, later!', 1.8);
+  emit('stretch-end', { kind: act });
+}
+// Given up part of the way through: still a stretch, just one that counts for nothing.
+function stopStretch() {
+  clearStretch('idle');
+  say(me, 'ok, another time', 1.8);
+  emit('stretch-end', { kind: 'stop' });
+}
+function endStretch() {
+  clearStretch('happy');
+  emit('stretch-end', { kind: 'done' });
+}
+// The page's answer to a finished one: what it was worth.
+function stretched({ coins }) {
+  if (!occupied()) say(me, coins ? `that's better!  +${coins}` : "that's better!", 2.4);
+  sfx(coins ? 'coin' : 'sparkle'); voice(me, 'happy'); hearts(me, 5);
+  if (me.grounded && !me.mode && !BUSY.includes(me.state)) hop(me, 380);
 }
 
 /* ---------- friends: visits and gifts ---------- */
 const away = () => !me || !world.pets.includes(me);
-const occupied = () => away() || me.mode === 'nag' || me.mode === 'leave' || me.mode === 'enter' || (me.bubble && me.bubble.buttons);
+const occupied = () => away() || me.mode === 'stretch' || me.mode === 'leave' || me.mode === 'enter' || (me.bubble && me.bubble.buttons);
 // Pets arrive and leave through the edges of the screen.
 function enterFrom(p, dir, frac) {
   const f = floor();
@@ -461,7 +527,7 @@ function dropItem(type, extra) {
 function pat(p) {
   hearts(p); sfx('heart'); voice(p, 'happy');
   if (p === me) emit('stat', 'pets');
-  if (p.mode !== 'nag' && p.grounded && !BUSY.includes(p.state)) hop(p, 320);
+  if (p.mode !== 'stretch' && p.grounded && !BUSY.includes(p.state)) hop(p, 320);
 }
 function addHandle(p) {
   const h = document.createElement('button'); h.type = 'button'; h.className = 'pet-handle';
@@ -539,13 +605,15 @@ function command(cmd, arg) {
     case 'home': comeHome(arg); return true;
   }
   if (away()) return false;
-  const busy = me.mode === 'nag' || me.mode === 'leave' || me.mode === 'enter';
+  const busy = me.mode === 'stretch' || me.mode === 'leave' || me.mode === 'enter';
   if (cmd === 'feed') dropItem('food');
   else if (cmd === 'ball') { for (const b of world.items.filter(i => i.type === 'ball')) removeItem(b); dropItem('ball', { vx: rand(-200, 200), kicks: 0 }); }
   else if (cmd === 'pet') { if (me.grounded && !busy && !BUSY.includes(me.state)) hop(me, 320); hearts(me); sfx('heart'); voice(me, 'happy'); emit('stat', 'pets'); }
   else if (cmd === 'emote') emote(me, arg);
   else if (cmd === 'visit') return sendPet(arg);
-  else if (cmd === 'nag') return startNag(arg);
+  else if (cmd === 'ask') return askStretch(arg);       // the pet's own "stretch with me?"
+  else if (cmd === 'stretch') return startStretch(arg); // "Stretch break" on the Play tab
+  else if (cmd === 'stretched') stretched(arg || {});
   else if (cmd === 'say') { if (!occupied()) say(me, arg.text, arg.sec || 3); if (arg.sound) sfx(arg.sound); if (arg.hearts) hearts(me, arg.hearts); }
   else if (cmd === 'come' && !busy && me.state !== 'drag') {
     goTo(me, 'floor', arg.x, () => { say(me, pick(['you called?', 'here!', 'hi hi']), 1.6); });
@@ -566,10 +634,17 @@ function drawPet(p) {
   if (p.grounded) { ctx.fillStyle = 'rgba(20,10,30,.25)'; ctx.fillRect(Math.round(p.x - 22 * k), Math.round(p.y), Math.round(44 * k), 4); }
   ctx.translate(Math.round(p.x), Math.round(p.y));
   if (p.spin) { ctx.translate(0, -28 * k); ctx.rotate(-p.dir * Math.min(1, p.spin.t / p.spin.dur) * Math.PI * 2); ctx.translate(0, 28 * k); }
-  const sq = p.squash; ctx.scale((p.dir > 0 ? -1 : 1) * (1 + sq * .22), 1 - sq * .22);
+  const sq = p.squash, st = stretchShape(p);
+  if (st) ctx.rotate(st.lean);
+  ctx.scale((p.dir > 0 ? -1 : 1) * (1 + sq * .22) * (st ? st.sx : 1), (1 - sq * .22) * (st ? st.sy : 1));
   ctx.globalAlpha = SKINS[p.skin].alpha || 1; ctx.imageSmoothingEnabled = false;
   ctx.drawImage(img, -w / 2, -h, w, h);
   ctx.restore();
+  if (st) {   // how far through its stretches it is: a bar under its feet
+    const bw = Math.round(52 * k), x = Math.round(p.x - bw / 2), y = Math.round(p.y) + 8;
+    ctx.fillStyle = 'rgba(42,37,48,.85)'; ctx.fillRect(x - 2, y - 2, bw + 4, 8);
+    ctx.fillStyle = '#8ee6a8'; ctx.fillRect(x, y, Math.round(bw * clamp(p.stretch.t / (MOVES.length * MOVE_S), 0, 1)), 4);
+  }
   if (p.dizzy > 0) for (let i = 0; i < 3; i++) { const a = p.anim * 6 + i * 2.1; drawRows(STAR, '#ffd34d', p.x + Math.cos(a) * 24 * k, p.y - 64 * k + Math.sin(a) * 6 * k, 2); }
   if (p.visitor) {   // visitors wear a name tag
     ctx.font = '600 15px "Pixelify Sans", ui-monospace, monospace'; const tw = Math.round(ctx.measureText(p.name).width) + 12;
@@ -699,7 +774,8 @@ function status() {
   if (!me) return null;
   if (away()) return { state: 'away', on: null };
   const s = me.ride && surfById(me.ride.id);
-  return { state: me.mode === 'nag' ? 'nag' : me.mode === 'leave' ? 'leaving' : me.state, on: s ? (s.floor ? 'floor' : s.wid) : null };
+  const mode = me.mode === 'stretch' ? (me.stretch.on ? 'stretch' : 'asking') : me.mode === 'leave' ? 'leaving' : null;
+  return { state: mode || me.state, on: s ? (s.floor ? 'floor' : s.wid) : null };
 }
 
 return {
@@ -707,6 +783,10 @@ return {
   on(type, fn) { (listeners[type] = listeners[type] || []).push(fn); },
   cmd: command,
   confetti,
+  // The stretch routine, for the page to draw: the moves, seconds a move, and the shape of each.
+  moves: MOVES.map(m => m[0]), moveSeconds: MOVE_S, moveShape,
+  // The stretch under way, if there is one: { on, t, move, total }. on is false while the pet is still asking.
+  get stretch() { return away() || me.mode !== 'stretch' ? null : { on: me.stretch.on, t: me.stretch.on ? me.stretch.t : 0, move: me.stretch.move, total: MOVES.length * MOVE_S }; },
   // Pixel sparks anywhere on the page, for the capsule reveal and the like.
   sparks(x, y, n, colors, power = 260) { burst('spark', x, y, n, { colors, spread: 10, vx: power, vy1: -power * 1.4, vy2: power * .2, max: 1 }); },
   hearts(x, y, n = 4) { burst('heart', x, y, n, { max: 1.3 }); },

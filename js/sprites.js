@@ -42,7 +42,6 @@ const WING_FEET={base:"....oo...oo.....",A:"...oo....oo.....",B:"....oo..oo.....
    size:  how many times as big it is drawn    sun: it grows with the day, and is at its biggest at noon
    And one doesn't wear every color:
    skins: the only colors it comes in    coat:  its own colors, which it wears as Classic and in place of any other */
-// What the people out of each of the anime packs have in common (see the end of CHARS).
 const HEAD={price:null,hatY:-2,eyes:{bg:'s',ink:'i'}};
 const SHINOBI={...HEAD,season:'Naruto',unlock:'Fill the Naruto pack',climber:true};
 const SWORD={...HEAD,season:'SAO',unlock:'Fill the Sword Art Online pack'};
@@ -347,7 +346,7 @@ const HATS={
   unicorn:{name:'Unicorn horn',price:320,y0:-3,rows:[".......w........",".......y........","......ww........","......yy........",".....www........",".....yyy........"]},
   crown:{name:'Crown',price:350,y0:-1,rows:[".....y.y.y......",".....yyyyy......",".....yryry......"]},
   starcrown:{name:'Star crown',price:420,y0:-6,rows:[".......y........","......yyy.......",".....yywyy......","..y...yyy...y...",".yyy...y...yyy..","..y.........y..."]},
-  nightcap:{name:'Nightcap',price:null,rarity:'epic',unlock:'Take 10 video breaks',y0:-1,rows:["..........bw....",".......bbbb.....","....bbbbbbb.....","...wwwwwwwww...."]},
+  nightcap:{name:'Nightcap',price:null,rarity:'epic',unlock:'Take 10 stretch breaks',y0:-1,rows:["..........bw....",".......bbbb.....","....bbbbbbb.....","...wwwwwwwww...."]},
   yuzu:{name:'Yuzu',price:150,y0:-2,rows:["........d.......",".......dd.......","......oooo......",".....oyoooo.....",".....oooooo....."]},
   boat:{name:'Paper boat',price:170,y0:-2,rows:[".......w........","......www.......","..wwwwwwwwwww...","...weeeeeeew....","....wwwwwww....."]},
   ramen:{name:'Ramen bowl',price:210,y0:-3,rows:["..n...n.........","...n..n.........","....yyyyyyy.....","...wwwwwwwww....","...wrwrwrwrw....","....wwwwwww....."]},

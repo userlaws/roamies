@@ -20,7 +20,7 @@ const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ---------- what this page remembers about you ---------- */
 const STORE = 'roamies-site-v1';
-const blank = () => ({ coins: 600, name: 'Pip', look: { char: 'cat', skin: 'classic', hat: null, face: null, buddy: null }, won: [], quests: [], sound: true, soundSet: false, nagPaid: false, code: '' });
+const blank = () => ({ coins: 600, name: 'Pip', look: { char: 'cat', skin: 'classic', hat: null, face: null, buddy: null }, won: [], quests: [], sound: true, soundSet: false, breaks: { day: '', n: 0, at: 0 }, code: '' });
 function load() {
   try {
     const s = Object.assign(blank(), JSON.parse(localStorage.getItem(STORE)) || {}); s.look = Object.assign(blank().look, s.look);
@@ -82,6 +82,7 @@ const ICONS = {
   play: [".o......", ".ooo....", ".ooooo..", ".ooooooo", ".ooooo..", ".ooo....", ".o......", "........"],
   chat: [".oooooo.", "oxxxxxxo", "oxoxoxxo", "oxxxxxxo", ".oooooo.", "..oo....", ".o......", "........"],
   hand: ["...o....", "..ooo...", ".ooooo..", "...o....", "...o....", ".ooooo..", "..ooo...", "...o...."],
+  stretch: ["o..oo..o", ".o.oo.o.", "..oooo..", "...oo...", "...oo...", "..o..o..", ".o....o.", ".o....o."],
 };
 function paintIcon(c) {
   const rows = ICONS[c.dataset.ico]; if (!rows) return;
@@ -341,7 +342,7 @@ function quest(id) {
 }
 
 /* ---------- pip.status ---------- */
-const DOING = { idle: 'looking around', walk: 'walking', sit: 'sitting', sleep: 'asleep', air: 'in the air', drag: 'being carried', ouch: 'seeing stars', nag: 'waiting for an answer',
+const DOING = { idle: 'looking around', walk: 'walking', sit: 'sitting', sleep: 'asleep', air: 'in the air', drag: 'being carried', ouch: 'seeing stars', asking: 'waiting for an answer', stretch: 'stretching',
   eat: 'eating', emote: 'dancing', happy: 'happy', prep: 'about to jump', away: 'out visiting', leaving: 'heading out' };
 setInterval(() => {
   const st = Pet.status(); if (!st) return;
@@ -376,74 +377,150 @@ for (const [id, c] of Object.entries(CHARS)) {
   $('voices').appendChild(b);
 }
 
-/* ---------- Breaks: a video that has been on for 45 minutes ---------- */
-const Video = (() => {
-  const cv = $('fishcam'), cx = cv.getContext('2d'), W = 128, H = 72;
-  let sec = 44 * 60 + 38, rate = 1, phase = 'idle', visible = false, last = 0, retry = 0;
-  const fishes = [
-    { x: 30, y: 22, v: -9, s: 2, body: '#ffb25b' }, { x: 90, y: 40, v: 6, s: 1, body: '#ff7a90' }, { x: 60, y: 52, v: -5, s: 1, body: '#ffd34d' },
-    { x: 110, y: 14, v: 4, s: 1, body: '#7fd6b0' }, { x: 10, y: 34, v: 7, s: 2, body: '#7ec8e3' },
-  ];
-  const bubbles = Array.from({ length: 9 }, (_, i) => ({ x: 12 + i * 13.7 % W, y: Math.random() * H, v: 6 + Math.random() * 8 }));
-  function draw(t) {
-    const water = ['#0e3a63', '#12507f', '#17679c', '#1d7fb6'];
-    for (let y = 0; y < H; y++) { cx.fillStyle = water[Math.min(3, Math.floor((y + (y % 2 ? 3 : 0)) / 18))]; cx.fillRect(0, y, W, 1); }
-    cx.fillStyle = '#e6c98a'; cx.fillRect(0, H - 7, W, 7);
-    cx.fillStyle = '#c9a868'; for (let x = 3; x < W; x += 11) cx.fillRect(x, H - 4 + (x % 3), 2, 1);
-    for (let i = 0; i < 6; i++) {   // seaweed
-      const x0 = 9 + i * 22 + (i % 2) * 5, h = 9 + (i * 7) % 8;
-      cx.fillStyle = i % 2 ? '#3fa37a' : '#2f8f6a';
-      for (let k = 0; k < h; k++) cx.fillRect(x0 + Math.round(Math.sin(t * 1.6 + i + k * .5) * (k / h) * 2), H - 8 - k, 2, 1);
-    }
-    cx.fillStyle = '#cfeeff';
-    for (const b of bubbles) cx.fillRect(Math.round(b.x + Math.sin(t * 2 + b.v)), Math.round(b.y), 1, 1);
-    for (const f of fishes) {
-      const rows = ART.food.rows, w = rows[0].length, bob = Math.round(Math.sin(t * 2 + f.x * .1));
-      for (let r = 0; r < rows.length; r++) for (let i = 0; i < w; i++) {
-        const k = rows[r][f.v < 0 ? i : w - 1 - i]; if (k === '.') continue;
-        cx.fillStyle = k === 'b' ? f.body : '#1d1a2b';
-        cx.fillRect(Math.round(f.x) + i * f.s, f.y + bob + r * f.s, f.s, f.s);
-      }
-    }
+/* ---------- Breaks: the stretch card, and a clock a little short of the hour ---------- */
+// What a break pays and how often: BREAK in the app's game.mjs. The pet stretches whenever it is asked all the same.
+const BREAK = { coins: 40, gap: 30, daily: 4 };
+(() => {
+  const today = () => new Date().toDateString();
+  // Today's count, which a new day starts over, and when the last one that counted was.
+  const kept = () => { const b = state.breaks || {}; return { day: today(), n: b.day === today() ? b.n || 0 : 0, at: Number(b.at) || 0 }; };
+  const due = (b, now) => now < b.at || now - b.at >= BREAK.gap * 60000;   // a clock set back doesn't hold the next one up
+  function take(now = Date.now()) {
+    const b = kept();
+    if (b.n >= BREAK.daily || !due(b, now)) return 0;
+    state.breaks = { day: b.day, n: b.n + 1, at: now }; save();
+    return BREAK.coins;
   }
-  function ask(practice) {
-    if (Pet.cmd('nag', { perch: 'video', minutes: 45, practice })) { phase = 'asked'; $('timecode').classList.add('hot'); return true; }
-    return false;
+  // What the next one is worth, in the words of the app's Play tab.
+  function worth() {
+    const b = kept(), left = BREAK.daily - b.n, wait = Math.ceil((b.at + BREAK.gap * 60000 - Date.now()) / 60000);
+    return !left ? `All ${BREAK.daily} of today's breaks counted. Stretch anyway!` : wait > 0 && wait <= BREAK.gap ? `Counts again in ${wait} min` : `+${BREAK.coins} coins · ${left} of ${BREAK.daily} left today`;
+  }
+
+  // The card: the five moves, each drawn with the shape the real pet makes (Pet.moveShape), on the visitor's own pet,
+  // against the same late-afternoon sky as the page. Each canvas is kept at its own size on screen, so the pet's
+  // pixels stay whole numbers of screen pixels however wide the card is.
+  const panels = [...$('moves').children], MS = Pet.moveSeconds;
+  const SKY = ['#7aa6e6', '#94b5e5', '#b4c3df', '#dccbbd', '#ffd9a2'], INK = '#2a2530';
+  function drawMove(c, kind, u, guides) {
+    // Four wide by five tall: room over its head for the reach. P is one sprite pixel.
+    const d = Math.min(2, devicePixelRatio || 1), W = Math.max(36, Math.round(c.clientWidth * d)), H = Math.round(W * 1.25);
+    if (c.width !== W || c.height !== H) { c.width = W; c.height = H; }
+    const x = c.getContext('2d'), P = Math.max(1, Math.floor(W / 36)), ground = H - 5 * P, mid = Math.round(W / 2 / P) * P;
+    const dot = (px, py, w = 1, h = 1) => x.fillRect(Math.round(px / P) * P, Math.round(py / P) * P, w * P, h * P);
+    x.imageSmoothingEnabled = false; x.globalAlpha = 1;
+    // sky in flat bands, a far hill with a tree at each end, and the grass it stands on
+    const band = Math.ceil(ground / SKY.length / P) * P;
+    SKY.forEach((col, i) => { x.fillStyle = col; x.fillRect(0, i * band, W, band); });
+    x.fillStyle = '#a3b85e';
+    for (let i = 0; i * P < W; i++) { const h = Math.round(3 + 1.6 * Math.sin(i * .21 + 1.2)); x.fillRect(i * P, ground - h * P, P, h * P); }
+    const trees = [4 * P, W - 6 * P];
+    x.fillStyle = '#5f7f3e';
+    for (const tx of trees) { dot(tx, ground - 9 * P, 3, 3); dot(tx + P, ground - 10 * P); dot(tx + P, ground - 6 * P, 1, 2); }
+    x.fillStyle = '#6f964a'; x.fillRect(0, ground, W, H - ground);
+    x.fillStyle = '#86ad5a'; x.fillRect(0, ground, W, P);
+    // the pet, tipped and stretched from its feet the way the one on the page is
+    const look = state.look, s = Pet.moveShape(kind, u), dir = kind === 'look' && u >= .5 ? 1 : -1;
+    const frame = kind === 'breathe' ? 'blink' : kind === 'reach' ? 'happy' : 'base';
+    x.save(); x.translate(mid, ground); x.rotate(s.lean); x.scale((dir > 0 ? -1 : 1) * s.sx, s.sy);
+    x.globalAlpha = SKINS[look.skin] && SKINS[look.skin].alpha || 1;
+    x.drawImage(sprite(look, frame), -SPR_W / 2 * P, -SPR_H * P, SPR_W * P, SPR_H * P);
+    x.restore(); x.globalAlpha = 1;
+    if (!guides) return;
+    // the dotted guides an exercise card has
+    const arc = Math.sin(u * Math.PI), head = ground - SPR_H * P * s.sy;
+    x.fillStyle = INK; x.globalAlpha = .55;
+    if (kind === 'reach') for (let k = 0; k < 2; k++) {
+      const y = head - (3 + k * 3 + Math.round(arc * 2)) * P;
+      dot(mid - 2 * P, y + 2 * P); dot(mid - P, y + P); dot(mid, y); dot(mid + P, y + P); dot(mid + 2 * P, y + 2 * P);
+    } else if (kind === 'lean' && Math.abs(s.lean) > .06) {
+      const side = Math.sign(s.lean), ax = mid + side * 13 * P, ay = ground - 18 * P;
+      for (let k = 0; k < 3; k++) { dot(ax - side * k * P, ay - k * P); dot(ax - side * k * P, ay + k * P); }
+    } else if (kind === 'roll') for (let k = 0; k < 3; k++) {
+      const a = u * Math.PI * 6 + k * 2.1;
+      dot(mid + Math.cos(a) * 11 * P, ground - 14 * P + Math.sin(a) * 4 * P);
+    } else if (kind === 'look') {
+      // a line of sight from its eyes to the tree on the side it is facing
+      const ex = mid + dir * 5 * P, ey = ground - 15 * P, tx = dir < 0 ? trees[0] + P : trees[1] + P, ty = ground - 8 * P, n = Math.round(Math.abs(tx - ex) / (3 * P));
+      for (let k = 1; k < n; k++) dot(ex + (tx - ex) * k / n, ey + (ty - ey) * k / n);
+    } else if (kind === 'breathe' && u > .5) {
+      x.fillStyle = '#fffdf7'; x.globalAlpha = .85;
+      for (let k = 0; k < 3; k++) { const f = (u - .5) * 2 - k * .22; if (f > 0) dot(mid - (7 + f * 9) * P, ground - (15 + f * 4 + k) * P, f < .5 ? 1 : 2, f < .5 ? 1 : 2); }
+    }
+    x.globalAlpha = 1;
+  }
+  // Waiting, every panel goes through its own move. While the pet stretches, the card follows it: the move it is on
+  // moves, the ones it has done are ticked off, and the bar under each fills as it goes.
+  function paintCard(now) {
+    const live = Pet.stretch && Pet.stretch.on ? Pet.stretch : null, t = now / 1000;
+    $('moves').classList.toggle('live', !!live);
+    panels.forEach((li, i) => {
+      const f = live ? clamp((live.t - i * MS) / MS, 0, 1) : 0, on = !!live && f > 0 && f < 1;
+      const u = live ? (on ? f : 0) : calm ? .3 : (t / MS + i * .17) % 1;
+      li.classList.toggle('now', on); li.classList.toggle('done', !!live && f >= 1);
+      li.style.setProperty('--f', f.toFixed(3));
+      drawMove(li.firstElementChild, li.dataset.move, u, !live || on);
+    });
+  }
+
+  // The clock: time at the computer, an hour of it in sixty squares. It starts a little short of the hour, hurries
+  // the rest of the way once it is in view, and then the pet asks, the way it does in the app after an hour.
+  const ASK = 60 * 60, meter = $('hour'), cells = [];
+  const face = el('canvas'); face.id = 'deskFace';
+  for (let r = 0; r < 6; r++) {
+    const row = el('div', 'hr');
+    for (let i = 0; i < 10; i++) { const c = el('i'); row.appendChild(c); cells.push(c); }
+    row.appendChild(r < 5 ? el('small', null, String((r + 1) * 10)) : face);
+    meter.appendChild(row);
+  }
+  let sec = 59 * 60 + 38, rate = 0, phase = 'idle', last = 0, retry = 0, shown = '', label = '';
+  // idle: not seen yet. counting: in a hurry to reach the hour. asked: the question is out. after: an ordinary clock.
+  function showClock() {
+    const m = Math.floor(sec / 60), text = `${m}:${String(Math.floor(sec % 60)).padStart(2, '0')}`;
+    if (text === shown) return;
+    shown = text; $('deskTime').textContent = text;
+    cells.forEach((c, i) => { c.className = i < m ? 'on' : i === m ? 'now' : ''; });
+  }
+  function showButton() {
+    const s = Pet.stretch, text = s && s.on ? `Stretching: ${Math.max(1, Math.ceil(s.total - s.t))} s to go` : worth();
+    if (text !== label) { label = text; $('stretchPay').textContent = text; }
+    $('stretchTry').disabled = !!(s && s.on);
   }
   function tick(now) {
     requestAnimationFrame(tick);
-    if (!visible || now - last < 80) return;
+    if (now - last < 33) return;
     const dt = Math.min(.3, (now - last) / 1000); last = now;
+    // Checked by hand rather than with an observer, the same as the windows opening.
+    const card = $('moves').getBoundingClientRect(), clock = meter.getBoundingClientRect();
+    if (card.bottom > 0 && card.top < innerHeight) paintCard(now);
+    if (phase === 'idle' && clock.top > 0 && clock.bottom < innerHeight - 70) { phase = 'counting'; rate = 5; }
     if (phase !== 'asked') sec += dt * rate;
-    for (const f of fishes) { f.x += f.v * dt; if (f.x < -26) f.x = W + 4; if (f.x > W + 6) f.x = -24; }
-    for (const b of bubbles) { b.y -= b.v * dt; if (b.y < 0) b.y = H - 8; }
-    if (phase === 'counting' && sec >= 45 * 60) {
-      sec = 45 * 60; rate = 1;
-      // If the pet is busy (out visiting, being carried), keep the clock at 45:00 and ask again shortly.
-      if (now > retry && !ask(state.nagPaid)) retry = now + 1200;
+    if (phase === 'counting' && sec >= ASK) {
+      sec = ASK;
+      // Busy (out visiting, being carried, stretching already)? Hold at the hour and ask again shortly.
+      if (now > retry) {
+        if (Pet.cmd('ask', { minutes: 60, perch: 'stretch' })) { phase = 'asked'; $('deskClock').classList.add('hot'); }
+        else retry = now + 1200;
+      }
     }
-    draw(calm ? 0 : now / 1000);
-    $('timecode').textContent = `${Math.floor(sec / 60)}:${String(Math.floor(sec % 60)).padStart(2, '0')}`;
+    showClock(); showButton();
   }
-  new IntersectionObserver(([e]) => {
-    visible = e.isIntersecting;
-    if (e.intersectionRatio > .7 && phase === 'idle') { phase = 'counting'; rate = 5; }
-  }, { threshold: [0, .7] }).observe(cv);
-  Pet.on('nag-end', ({ kind, practice }) => {
-    $('timecode').classList.remove('hot');
-    if (kind === 'break') { sec = 0; if (!practice) { state.nagPaid = true; save(); } phase = 'done'; }
-    else if (kind === 'snooze') { phase = 'done'; }
-    else phase = 'done';
-    $('nagTry').textContent = 'Try the break nudge';
+  // A break seen through to the end pays, if it counts, and the clock starts over. Any other answer lets the clock run on.
+  Pet.on('stretch-end', ({ kind }) => {
+    $('deskClock').classList.remove('hot');
+    if (kind === 'done') {
+      const coins = take(); Pet.cmd('stretched', { coins }); if (coins) earn(coins);
+      sec = 0; phase = 'after'; rate = 1;
+    } else if (phase === 'asked') { phase = 'after'; rate = 1; }
   });
-  $('nagTry').addEventListener('click', () => {
-    if (phase === 'asked') return;
-    cv.closest('.win').scrollIntoView({ block: 'center', behavior: calm ? 'auto' : 'smooth' });
-    sec = 45 * 60;
-    // Give the scroll a moment, so the video's top edge is on screen for the pet to climb onto.
-    setTimeout(() => { if (!ask(state.nagPaid)) toast(`${state.name} is busy. Try again in a second.`); }, 500);
+  $('stretchTry').addEventListener('click', () => {
+    if (Pet.away) { toast(`${state.name} is out visiting. Back in a moment.`); return; }
+    const card = $('stretchTry').closest('.win'), r = card.getBoundingClientRect(), seen = r.top > 140 && r.bottom < innerHeight - 70;
+    if (!seen) card.scrollIntoView({ block: 'center', behavior: calm ? 'auto' : 'smooth' });
+    // Give a scroll a moment, so the card's top edge is on screen for the pet to jump onto.
+    setTimeout(() => { if (!Pet.cmd('stretch', { perch: 'stretch' })) toast(`${state.name} is busy. Try again in a second.`); }, seen ? 0 : 500);
   });
-  draw(0); requestAnimationFrame(tick);
+  showClock(); showButton(); requestAnimationFrame(tick);
 })();
 
 /* ---------- Friends: Dani, who lives in a small window ---------- */
@@ -626,6 +703,7 @@ function renderWardrobe(animate) {
 function showLook() {
   Pet.cmd('look', state.look);
   paintWhole($('footPet'), state.look, 'sleep');
+  paintFace($('deskFace'), state.look);
   for (const n of document.querySelectorAll('[data-petname]')) n.textContent = state.name;
 }
 function wear(k, id, from) {

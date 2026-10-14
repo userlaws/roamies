@@ -199,7 +199,8 @@ const SFX = (() => {
     wisp: { type: 'sine', f: 1180, vib: { rate: 14, depth: .04 } }, dragon: { type: 'sawtooth', f: 300, soft: .6, air: .3 },
     monkey: { type: 'triangle', f: 820, chiff: .3 }, gorilla: { type: 'sawtooth', f: 120, soft: .7, drop: .85 },
     batty: { type: 'square', f: 1320, soft: .4, chiff: .4 }, reindeer: { type: 'triangle', f: 360, vib: { rate: 20, depth: .04 } },
-    santa: { type: 'sawtooth', f: 170, soft: .65 }, kurama: { type: 'sawtooth', f: 130, soft: .7, drop: .8, air: .3 },
+    santa: { type: 'sawtooth', f: 170, soft: .65 },
+    kurama: { type: 'sawtooth', f: 130, soft: .7, drop: .8, air: .3 },
     // The Naruto pack's people: one kind of voice, each at a pitch of its own.
     ...Object.fromEntries([['naruto', 'square', 620], ['sasuke', 'triangle', 400], ['sakura', 'triangle', 880], ['kakashi', 'square', 360], ['hinata', 'triangle', 940], ['itachi', 'square', 380], ['konan', 'triangle', 760]]
       .map(([id, type, f]) => [id, { type, f, soft: type === 'square' ? .5 : 1, chiff: .5 }])),
