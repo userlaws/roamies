@@ -39,7 +39,7 @@
     <div class="hero-copy">
       <p class="stamp"><canvas class="ico" data-ico="paw"></canvas><span>Roamies <span data-version>v1.4.0</span> · a desktop pet</span></p>
       <h1 class="sky-type">A pet that lives on top of your desktop.</h1>
-      <p class="caption">It walks your taskbar, climbs your windows and rides them when you drag them. It gets you to stretch when you've been at the screen a while. And it can walk off your screen and onto a friend's.</p>
+      <p class="caption">It walks your taskbar, climbs your windows and rides them when you drag them. It gets you to stretch when you've been at the screen a while. It has a park to run around in, with your friends' pets. And it can walk off your screen and onto a friend's.</p>
       <div class="cta-row">
         <a class="btn big" href="#get" data-snd="click"><canvas class="ico" data-ico="down"></canvas>Get Roamies</a>
         <a class="btn big ghost" href="#roam" data-snd="click">See what it does</a>
@@ -196,6 +196,98 @@
           <div class="voices" id="voices"></div>
         </div>
       </article>
+
+      <article class="win term w-e" data-perch="arcade" data-title="arcade" style="--bar: var(--mint)">
+        <header class="win-bar"><canvas class="ico" data-ico="play"></canvas><b>arcade</b></header>
+        <div class="win-body">
+          <div class="arcade-switch" aria-hidden="true"><span class="on">Snack Catch</span><span>Sky Hop</span><em class="topchip"><i></i><small>Top score</small><b>that's you!</b></em></div>
+          <dl class="readout tall">
+            <div><dt>catch</dt><dd>Fish fall for 30 seconds and your pet runs under them. A fish is a point, a golden one is five, and an urchin costs one of three hearts. Power-ups fall too: magnet, shield, double, slow-mo, a heart back.</dd></div>
+            <div><dt>hop</dt><dd>Your pet hangs in the night sky and towers slide toward it, each with a gap. A click or Space is a hop, gravity does the rest, and one bump ends the round.</dd></div>
+            <div><dt>pays</dt><dd>Every point is a coin until 100 coins have been won that day, whichever game they were won in. After that both can still be played, for the score.</dd></div>
+            <div><dt>top</dt><dd>The Play tab shows the top score of everyone in each game, and says so when it's yours.</dd></div>
+          </dl>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ 2:30 PM · park ============ -->
+  <section class="scene" id="park" data-hour="14.5">
+    <div class="scene-head">
+      <p class="stamp"><canvas class="ico" data-ico="sun"></canvas><time>2:30 PM</time></p>
+      <h2 class="sky-type">Half past two. It goes to the park.</h2>
+      <p class="caption">Open the Park tab and the pet steps off the desktop in a puff and turns up at the gate of a park a few screens wide, seen from the side like the desktop. You steer it. The sky in there follows your computer's clock: day, dusk and night, when the lamps come on.</p>
+    </div>
+
+    <div class="scatter park-grid">
+      <article class="win app w-a" data-perch="park" data-title="Park" style="--bar: var(--mint)">
+        <header class="win-bar"><canvas class="ico" data-ico="tree"></canvas><b>Park</b></header>
+        <div class="park-screen" id="parkScreen">
+          <canvas id="parkCanvas" width="320" height="120"></canvas>
+          <span class="park-tag" id="parkTagDani">Dani</span>
+          <div class="park-bar"><span><i class="dot on"></i><b data-petname>Pip</b></span><span><i class="dot on"></i>Dani</span></div>
+        </div>
+        <div class="win-body park-foot">
+          <p class="fine">A small park, with the pet from this page and Dani in it. Click the ground and your pet walks there; click well above it and it jumps. The trampoline throws a pet more than twice as high as a jump, and something is lying about to be found.</p>
+        </div>
+      </article>
+
+      <article class="win w-b" data-perch="keys" data-title="keys.txt" style="--bar: var(--sun)">
+        <header class="win-bar"><canvas class="ico" data-ico="doc"></canvas><b>keys.txt</b></header>
+        <div class="win-body">
+          <h3 class="win-h">Keys, or the mouse</h3>
+          <ul class="outcomes keys">
+            <li><b><kbd>A</kbd> <kbd>D</kbd> or the arrows</b><span>Run.</span></li>
+            <li><b><kbd>Space</kbd> <kbd>W</kbd> or up</b><span>Jump. A tap is a hop, a hold is a full jump.</span></li>
+            <li><b><kbd>S</kbd> or down</b><span>With jump, drop down through what the pet is standing on. Held, walk past the trampoline instead of onto it.</span></li>
+            <li><b><kbd>E</kbd> or <kbd>Enter</kbd></b><span>Use the machine the pet is standing at.</span></li>
+          </ul>
+          <p class="fine">Or click: a click on the ground walks there, a click on a machine walks up to it and uses it, and a click well above the pet is a jump.</p>
+          <p class="stampline">Every pet runs as fast and jumps as high. One that flies glides instead; one that hovers bobs a little off the ground.</p>
+        </div>
+      </article>
+
+      <article class="win w-c" data-perch="in-the-park" data-title="in the park" style="--bar: var(--orange)">
+        <header class="win-bar"><canvas class="ico" data-ico="tree"></canvas><b>in the park</b></header>
+        <div class="win-body">
+          <ul class="plain">
+            <li><b>Things to walk up to.</b> The quest board, the capsule machine, the shop and two arcade cabinets. Standing at one shows its name over it, and <kbd>E</kbd> opens its page on top of the park. The pet stays in the park meanwhile.</li>
+            <li><b>Things to play on.</b> A ball anyone can kick, a trampoline, a see-saw that sends whatever is on the other end flying, the big tree's branches up to the top of its crown, crates, a wall, a lookout with a flag, a bench, and lamps along the path.</li>
+            <li><b>Today's find.</b> Something small is dropped somewhere new every day, up a tree or on the lookout as often as not: a lost sock, a marble, a lucky penny. It glints now and then. Walking over it pays 15 coins, once a day, and one of the daily quests is to find it.</li>
+            <li><b>The year.</b> October puts pumpkins about the place, December snow.</li>
+            <li><b>A visiting pet comes too.</b> It turns up at the gate and runs about by itself: after your pet, onto the trampoline, wherever. When your pet goes home it goes with it.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="win term w-d" data-perch="with-friends" data-title="with friends" style="--bar: var(--grape)">
+        <header class="win-bar"><canvas class="ico" data-ico="heart"></canvas><b>with friends</b></header>
+        <div class="win-body">
+          <dl class="readout tall">
+            <div><dt>who</dt><dd>Everyone in the same hangout who opens the park is in it together, up to eight pets, each steered by its own owner. Friends' pets wear their names.</dd></div>
+            <div><dt>race</dt><dd>A start line by the gate and a checkered flag at the far end. <kbd>E</kbd> on the line starts one: everyone near it gets the 3-2-1, then first to the flag wins. Alone, it is a race against the clock.</dd></div>
+            <div><dt>tag</dt><dd><kbd>E</kbd> next to another pet starts a game, with you it. Whoever is it wears a red tag and passes it on by touching someone. After a minute, whoever was it for the least time wins.</dd></div>
+            <div><dt>say</dt><dd>A dozen phrases ("hi!", "race?", "follow me!", "gg") and the four emotes. They go to the others by number, so nothing can be said in the park that isn't on the list.</dd></div>
+            <div><dt>pays</dt><dd>Nothing by themselves. Winning a race and playing tag to the end are daily quests, 40 and 30 coins, and minutes together bring friends closer as they always do.</dd></div>
+            <div><dt>wires</dt><dd>Two copies talk to each other directly, always through a relay, so no copy ever learns another's internet address.</dd></div>
+          </dl>
+        </div>
+      </article>
+
+      <article class="win w-e" data-perch="home-time" data-title="home time" style="--bar: var(--pink)">
+        <header class="win-bar"><canvas class="ico" data-ico="paw"></canvas><b>home time</b></header>
+        <div class="win-body">
+          <h3 class="win-h">Not a way out of looking after it</h3>
+          <p>While the park is open the pet is not on the desktop. It is away, the way it is on a visit, and its coin a minute and its care meters carry on as ever. It comes home, with a puff where it went, when you leave:</p>
+          <ul class="plain">
+            <li>another tab, closing the app window, or putting it away;</li>
+            <li>the window left behind other windows for ten minutes;</li>
+            <li><kbd>Ctrl</kbd> <kbd>Alt</kbd> <kbd>P</kbd>, which calls it to the mouse as usual;</li>
+            <li>a nap.</li>
+          </ul>
+        </div>
+      </article>
     </div>
   </section>
 
@@ -306,6 +398,40 @@
           </dl>
         </div>
       </article>
+
+      <article class="win w-e" data-perch="sweethearts" data-title="sweethearts" style="--bar: var(--orange)">
+        <header class="win-bar"><canvas class="ico" data-ico="heart"></canvas><b>sweethearts</b></header>
+        <div class="win-body">
+          <p>From Good friends on, a friend's row has <b>Ask out</b>: your pet asks theirs to be sweethearts. Their pet brings it up on their desktop.</p>
+          <p class="ask-line">"<span data-petname>Pip</span> asked me out!"</p>
+          <ul class="outcomes">
+            <li><b>Say yes</b><span>Sweethearts on both sides, with confetti and an achievement the first time.</span></li>
+            <li><b>Not now</b><span>Your pet is told. It can ask again a day later.</span></li>
+            <li><b>Both ask</b><span>If both ask each other, that is a yes.</span></li>
+            <li><b>Just friends</b><span>Ends it, for either of you, whenever. The friendship level stays.</span></li>
+          </ul>
+          <p>The row is marked and listed first, the pet says when its sweetheart comes online, and a visit home from them pays 10 more. When a sweetheart visits, the two run to each other and their game is usually a cuddle. The visitor goes home with "a love letter".</p>
+        </div>
+      </article>
+
+      <article class="win w-f" data-perch="found-out" data-title="found out" style="--bar: var(--sun)">
+        <header class="win-bar"><canvas class="ico" data-ico="chat"></canvas><b>found out</b></header>
+        <div class="win-body">
+          <h3 class="win-h">More than one</h3>
+          <p>A pet can have any number of sweethearts, and each knows only about themselves. Only your copy knows who they all are, so the only ways they find out are through it.</p>
+          <ul class="plain">
+            <li><b>A rumour.</b> Whenever something done with one sweetheart counts towards the bond, there is a small chance word of it reaches another: 0.5% with two sweethearts, doubling for every one beyond that. It costs 25 points off that bond, on both sides.</li>
+            <li><b>Confessing.</b> Under a sweetheart's row is a line saying who they know about and who they don't, with <b>Confess</b>. It costs nothing.</li>
+          </ul>
+          <p class="ask-line">"I heard <span data-petname>Pip</span> is seeing Dani too!"</p>
+          <ul class="outcomes">
+            <li><b>Stay</b><span>They stay sweethearts, and know from then on. If you had confessed, that is an achievement.</span></li>
+            <li><b>Me or them</b><span>You choose. Keep whoever asked, and it is over with everyone they know about; keep the other, and it is over with them. Nobody chooses for three days and they stay, still knowing.</span></li>
+            <li><b>We're done</b><span>The same as Just friends. Nobody else hears anything.</span></li>
+          </ul>
+          <p class="fine">Until they answer, the two pets sulk at each other: no hearts, and when one visits they sit apart and have it out instead of cuddling.</p>
+        </div>
+      </article>
     </div>
   </section>
 
@@ -377,6 +503,7 @@
             <tr><td>Pet out on the desktop</td><td>1 a minute</td></tr>
             <tr><td>A stretch break, up to four a day</td><td>40</td></tr>
             <tr><td>Your pet coming home from a visit</td><td>25</td></tr>
+            <tr><td>Today's find in the park, once a day</td><td>15</td></tr>
             <tr><td>Opening a gift a visitor left</td><td>10 to 40</td></tr>
             <tr><td>Daily reward, day 1 to day 7</td><td>20 to 150</td></tr>
             <tr><td>Daily quests</td><td>25 to 60</td></tr>
@@ -423,7 +550,7 @@
         <header class="win-bar"><canvas class="ico" data-ico="gear"></canvas><b>what's in the box</b></header>
         <div class="win-body">
           <dl class="readout tall">
-            <div><dt>tabs</dt><dd>Wardrobe, Store, Capsules, Quests, Play, Settings</dd></div>
+            <div><dt>tabs</dt><dd>Wardrobe, Store, Capsules, Friends, Quests, Play, Park, Settings</dd></div>
             <div><dt>daily</dt><dd>a 7-day reward streak and three quests</dd></div>
             <div><dt>hotkey</dt><dd>Ctrl+Alt+P calls the pet to your mouse</dd></div>
             <div><dt>price</dt><dd>coins only. Nothing to buy with real money.</dd></div>
@@ -446,6 +573,7 @@
   <div class="tb-apps" id="tbApps">
     <a href="#roam" data-snd="tab"><canvas class="ico" data-ico="win"></canvas><span>Roam</span></a>
     <a href="#play" data-snd="tab"><canvas class="ico" data-ico="pad"></canvas><span>Play</span></a>
+    <a href="#park" data-snd="tab"><canvas class="ico" data-ico="tree"></canvas><span>Park</span></a>
     <a href="#breaks" data-snd="tab"><canvas class="ico" data-ico="stretch"></canvas><span>Breaks</span></a>
     <a href="#friends" data-snd="tab"><canvas class="ico" data-ico="heart"></canvas><span>Friends</span></a>
     <a href="#wardrobe" data-snd="tab"><canvas class="ico" data-ico="shirt"></canvas><span>Wardrobe</span></a>

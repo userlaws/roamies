@@ -83,6 +83,7 @@ const ICONS = {
   chat: [".oooooo.", "oxxxxxxo", "oxoxoxxo", "oxxxxxxo", ".oooooo.", "..oo....", ".o......", "........"],
   hand: ["...o....", "..ooo...", ".ooooo..", "...o....", "...o....", ".ooooo..", "..ooo...", "...o...."],
   stretch: ["o..oo..o", ".o.oo.o.", "..oooo..", "...oo...", "...oo...", "..o..o..", ".o....o.", ".o....o."],
+  tree: ["...oo...", "..oooo..", ".oooooo.", "oooooooo", ".oooooo.", "..oooo..", "...xx...", "...xx..."],
 };
 function paintIcon(c) {
   const rows = ICONS[c.dataset.ico]; if (!rows) return;
@@ -618,6 +619,112 @@ const Dani = (() => {
   Pet.on('visitor-left', () => { Dani.back(); line('Online', true); busy = false; lock(false); });
 })();
 
+/* ---------- Park: a small one, seen from the side, with the pet from this page and Dani in it ---------- */
+// The sky follows the computer's clock the way the app's does. Click the ground and your pet walks there; click well
+// above it and it jumps. The trampoline throws a pet high. Something small is lying about, in a place picked by the date,
+// and walking over it pays 15 coins once a day.
+(() => {
+  const cv = $('parkCanvas'), cx = cv.getContext('2d'), W = 320, H = 120, FLOOR = 100;
+  const tag = $('parkTagDani');
+  const G = 300, JUMP = 100, TRAMP = { x: 78, w: 28, v: 190 }, SPEED = 42;
+  const own = { x: 40, tx: 40, y: 0, vy: 0, dir: 1, t: 3, look: () => state.look, roam: true };
+  const dani = { x: 150, tx: 150, y: 0, vy: 0, dir: -1, t: 1, look: () => DANI, roam: true };
+  const FINDS = [{ x: 60, what: 'a lost sock' }, { x: 118, what: 'a marble' }, { x: 206, what: 'a lucky penny' }, { x: 270, what: 'a lost sock' }, { x: 164, what: 'a marble' }];
+  const today = () => { const d = new Date(); return [d.getFullYear(), d.getMonth() + 1, d.getDate()].join('-'); };   // the computer's own day, like the app
+  const find = FINDS[(new Date().getFullYear() * 366 + new Date().getMonth() * 31 + new Date().getDate()) % FINDS.length];
+  let visible = false, last = 0, anim = 0, sparks = [], month = new Date().getMonth();
+
+  function sky() {
+    const h = new Date().getHours() + new Date().getMinutes() / 60;
+    if (h < 6 || h >= 20) return { bands: ['#1a1633', '#241d44', '#2e2552', '#3a2f5c'], hill: '#2f3d4a', hill2: '#3a4d57', grass: '#3f7a52', dirt: '#3a2a26', night: true };
+    if (h < 8 || h >= 17.5) return { bands: ['#ff9a6b', '#ffb07a', '#ffc98a', '#ffe2b8'], hill: '#7fb07a', hill2: '#99c48a', grass: '#79c46f', dirt: '#6b4a3a', night: h >= 18.5 };
+    return { bands: ['#6fbaf0', '#8fd3ff', '#a8dfff', '#c6ecff'], hill: '#8ccf8e', hill2: '#a9dca3', grass: '#86d27a', dirt: '#6b4a3a', night: false };
+  }
+  const rect = (x, y, w, h, c) => { cx.fillStyle = c; cx.fillRect(Math.round(x), Math.round(y), w, h); };
+  function disc(x0, y0, r, c) { for (let y = -r; y <= r; y++) { const w = Math.round(Math.sqrt(r * r - y * y)); rect(x0 - w, y0 + y, w * 2 + 1, 1, c); } }
+  function pumpkin(x) { rect(x, FLOOR - 4, 6, 4, '#ff8a3d'); rect(x + 1, FLOOR - 5, 4, 1, '#ff8a3d'); rect(x + 2, FLOOR - 4, 1, 3, '#d9622a'); rect(x + 2, FLOOR - 6, 2, 1, '#5cb87b'); }
+  function lamp(x, night) { rect(x, FLOOR - 24, 2, 24, '#3d3352'); rect(x - 2, FLOOR - 28, 6, 4, night ? '#ffd34d' : '#f6f0e8'); rect(x - 1, FLOOR - 29, 4, 1, '#3d3352'); if (night) { cx.globalAlpha = .12; disc(x + 1, FLOOR - 26, 14, '#ffd34d'); cx.globalAlpha = 1; } }
+  function scene() {
+    const s = sky(), snow = month === 11;
+    s.bands.forEach((c, i) => rect(0, i * 25, W, 25, c));
+    if (s.night) { cx.fillStyle = '#fff3c4'; for (let i = 0; i < 26; i++) cx.fillRect((i * 53) % W, (i * 29) % 70, 1, 1); rect(272, 14, 8, 8, '#fff3c4'); rect(270, 16, 12, 4, '#fff3c4'); }
+    disc(60, FLOOR + 10, 44, s.hill); disc(250, FLOOR + 18, 60, s.hill); disc(150, FLOOR + 22, 56, s.hill2);
+    rect(0, FLOOR, W, 4, s.grass); rect(0, FLOOR + 4, W, H - FLOOR - 4, s.dirt);
+    for (let x = 6; x < W; x += 9) rect(x, FLOOR + 6, 5, 1, '#e8d7a8');             // the path
+    if (snow) rect(0, FLOOR - 1, W, 2, '#f6f0e8');
+    // the gate, and the start line beside it
+    rect(4, FLOOR - 30, 3, 30, '#8a5a3c'); rect(19, FLOOR - 30, 3, 30, '#8a5a3c'); rect(2, FLOOR - 33, 22, 3, '#8a5a3c'); rect(8, FLOOR - 31, 10, 5, '#ffd34d');
+    for (let y = FLOOR; y < FLOOR + 4; y += 2) rect(28, y, 1, 1, '#f6f0e8');
+    // a bench
+    rect(40, FLOOR - 8, 16, 2, '#c97a2b'); rect(41, FLOOR - 6, 2, 6, '#8a5a3c'); rect(53, FLOOR - 6, 2, 6, '#8a5a3c'); rect(40, FLOOR - 13, 16, 2, '#c97a2b');
+    lamp(64, s.night); lamp(140, s.night); lamp(214, s.night); lamp(302, s.night);
+    // the trampoline
+    rect(TRAMP.x + 1, FLOOR - 6, 2, 6, '#2a2530'); rect(TRAMP.x + TRAMP.w - 3, FLOOR - 6, 2, 6, '#2a2530'); rect(TRAMP.x, FLOOR - 8, TRAMP.w, 3, '#2a2530'); rect(TRAMP.x + 2, FLOOR - 8, TRAMP.w - 4, 1, '#5aa9ff');
+    // the see-saw
+    rect(126, FLOOR - 4, 2, 4, '#5c4033'); rect(124, FLOOR - 6, 6, 2, '#5c4033');
+    for (let i = 0; i < 36; i++) rect(109 + i, FLOOR - 4 - Math.round(i * .3), 1, 2, '#c97a2b');
+    // the ball
+    disc(100 + Math.round(Math.sin(anim * .6) * 3), FLOOR - 3, 3, '#ff7a90'); rect(99 + Math.round(Math.sin(anim * .6) * 3), FLOOR - 4, 2, 1, '#f6f0e8');
+    // crates, and the wall
+    rect(156, FLOOR - 12, 12, 12, '#c97a2b'); rect(156, FLOOR - 12, 12, 1, '#2a2530'); rect(156, FLOOR - 12, 1, 12, '#2a2530'); rect(167, FLOOR - 12, 1, 12, '#2a2530'); rect(160, FLOOR - 8, 4, 4, '#8a5a3c');
+    rect(162, FLOOR - 24, 12, 12, '#c97a2b'); rect(162, FLOOR - 24, 12, 1, '#2a2530'); rect(162, FLOOR - 24, 1, 12, '#2a2530'); rect(173, FLOOR - 24, 1, 12, '#2a2530'); rect(166, FLOOR - 20, 4, 4, '#8a5a3c');
+    for (let r = 0; r < 4; r++) for (let c = 0; c < 3; c++) rect(184 + c * 6 + (r % 2) * 3, FLOOR - 4 - r * 4, 5, 3, r % 2 ? '#a79fb4' : '#8f879c');
+    // the big tree
+    rect(236, FLOOR - 42, 8, 42, '#7a4f2e'); rect(244, FLOOR - 30, 10, 2, '#7a4f2e'); rect(226, FLOOR - 24, 10, 2, '#7a4f2e');
+    disc(240, FLOOR - 58, 22, '#3f8f55'); disc(228, FLOOR - 50, 14, '#4fa864'); disc(254, FLOOR - 48, 13, '#4fa864'); disc(238, FLOOR - 66, 12, '#6cc47a');
+    if (snow) { disc(238, FLOOR - 72, 8, '#f6f0e8'); rect(224, FLOOR - 61, 34, 2, '#f6f0e8'); }
+    // the lookout, its flag, and the checkered flag at the far end
+    rect(276, FLOOR - 34, 2, 34, '#8a5a3c'); rect(296, FLOOR - 34, 2, 34, '#8a5a3c'); rect(274, FLOOR - 36, 26, 3, '#c97a2b'); rect(274, FLOOR - 44, 1, 8, '#8a5a3c'); rect(299, FLOOR - 44, 1, 8, '#8a5a3c'); rect(274, FLOOR - 44, 26, 1, '#8a5a3c');
+    for (let i = 0; i < 5; i++) rect(286, FLOOR - 4 - i * 6, 8, 1, '#8a5a3c');
+    rect(287, FLOOR - 58, 1, 22, '#2a2530'); const wave = Math.round(Math.sin(anim * 5)); rect(288, FLOOR - 58, 7, 4, '#ff7a90'); rect(288 + 5, FLOOR - 58 + wave, 3, 4, '#ff7a90');
+    rect(312, FLOOR - 22, 1, 22, '#2a2530'); for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) rect(313 + c * 2, FLOOR - 22 + r * 2, 2, 2, (r + c) % 2 ? '#2a2530' : '#f6f0e8');
+    if (month === 9) { pumpkin(32); pumpkin(178); pumpkin(258); }
+  }
+  function drawFind() {
+    if (state.findDay === today()) return;
+    const g = Math.floor(anim * 2) % 7 === 0;
+    rect(find.x - 1, FLOOR - 3, 3, 3, find.what === 'a lucky penny' ? '#ffd34d' : find.what === 'a marble' ? '#6ec1ff' : '#ff7a90');
+    if (g) { rect(find.x - 3, FLOOR - 5, 1, 1, '#fff'); rect(find.x + 3, FLOOR - 2, 1, 1, '#fff'); rect(find.x, FLOOR - 6, 1, 1, '#fff'); }
+  }
+  function drawPet(a) {
+    const frame = a.y > 0 ? 'happy' : a.moving ? (Math.floor(anim * 9) % 2 ? 'walkA' : 'walkB') : 'base';
+    cx.save(); cx.translate(Math.round(a.x), FLOOR - Math.round(a.y)); if (a.dir > 0) cx.scale(-1, 1);
+    cx.drawImage(sprite(a.look(), frame), -8, -SPR_H); cx.restore();
+  }
+  function draw() {
+    scene(); drawFind();
+    for (const a of [dani, own].sort((p, q) => p.x - q.x)) drawPet(a);
+    for (const s of sparks) rect(s.x, s.y, 1, 1, '#fff3c4');
+    tag.style.left = (dani.x / W * 100) + '%'; tag.style.top = ((FLOOR - dani.y - SPR_H - 3) / H * 100) + '%';
+  }
+  function step(a, dt) {
+    if (a.roam) { a.t -= dt; if (a.t <= 0) { a.tx = 14 + Math.random() * (W - 28); a.t = 2.5 + Math.random() * 4; if (a.y === 0 && Math.random() < .3) a.vy = JUMP; } }
+    if (Math.abs(a.tx - a.x) > .8) { a.dir = Math.sign(a.tx - a.x); a.x += a.dir * SPEED * dt; a.moving = true; } else { a.moving = false; if (!a.roam && a.y === 0) { a.roam = true; a.t = 4; } }
+    if (a.y > 0 || a.vy > 0) { a.y += a.vy * dt; a.vy -= G * dt; if (a.y <= 0) { a.y = 0; a.vy = 0; } }
+    else if (a.x > TRAMP.x + 3 && a.x < TRAMP.x + TRAMP.w - 3 && a.moving) a.vy = TRAMP.v;
+  }
+  function tick(now) {
+    requestAnimationFrame(tick);
+    if (!visible || document.hidden || calm) return;
+    const dt = Math.min(.1, (now - last) / 1000); last = now; anim += dt;
+    step(dani, dt); step(own, dt);
+    if (own.y === 0 && state.findDay !== today() && Math.abs(own.x - find.x) < 5) {
+      state.findDay = today(); earn(15); SFX.play('coin'); toast(`${state.name} found ${find.what}. +15`);
+      for (let i = 0; i < 10; i++) sparks.push({ x: find.x + (Math.random() - .5) * 14, y: FLOOR - 4 - Math.random() * 12, life: .6 + Math.random() * .5 });
+    }
+    for (const s of sparks) { s.y -= 14 * dt; s.life -= dt; } sparks = sparks.filter(s => s.life > 0);
+    draw();
+  }
+  cv.addEventListener('pointerdown', (e) => {
+    const r = cv.getBoundingClientRect(), px = (e.clientX - r.left) / r.width * W, py = (e.clientY - r.top) / r.height * H;
+    if (py < FLOOR - own.y - SPR_H - 6 && Math.abs(px - own.x) < 30) { if (own.y === 0) { own.vy = JUMP; SFX.play('click'); } return; }
+    own.tx = clamp(px, 12, W - 12); own.roam = false; own.t = 4;
+  });
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; last = performance.now(); }).observe(cv);
+  draw(); requestAnimationFrame(tick);
+})();
+
+
 /* ---------- Wardrobe ---------- */
 const KIND_LIST = [
   { key: 'char', label: 'Characters', one: 'character' }, { key: 'skin', label: 'Colors', one: 'color' },
@@ -892,7 +999,7 @@ Pet.on('open-ui', () => $('wardrobe').scrollIntoView({ behavior: calm ? 'auto' :
 Pet.start({ floor: $('taskbar'), name: state.name, look: state.look, x: .66 });
 
 // It has something to say the first time you reach each part of the page.
-const REMARKS = { roam: 'ooh, ledges', play: 'snack? snack.', friends: 'can Dani come over?', wardrobe: 'hats!!', capsules: 'spin it spin it', get: 'take me home?' };
+const REMARKS = { roam: 'ooh, ledges', play: 'snack? snack.', park: 'race?', friends: 'can Dani come over?', wardrobe: 'hats!!', capsules: 'spin it spin it', get: 'take me home?' };
 const seen = new Set();
 const remarks = new IntersectionObserver((entries) => {
   for (const e of entries) {

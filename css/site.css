@@ -172,10 +172,19 @@ h2.win-h { font-size: 28px; }
   100% { left: 6px; bottom: 9px; transform: scaleX(1); }
 }
 
-.play-grid .w-a { grid-column: 1 / span 5; grid-row: 1 / span 2; }
+.play-grid .w-a { grid-column: 1 / span 5; }
 .play-grid .w-b { grid-column: 6 / span 3; margin-top: 110px; }
 .play-grid .w-c { grid-column: 9 / span 4; margin-top: 10px; }
 .play-grid .w-d { grid-column: 6 / span 6; margin-top: -20px; }
+.play-grid .w-e { grid-column: 1 / span 5; margin-top: -40px; }
+/* the arcade's switch, and the top-score chip that sits next to it in the app */
+.arcade-switch { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 16px; }
+.arcade-switch span { padding: 5px 12px 7px; background: var(--night); border: 2px solid var(--line); color: var(--muted); font: 600 16px/1 var(--f-pixel); }
+.arcade-switch span.on { background: var(--orange); border-color: var(--orange); color: var(--ink); }
+.topchip { display: flex; align-items: center; gap: 8px; margin-left: auto; padding: 4px 10px 5px 8px; background: var(--night); border: 2px solid var(--sun); font-style: normal; }
+.topchip i { flex: none; width: 4px; height: 4px; margin: 0 6px 4px; background: var(--sun); box-shadow: -4px -4px 0 var(--sun), 4px -4px 0 var(--sun), -4px 0 0 var(--sun), 4px 0 0 var(--sun), 0 -4px 0 var(--sun), -4px 4px 0 var(--sun), 0 4px 0 var(--sun), 4px 4px 0 var(--sun), -8px -4px 0 var(--sun), 8px -4px 0 var(--sun), -8px 0 0 var(--sun), 8px 0 0 var(--sun), -8px 4px 0 var(--sun), 8px 4px 0 var(--sun); }
+.topchip small { color: var(--muted); font: 500 12px/1 var(--f-pixel); }
+.topchip b { color: var(--sun); font: 700 15px/1 var(--f-pixel); }
 .actions { display: grid; gap: 14px; }
 .actions button { display: flex; align-items: center; gap: 16px; margin: 0 var(--px); padding: 11px 14px 13px; border: 0; background: var(--cream); text-align: left; box-shadow: var(--edge-1), 0 calc(var(--px) * 2) 0 0 var(--ink), inset 0 calc(var(--px) * -1) 0 0 #e6d8bf; transition: transform .07s, background .1s; }
 .actions button:hover { background: #fff; transform: translateY(-2px); }
@@ -199,6 +208,23 @@ kbd { padding: 1px 5px 2px; background: var(--ink); color: var(--cream); font: 6
 .voices button.said canvas { animation: said .3s steps(3); }
 @keyframes said { 50% { transform: translateY(-6px) scale(1.1, .92); } }
 
+.park-grid .w-a { grid-column: 1 / span 8; }
+.park-grid .w-b { grid-column: 9 / span 4; margin-top: 70px; }
+.park-grid .w-c { grid-column: 1 / span 5; margin-top: -30px; }
+.park-grid .w-d { grid-column: 6 / span 4; margin-top: 30px; }
+.park-grid .w-e { grid-column: 10 / span 3; margin-top: -50px; }
+/* the park: a canvas the pet runs about in, with the bar along the top that says who is here */
+.park-screen { position: relative; background: var(--night); border-bottom: var(--px) solid var(--ink); cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+#parkCanvas { display: block; width: 100%; aspect-ratio: 8 / 3; }
+.park-tag { position: absolute; transform: translate(-50%, -100%); padding: 1px 5px 2px; background: var(--cream); color: var(--ink); font: 600 12px/1 var(--f-pixel); white-space: nowrap; pointer-events: none; box-shadow: 0 0 0 2px var(--ink); }
+.park-bar { position: absolute; left: 10px; top: 10px; display: flex; gap: 6px; pointer-events: none; }
+.park-bar span { display: inline-flex; align-items: center; padding: 3px 8px 4px 7px; background: #17131fcc; border: 2px solid var(--line); color: var(--moonlit); font: 600 13px/1 var(--f-pixel); }
+.park-bar b { font-weight: 600; }
+.park-foot { padding-top: 14px; padding-bottom: 16px; }
+.outcomes.keys li { grid-template-columns: 170px 1fr; }
+.outcomes.keys b { font: 400 15px/1.5 var(--f-body); }
+.outcomes.keys kbd { font-size: 14px; }
+.win:not(.app):not(.term) kbd { vertical-align: 1px; }
 .breaks-grid .w-a { grid-column: 1 / span 8; margin-top: 110px; }
 .breaks-grid .w-b { grid-column: 9 / span 4; margin-top: -40px; }
 .breaks-grid .w-c { grid-column: 4 / span 5; margin-top: -10px; }
@@ -245,6 +271,8 @@ kbd { padding: 1px 5px 2px; background: var(--ink); color: var(--cream); font: 6
 .friends-grid .w-b { grid-column: 7 / span 6; margin-top: 90px; }
 .friends-grid .w-c { grid-column: 2 / span 5; }
 .friends-grid .w-d { grid-column: 8 / span 4; margin-top: 50px; }
+.friends-grid .w-e { grid-column: 1 / span 5; }
+.friends-grid .w-f { grid-column: 6 / span 6; margin-top: 70px; }
 .code { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 0 0 12px; }
 .code i { width: 38px; padding: 8px 0 10px; background: var(--panel); border: 2px solid var(--line); color: var(--orange); font: 700 26px/1 var(--f-pixel); font-style: normal; text-align: center; }
 .code u { color: var(--muted); font: 700 22px var(--f-pixel); text-decoration: none; }
@@ -455,11 +483,11 @@ kbd { padding: 1px 5px 2px; background: var(--ink); color: var(--cream); font: 6
   :root { --bar-h: 56px; }
   body { font-size: 16px; }
   .caption { font-size: 16px; }
-  .taskbar { padding: 0 6px; gap: 2px; }
+  .taskbar { padding: 0 4px; gap: 2px; }
   .tb-start b, .tb-clock, .tb-get { display: none; }
-  .tb-start { padding: 5px 6px 7px; margin: 4px 6px 0 4px; }
-  .tb-apps a { padding: 0 6px 3px; }
-  .tb-apps .ico { width: 20px; height: 20px; }
+  .tb-start { padding: 5px 6px 7px; margin: 4px 4px 0 2px; }
+  .tb-apps a { padding: 0 5px 3px; }
+  .tb-apps .ico { width: 18px; height: 18px; }
   .tb-apps a.on::after { width: 16px; }
   .tb-tray { gap: 6px; }
   .tb-pill { padding: 5px 8px 6px 7px; gap: 6px; }
@@ -469,6 +497,9 @@ kbd { padding: 1px 5px 2px; background: var(--ink); color: var(--cream); font: 6
   .scatter > .win:nth-child(odd) { margin-right: 8px; }
   .voices { grid-template-columns: repeat(4, 1fr); }
   .outcomes li { grid-template-columns: 1fr; gap: 2px; }
+  .outcomes.keys li { grid-template-columns: 1fr; }
+  .park-bar { left: 6px; top: 6px; }
+  .park-bar span { font-size: 11px; padding: 2px 6px 3px 5px; }
   /* three over two, the two centred under the three */
   .moves { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px 10px; }
   .moves li { grid-column: span 2; }
