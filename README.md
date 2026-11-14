@@ -17,10 +17,11 @@ Then open http://localhost:4173. There is no build step and nothing to install: 
 | File | Job |
 |---|---|
 | `index.html`, `css/site.css` | The page |
-| `js/site.js` | Sky, clock, windows, and the Play, Friends, Wardrobe and Capsules demos. `CONFIG` at the top holds the download link |
+| `js/site.js` | Sky, clock, windows, the Play, Friends, Wardrobe and Capsules demos, and the Town picture viewer. `CONFIG` at the top holds the download link |
 | `js/pet-web.js` | The pet: physics, behavior, input. The viewport is its desktop and any element marked `data-perch` is a window it can stand on |
 | `js/sprites.js` | All pixel art, as rows of letters (one letter per pixel), and the item catalog |
 | `js/sfx.js` | Every sound, synthesized with Web Audio. There are no audio files |
+| `img/town/` | Seven pictures taken in the app's Town tab, 1280 by 746, for the Town window |
 
 `sprites.js` and `sfx.js` are the desktop app's own files, copied over unchanged.
 

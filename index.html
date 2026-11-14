@@ -37,9 +37,9 @@
   <!-- ============ 8:30 AM · hero ============ -->
   <section class="scene hero" id="top" data-hour="8.5">
     <div class="hero-copy">
-      <p class="stamp"><canvas class="ico" data-ico="paw"></canvas><span>Roamies <span data-version>v1.5.1</span> · a desktop pet</span></p>
+      <p class="stamp"><canvas class="ico" data-ico="paw"></canvas><span>Roamies <span data-version>v1.6.0</span> · a desktop pet</span></p>
       <h1 class="sky-type">A pet that lives on top of your desktop.</h1>
-      <p class="caption">It walks your taskbar, climbs your windows and rides them when you drag them. It gets you to stretch when you've been at the screen a while. It has a park to run around in, with your friends' pets. And it can walk off your screen and onto a friend's.</p>
+      <p class="caption">It walks your taskbar, climbs your windows and rides them when you drag them. It gets you to stretch when you've been at the screen a while. It has a town to walk around in, with your friends' pets. And it can walk off your screen and onto a friend's.</p>
       <div class="cta-row">
         <a class="btn big" href="#get" data-snd="click"><canvas class="ico" data-ico="down"></canvas>Get Roamies</a>
         <a class="btn big ghost" href="#roam" data-snd="click">See what it does</a>
@@ -212,64 +212,87 @@
     </div>
   </section>
 
-  <!-- ============ 2:30 PM · park ============ -->
-  <section class="scene" id="park" data-hour="14.5">
+  <!-- ============ 2:30 PM · town ============ -->
+  <section class="scene" id="town" data-hour="14.5">
     <div class="scene-head">
       <p class="stamp"><canvas class="ico" data-ico="sun"></canvas><time>2:30 PM</time></p>
-      <h2 class="sky-type">Half past two. It goes to the park.</h2>
-      <p class="caption">Open the Park tab and the pet steps off the desktop in a puff and turns up at the gate of a park a few screens wide, seen from the side like the desktop. You steer it. The sky in there follows your computer's clock: day, dusk and night, when the lamps come on.</p>
+      <h2 class="sky-type">Half past two. It goes to town.</h2>
+      <p class="caption">Open the Town tab and the pet steps off the desktop in a puff and turns up at the west gate of a fenced town, drawn in 3D and seen from behind the pet. You steer it. The sky in there follows your computer's clock, and the weather follows the date.</p>
     </div>
 
-    <div class="scatter park-grid">
-      <article class="win app w-a" data-perch="park" data-title="Park" style="--bar: var(--mint)">
-        <header class="win-bar"><canvas class="ico" data-ico="tree"></canvas><b>Park</b></header>
-        <div class="park-screen" id="parkScreen">
-          <canvas id="parkCanvas" width="320" height="120"></canvas>
-          <span class="park-tag" id="parkTagDani">Dani</span>
-          <div class="park-bar"><span><i class="dot on"></i><b data-petname>Pip</b></span><span><i class="dot on"></i>Dani</span></div>
+    <div class="scatter town-grid">
+      <article class="win app w-a" data-perch="town" data-title="Town" style="--bar: var(--mint)">
+        <header class="win-bar"><canvas class="ico" data-ico="tree"></canvas><b>Town</b></header>
+        <div class="town-screen" id="townShots">
+          <img class="on" src="img/town/day.jpg" width="1280" height="746" loading="lazy" decoding="async" alt="The town by day: two pets on the grass beside a blue trampoline and a ball, with the arcade across the cobbled street and mountains behind." data-note="The playground corner by day, with the arcade across the street.">
+          <img src="img/town/dusk.jpg" width="1280" height="746" loading="lazy" decoding="async" alt="The main street at dusk under a pink sky: two lamps lit, coloured string lights between them, a bench, and two pets by the cobbles." data-note="Dusk on the main street. The lanterns and the string lights come on.">
+          <img src="img/town/night.jpg" width="1280" height="746" loading="lazy" decoding="async" alt="The same street at night: the lamps and the string lights glow, and each lamp lights the ground round it." data-note="Night. Each lamp lights a pool of the ground round it.">
+          <img src="img/town/rain.jpg" width="1280" height="746" loading="lazy" decoding="async" alt="The arcade on a rainy day: a grey sky, streaks of rain, puddles on the street and a cat sitting on a bench." data-note="A rainy day. Rain wets the stone and leaves puddles on the street.">
+          <img src="img/town/snow.jpg" width="1280" height="746" loading="lazy" decoding="async" alt="The arcade in snow: white ground, and snow on the trees, the awning and the bench." data-note="Snow lies on everything. In December it snows more often than not.">
+          <img src="img/town/pond.jpg" width="1280" height="746" loading="lazy" decoding="async" alt="Two pets at the edge of the pond, with stones round it, reeds, lilies and two ducks on the water." data-note="The pond, with its ducks. Pets walk round it, never into it.">
+          <img src="img/town/hill.jpg" width="1280" height="746" loading="lazy" decoding="async" alt="The top of the hill: two pets by a bench, a railing and a checkered flag, with the street, the playground and the arcade below." data-note="The top of the hill: the lookout, a bench and the race's checkered flag.">
         </div>
-        <div class="win-body park-foot">
-          <p class="fine">A small park, with the pet from this page and Dani in it. Click the ground and your pet walks there; click well above it and it jumps. The trampoline throws a pet more than twice as high as a jump, and something is lying about to be found.</p>
+        <div class="win-body town-foot">
+          <div class="town-picks" id="townPicks" role="group" aria-label="Pictures of the town">
+            <button class="btn small ghost" type="button" aria-pressed="true" data-snd="tab">Day</button>
+            <button class="btn small ghost" type="button" aria-pressed="false" data-snd="tab">Dusk</button>
+            <button class="btn small ghost" type="button" aria-pressed="false" data-snd="tab">Night</button>
+            <button class="btn small ghost" type="button" aria-pressed="false" data-snd="tab">Rain</button>
+            <button class="btn small ghost" type="button" aria-pressed="false" data-snd="tab">Snow</button>
+            <button class="btn small ghost" type="button" aria-pressed="false" data-snd="tab">The pond</button>
+            <button class="btn small ghost" type="button" aria-pressed="false" data-snd="tab">The hill</button>
+          </div>
+          <p class="fine" id="townNote" aria-live="polite">The playground corner by day, with the arcade across the street.</p>
+          <p class="fine muted">Pictures taken in the app's Town tab.</p>
         </div>
       </article>
 
       <article class="win w-b" data-perch="keys" data-title="keys.txt" style="--bar: var(--sun)">
         <header class="win-bar"><canvas class="ico" data-ico="doc"></canvas><b>keys.txt</b></header>
         <div class="win-body">
-          <h3 class="win-h">Keys, or the mouse</h3>
+          <h3 class="win-h">Keys, and the mouse</h3>
           <ul class="outcomes keys">
-            <li><b><kbd>A</kbd> <kbd>D</kbd> or the arrows</b><span>Run.</span></li>
-            <li><b><kbd>Space</kbd> <kbd>W</kbd> or up</b><span>Jump. A tap is a hop, a hold is a full jump.</span></li>
-            <li><b><kbd>S</kbd> or down</b><span>With jump, drop down through what the pet is standing on. Held, walk past the trampoline instead of onto it.</span></li>
-            <li><b><kbd>E</kbd> or <kbd>Enter</kbd></b><span>Use the machine the pet is standing at.</span></li>
+            <li><b><kbd>W</kbd> <kbd>S</kbd> or up and down</b><span>Walk the way the camera looks, or back.</span></li>
+            <li><b><kbd>A</kbd> <kbd>D</kbd> or left and right</b><span>Walk sideways.</span></li>
+            <li><b>Drag the mouse</b><span>Swing the camera round the pet.</span></li>
+            <li><b>Scroll</b><span>Bring the camera nearer or further.</span></li>
+            <li><b><kbd>Space</kbd></b><span>Hop. A tap is a little one, a hold a full one.</span></li>
+            <li><b><kbd>Shift</kbd></b><span>Held, walk across the trampoline instead of bouncing on it.</span></li>
+            <li><b><kbd>E</kbd> or <kbd>Enter</kbd></b><span>Use what the pet is standing at.</span></li>
+            <li><b><kbd>Q</kbd></b><span>Say something.</span></li>
           </ul>
-          <p class="fine">Or click: a click on the ground walks there, a click on a machine walks up to it and uses it, and a click well above the pet is a jump.</p>
-          <p class="stampline">Every pet runs as fast and jumps as high. One that flies glides instead; one that hovers bobs a little off the ground.</p>
+          <p class="fine">Or click: a click on the ground walks there, a click on an arcade cabinet or the bulletin board walks up to it and uses it, and a click on another pet says who it is.</p>
+          <p class="stampline">Every pet walks as fast and hops as high. One that flies can float down slowly; one that hovers bobs a little off the ground.</p>
         </div>
       </article>
 
-      <article class="win w-c" data-perch="in-the-park" data-title="in the park" style="--bar: var(--orange)">
-        <header class="win-bar"><canvas class="ico" data-ico="tree"></canvas><b>in the park</b></header>
+      <article class="win w-c" data-perch="in-the-town" data-title="in the town" style="--bar: var(--orange)">
+        <header class="win-bar"><canvas class="ico" data-ico="tree"></canvas><b>in the town</b></header>
         <div class="win-body">
           <ul class="plain">
-            <li><b>Things to walk up to.</b> The quest board, the capsule machine, the shop and two arcade cabinets. Standing at one shows its name over it, and <kbd>E</kbd> opens its page on top of the park. The pet stays in the park meanwhile.</li>
-            <li><b>Things to play on.</b> A ball anyone can kick, a trampoline, a see-saw that sends whatever is on the other end flying, the big tree's branches up to the top of its crown, crates, a wall, a lookout with a flag, a bench, and lamps along the path.</li>
-            <li><b>Today's find.</b> Something small is dropped somewhere new every day, up a tree or on the lookout as often as not: a lost sock, a marble, a lucky penny. It glints now and then. Walking over it pays 15 coins, once a day, and one of the daily quests is to find it.</li>
-            <li><b>The year.</b> October puts pumpkins about the place, December snow.</li>
-            <li><b>A visiting pet comes too.</b> It turns up at the gate and runs about by itself: after your pet, onto the trampoline, wherever. When your pet goes home it goes with it.</li>
+            <li><b>The layout.</b> The gate is on the west side, with the bulletin board by it. The main street runs east with its lamps, string lights and benches. The arcade is on its north side, the playground in the south-east corner with a sandpit, the pond in the south-west, and the hill with the lookout in the north-east.</li>
+            <li><b>Things to walk up to.</b> The arcade's two cabinets, Snack Catch and Sky Hop, and the bulletin board. Standing at a cabinet shows its name over it, and <kbd>E</kbd> opens the game on top of the town. The pet stays in the town meanwhile. Quests, capsules and the Store are tabs of the app window and are not in the town.</li>
+            <li><b>Things to play on.</b> A ball anyone can kick, a trampoline that throws a pet far higher than a hop, a see-saw that sends whatever is on the other end flying, and the hill.</li>
+            <li><b>The bulletin board.</b> A notice is a phrase from a list and a sticker, signed with your pet's name. It stays up for a day, and pinning another replaces it. The board is the same in every town, and whoever comes by sees the latest twenty.</li>
+            <li><b>Today's find.</b> Something small is dropped somewhere new every day, up on the lookout as often as not: a lost sock, a marble, a lucky penny. It glints now and then. Walking over it pays 15 coins, once a day, and one of the daily quests is to find it.</li>
+            <li><b>The weather and the year.</b> Most days are clear. Some bring rain, some wind, and in December it snows more often than not. October puts pumpkins by the lamps.</li>
+            <li><b>Sounds and small life.</b> Footsteps change with the ground. There are birds by day and crickets by night. A cat sits on a bench, a dog follows your pet about, three ducks paddle round the pond, and fireflies come out at night.</li>
+            <li><b>A visiting pet comes too.</b> It turns up at the gate and runs about by itself. When your pet goes home it goes with it.</li>
           </ul>
         </div>
       </article>
 
-      <article class="win term w-d" data-perch="with-friends" data-title="with friends" style="--bar: var(--grape)">
-        <header class="win-bar"><canvas class="ico" data-ico="heart"></canvas><b>with friends</b></header>
+      <article class="win term w-d" data-perch="with-others" data-title="with others" style="--bar: var(--grape)">
+        <header class="win-bar"><canvas class="ico" data-ico="heart"></canvas><b>with others</b></header>
         <div class="win-body">
           <dl class="readout tall">
-            <div><dt>who</dt><dd>Everyone in the same hangout who opens the park is in it together, up to eight pets, each steered by its own owner. Friends' pets wear their names.</dd></div>
-            <div><dt>race</dt><dd>A start line by the gate and a checkered flag at the far end. <kbd>E</kbd> on the line starts one: everyone near it gets the 3-2-1, then first to the flag wins. Alone, it is a race against the clock.</dd></div>
-            <div><dt>tag</dt><dd><kbd>E</kbd> next to another pet starts a game, with you it. Whoever is it wears a red tag and passes it on by touching someone. After a minute, whoever was it for the least time wins.</dd></div>
-            <div><dt>say</dt><dd>A dozen phrases ("hi!", "race?", "follow me!", "gg") and the four emotes. They go to the others by number, so nothing can be said in the park that isn't on the list.</dd></div>
-            <div><dt>pays</dt><dd>Nothing by themselves. Winning a race and playing tag to the end are daily quests, 40 and 30 coins, and minutes together bring friends closer as they always do.</dd></div>
+            <div><dt>who</dt><dd>Everyone in your hangout who opens the town is in it together. A town holds up to eight pets, each steered by its own owner.</dd></div>
+            <div><dt>meet</dt><dd>Settings has a switch, <b>Meet other players in the town</b>. It is off until you turn it on. Off, your town only ever has your hangout in it. On, whoever else is playing can share it.</dd></div>
+            <div><dt>names</dt><dd>Friends' pets wear their names. A stranger has its pet's name under it and nothing else. Click one for Add friend, Hide, Block and Report. A blocked player is never in a town with you again, and their notices are off your board.</dd></div>
+            <div><dt>race</dt><dd>A start line across the street by the gate and a checkered flag on top of the hill. <kbd>E</kbd> on the line starts one: everyone near it gets the 3-2-1, then first to the flag wins, by whatever way. Alone, it is a race against the clock.</dd></div>
+            <div><dt>tag</dt><dd><kbd>E</kbd> next to another pet starts a game, with you it. Whoever is it has a red tag over its head and passes it on by touching someone. After a minute, whoever was it for the least time wins.</dd></div>
+            <div><dt>say</dt><dd><kbd>Q</kbd> opens a dozen phrases ("hi!", "race?", "follow me!", "gg") and the four emotes. They go to the others by number, and the board's notices are from lists too, so pet names are the only free text between players.</dd></div>
+            <div><dt>pays</dt><dd>Nothing by themselves. Winning a race and playing tag to the end are daily quests, 40 and 30 coins, and minutes in a hangout bring friends closer as they always do.</dd></div>
             <div><dt>wires</dt><dd>Two copies talk to each other directly, always through a relay, so no copy ever learns another's internet address.</dd></div>
           </dl>
         </div>
@@ -278,14 +301,27 @@
       <article class="win w-e" data-perch="home-time" data-title="home time" style="--bar: var(--pink)">
         <header class="win-bar"><canvas class="ico" data-ico="paw"></canvas><b>home time</b></header>
         <div class="win-body">
-          <h3 class="win-h">Not a way out of looking after it</h3>
-          <p>While the park is open the pet is not on the desktop. It is away, the way it is on a visit, and its coin a minute and its care meters carry on as ever. It comes home, with a puff where it went, when you leave:</p>
+          <h3 class="win-h">No way out of looking after it</h3>
+          <p>While the town is open the pet is not on the desktop. It is away, the way it is on a visit, and its coin a minute and its care meters carry on as ever. It comes home, with a puff where it went, when you leave:</p>
           <ul class="plain">
-            <li>another tab, closing the app window, or putting it away;</li>
+            <li>another tab, closing the app window, or putting it away (a game opened from a cabinet in the town doesn't count);</li>
             <li>the window left behind other windows for ten minutes;</li>
             <li><kbd>Ctrl</kbd> <kbd>Alt</kbd> <kbd>P</kbd>, which calls it to the mouse as usual;</li>
             <li>a nap.</li>
           </ul>
+          <p class="fine">A pet that is napping or out visiting can't come in, and the town says so.</p>
+        </div>
+      </article>
+
+      <article class="win term w-f" data-perch="graphics" data-title="graphics" style="--bar: var(--sky)">
+        <header class="win-bar"><canvas class="ico" data-ico="gear"></canvas><b>graphics</b></header>
+        <div class="win-body">
+          <dl class="readout tall">
+            <div><dt>asks</dt><dd>The first time the town is opened it asks, at the gate: Auto, High, Medium, Low or Lowest. The cog in the town changes it at any time.</dd></div>
+            <div><dt>auto</dt><dd>Starts where your graphics card's name suggests, steps down by itself when frames get slow, and tries one step up again after a few days.</dd></div>
+            <div><dt>high</dt><dd>Everything: soft shadows, grass blade by blade, a soft glow round whatever shines.</dd></div>
+            <div><dt>lowest</dt><dd>No shadows and no grass. Easy mode, the switch in Settings, always draws this one.</dd></div>
+          </dl>
         </div>
       </article>
     </div>
@@ -394,7 +430,7 @@
           <dl class="readout tall">
             <div><dt>sees</dt><dd>pet names, outfits, who is friends with whom</dd></div>
             <div><dt>never</dt><dd>window titles, or anything else about your screen</dd></div>
-            <div><dt>keeps</dt><dd>nothing on disk</dd></div>
+            <div><dt>keeps</dt><dd>what the <a href="privacy.html">privacy page</a> lists, and no more</dd></div>
           </dl>
         </div>
       </article>
@@ -503,7 +539,7 @@
             <tr><td>Pet out on the desktop</td><td>1 a minute</td></tr>
             <tr><td>A stretch break, up to four a day</td><td>40</td></tr>
             <tr><td>Your pet coming home from a visit</td><td>25</td></tr>
-            <tr><td>Today's find in the park, once a day</td><td>15</td></tr>
+            <tr><td>Today's find in the town, once a day</td><td>15</td></tr>
             <tr><td>Opening a gift a visitor left</td><td>10 to 40</td></tr>
             <tr><td>Daily reward, day 1 to day 7</td><td>20 to 150</td></tr>
             <tr><td>Daily quests</td><td>25 to 60</td></tr>
@@ -530,7 +566,7 @@
     <div class="cta-row center">
       <a class="btn huge" id="download" href="https://github.com/userlaws/roamies/releases/latest/download/Roamies-Setup.exe" data-snd="click"><canvas class="ico" data-ico="down"></canvas><span id="downloadLabel">Download for Windows</span></a>
     </div>
-    <p class="caption center" id="downloadNote">Free. Windows 10 and 11. The latest is <span data-version>v1.5.1</span>.</p>
+    <p class="caption center" id="downloadNote">Free. Windows 10 and 11. The latest is <span data-version>v1.6.0</span>.</p>
 
     <div class="scatter finale-grid">
       <article class="win w-a" data-perch="windows" data-title="windows" style="--bar: var(--sky)">
@@ -550,7 +586,7 @@
         <header class="win-bar"><canvas class="ico" data-ico="gear"></canvas><b>what's in the box</b></header>
         <div class="win-body">
           <dl class="readout tall">
-            <div><dt>tabs</dt><dd>Wardrobe, Store, Capsules, Friends, Quests, Play, Park, Settings</dd></div>
+            <div><dt>tabs</dt><dd>Wardrobe, Store, Capsules, Friends, Quests, Play, Town, Settings</dd></div>
             <div><dt>daily</dt><dd>a 7-day reward streak and three quests</dd></div>
             <div><dt>hotkey</dt><dd>Ctrl+Alt+P calls the pet to your mouse</dd></div>
             <div><dt>price</dt><dd>coins only. Nothing to buy with real money.</dd></div>
@@ -561,7 +597,7 @@
 
     <footer class="foot">
       <canvas id="footPet" width="16" height="23" aria-hidden="true"></canvas>
-      <p>Roamies <span data-version>v1.5.1</span>. The pet on this page is drawn from the app's own sprite sheet and makes the app's own noises.</p>
+      <p>Roamies <span data-version>v1.6.0</span>. The pet on this page is drawn from the app's own sprite sheet and makes the app's own noises.</p>
       <p><button class="linkish" id="resetSite" data-snd="click">Reset this page's coins and outfit</button> · <a class="linkish" href="privacy.html">What Roamies knows about you</a></p>
     </footer>
   </section>
@@ -573,7 +609,7 @@
   <div class="tb-apps" id="tbApps">
     <a href="#roam" data-snd="tab"><canvas class="ico" data-ico="win"></canvas><span>Roam</span></a>
     <a href="#play" data-snd="tab"><canvas class="ico" data-ico="pad"></canvas><span>Play</span></a>
-    <a href="#park" data-snd="tab"><canvas class="ico" data-ico="tree"></canvas><span>Park</span></a>
+    <a href="#town" data-snd="tab"><canvas class="ico" data-ico="tree"></canvas><span>Town</span></a>
     <a href="#breaks" data-snd="tab"><canvas class="ico" data-ico="stretch"></canvas><span>Breaks</span></a>
     <a href="#friends" data-snd="tab"><canvas class="ico" data-ico="heart"></canvas><span>Friends</span></a>
     <a href="#wardrobe" data-snd="tab"><canvas class="ico" data-ico="shirt"></canvas><span>Wardrobe</span></a>

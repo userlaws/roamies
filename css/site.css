@@ -208,20 +208,23 @@ kbd { padding: 1px 5px 2px; background: var(--ink); color: var(--cream); font: 6
 .voices button.said canvas { animation: said .3s steps(3); }
 @keyframes said { 50% { transform: translateY(-6px) scale(1.1, .92); } }
 
-.park-grid .w-a { grid-column: 1 / span 8; }
-.park-grid .w-b { grid-column: 9 / span 4; margin-top: 70px; }
-.park-grid .w-c { grid-column: 1 / span 5; margin-top: -30px; }
-.park-grid .w-d { grid-column: 6 / span 4; margin-top: 30px; }
-.park-grid .w-e { grid-column: 10 / span 3; margin-top: -50px; }
-/* the park: a canvas the pet runs about in, with the bar along the top that says who is here */
-.park-screen { position: relative; background: var(--night); border-bottom: var(--px) solid var(--ink); cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-#parkCanvas { display: block; width: 100%; aspect-ratio: 8 / 3; }
-.park-tag { position: absolute; transform: translate(-50%, -100%); padding: 1px 5px 2px; background: var(--cream); color: var(--ink); font: 600 12px/1 var(--f-pixel); white-space: nowrap; pointer-events: none; box-shadow: 0 0 0 2px var(--ink); }
-.park-bar { position: absolute; left: 10px; top: 10px; display: flex; gap: 6px; pointer-events: none; }
-.park-bar span { display: inline-flex; align-items: center; padding: 3px 8px 4px 7px; background: #17131fcc; border: 2px solid var(--line); color: var(--moonlit); font: 600 13px/1 var(--f-pixel); }
-.park-bar b { font-weight: 600; }
-.park-foot { padding-top: 14px; padding-bottom: 16px; }
-.outcomes.keys li { grid-template-columns: 170px 1fr; }
+.town-grid .w-a { grid-column: 1 / span 8; }
+.town-grid .w-b { grid-column: 9 / span 4; margin-top: 70px; }
+.town-grid .w-c { grid-column: 1 / span 6; margin-top: -30px; }
+.town-grid .w-d { grid-column: 7 / span 6; margin-top: 30px; }
+.town-grid .w-e { grid-column: 2 / span 5; margin-top: -40px; }
+.town-grid .w-f { grid-column: 8 / span 4; margin-top: 30px; }
+/* the town: pictures taken in the app, one on show at a time, and a row of buttons that change it.
+   The box keeps the pictures' shape, so nothing moves when one arrives or another is picked. */
+.town-screen { position: relative; aspect-ratio: 1280 / 746; overflow: hidden; background: var(--night); border-bottom: var(--px) solid var(--ink); color: var(--muted); font-size: 14px; }
+.town-screen img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.town-screen img:not(.on) { display: none; }
+.town-foot { padding-top: 12px; padding-bottom: 16px; }
+.town-picks { display: flex; flex-wrap: wrap; gap: 4px; margin: 0 calc(var(--px) * -1) 8px; }
+html:not(.js) .town-picks { display: none; }
+.town-picks .btn.ghost[aria-pressed="true"] { --b: var(--orange); --d: var(--orange-d); color: var(--ink); }
+#townNote { margin-bottom: 4px; }
+.outcomes.keys li { grid-template-columns: 150px 1fr; }
 .outcomes.keys b { font: 400 15px/1.5 var(--f-body); }
 .outcomes.keys kbd { font-size: 14px; }
 .win:not(.app):not(.term) kbd { vertical-align: 1px; }
@@ -498,8 +501,7 @@ kbd { padding: 1px 5px 2px; background: var(--ink); color: var(--cream); font: 6
   .voices { grid-template-columns: repeat(4, 1fr); }
   .outcomes li { grid-template-columns: 1fr; gap: 2px; }
   .outcomes.keys li { grid-template-columns: 1fr; }
-  .park-bar { left: 6px; top: 6px; }
-  .park-bar span { font-size: 11px; padding: 2px 6px 3px 5px; }
+  #townNote { min-height: 3em; }   /* two lines at this width, so the window keeps its height from picture to picture */
   /* three over two, the two centred under the three */
   .moves { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px 10px; }
   .moves li { grid-column: span 2; }

@@ -46,7 +46,7 @@ body { background: var(--night); color: var(--moonlit);
 <body>
 
 <main class="fine-desk">
-  <p class="stamp"><span>privacy.txt · last changed 13 October 2026</span></p>
+  <p class="stamp"><span>privacy.txt · last changed 14 November 2026</span></p>
   <h1 class="sky-type">The fine print, in plain words.</h1>
   <p class="caption">Roamies is a pet that lives on your desktop. Most of what it knows stays on your computer. This page says what doesn't, where it goes, and how to have it removed.</p>
 
@@ -80,7 +80,23 @@ body { background: var(--night); color: var(--moonlit);
         <li>a ban and its reason, if a code or an account has ever been shut out.</li>
       </ul>
       <p>Window titles, song names and anything else about your screen never reach it. Coins and ordinary items aren't there either: those live in your save.</p>
-      <p class="fine">The server's own code does not store your IP address. It runs at Neon, in the United States, and the host handles each connection the way any host does.</p>
+      <p class="fine">The server's own code does not store your IP address. It runs at Cloudflare and keeps its database at Neon, in the United States, and the hosts handle each connection the way any host does.</p>
+    </div>
+  </article>
+
+  <article class="win" style="--bar: var(--orange)">
+    <header class="win-bar"><b>the town</b></header>
+    <div class="win-body">
+      <h2 class="win-h">Other players, only if you say so</h2>
+      <p>The Town tab is a place your pet walks around in. <b>Settings &gt; Meet other players in the town</b> is off until you turn it on. Off, your town only ever has the friends in your hangout in it.</p>
+      <ul>
+        <li><b>With the switch on,</b> whoever else is playing can share your town, up to eight pets in one. Their copies see your pet's name, what it looks like, where it walks, and what it says from the list of phrases. Someone who clicks your pet is shown its name, with Add friend, Hide, Block and Report. Their copy is told your friend code so that it can reach yours and ask to be friends; the app does not show it. Friends in your hangout see your pet in the town either way.</li>
+        <li><b>Through a relay.</b> The copies in a town talk to each other directly, always through a relay run by Cloudflare, so no copy learns another's internet address.</li>
+        <li><b>What the friend server is told.</b> While your pet is in the town, your copy says so every few seconds, with whether the switch is on, which hangout you are in, the friend codes you have blocked, and how much its town connections carried. The server uses that to decide who shares a town and holds it in memory. What it stores is one monthly total of what all the towns carried.</li>
+        <li><b>The bulletin board.</b> A notice is a phrase and a sticker, each from a fixed list, signed with your pet's name. The friend server keeps it with your friend code. It is up for a day, for whoever opens the board in any town, whether or not they have the switch on. It is deleted from the server a day or two after it comes down. Pinning another replaces it.</li>
+        <li><b>Reports.</b> Reporting a pet in your town sends the friend server your friend code, the reported copy's friend code, which town the two of you were in, and a reason from a list of four. The people who make Roamies read it, and can shut a copy out of every town. A report is deleted 90 days after it has been dealt with.</li>
+      </ul>
+      <p>The phrases, the emotes and the notices all come from lists, so pet names are the only words of your own that other players see.</p>
     </div>
   </article>
 
@@ -117,7 +133,7 @@ body { background: var(--night); color: var(--moonlit);
     <div class="win-body">
       <h2 class="win-h">Other places Roamies talks to</h2>
       <ul>
-        <li><b>Updates.</b> A copy from the installer looks for new versions on GitHub and downloads them from there. A copy from the Microsoft Store is updated by the Store. GitHub and Microsoft see those requests as they see any download.</li>
+        <li><b>Updates.</b> A copy from the installer looks for new versions on GitHub and downloads them from there. A copy from the Microsoft Store is updated by the Store. So that Settings can say when a newer version is out, that copy also asks GitHub for the newest version's number, when it starts and then twice a day. The request carries nothing about you or your copy beyond what any web request carries. GitHub and Microsoft see those requests as they see any download.</li>
         <li><b>This website.</b> The demo pet's coins and outfit are kept in your own browser and sent nowhere. The page asks GitHub what the newest version is. It sets no cookies and has no analytics. It is hosted by GitHub Pages, and its fonts come from Google Fonts.</li>
       </ul>
     </div>
