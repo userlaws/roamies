@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roamies: the photo wall</title>
+<meta name="description" content="Photos from the Roamies photo booth: desktop pets in their outfits, alone or with a friend, posted by their owners.">
+<meta property="og:title" content="The Roamies photo wall">
+<meta property="og:description" content="Desktop pets in their best outfits, from the Roamies photo booth.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://userlaws.github.io/roamies/photos.html">
+<meta property="og:image" content="https://userlaws.github.io/roamies/preview.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@roamiesapp">
+<link rel="canonical" href="https://userlaws.github.io/roamies/photos.html">
+<meta name="theme-color" content="#221b2e">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/site.css">
+<style>
+/* The wall is a corkboard in a window on the same desktop, at dusk: prints pinned at a tilt, one pin each. */
+body { background: var(--night); color: var(--moonlit);
+  background-image:
+    radial-gradient(var(--moonlit) 0 2px, transparent 2px), radial-gradient(#ffb25b 0 2px, transparent 2px), radial-gradient(#ff7a90 0 2px, transparent 2px),
+    linear-gradient(#2a1f45, #3a2553 55%, #5a3060);
+  background-size: 410px 350px, 560px 470px, 700px 610px, 100% 100%;
+  background-position: 30px 50px, 230px 170px, 440px 20px, 0 0;
+  background-attachment: fixed; image-rendering: pixelated; }
+.wall-desk { max-width: 1180px; margin: 0 auto; padding: 64px 20px 140px; }
+.wall-desk h1.sky-type { font-size: clamp(42px, 6.6vw, 92px); }
+.wall-desk .caption { max-width: 640px; margin-bottom: 40px; }
+.wall-desk .caption b { color: var(--cream); }
+.wall-win .win-bar { cursor: default; }
+.wall-win .win-body { padding: 0; }
+/* cork: two sizes of speck on a warm brown, drawn in pixels like everything else */
+.board { position: relative; display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 34px 26px; padding: 40px 30px 46px; min-height: 360px;
+  background:
+    radial-gradient(#8a5a30 0 2px, transparent 2px) 0 0 / 22px 18px,
+    radial-gradient(#d29a5c 0 2px, transparent 2px) 9px 7px / 30px 26px,
+    radial-gradient(#7a4c26 0 3px, transparent 3px) 15px 3px / 46px 38px,
+    #b67a42;
+  box-shadow: inset 0 0 0 var(--px) #6b4120, inset 0 calc(var(--px) * 3) 0 #00000022; }
+.print { --r: 0deg; position: relative; margin: 0; padding: 0; border: 0; background: none; transform: rotate(var(--r)); transition: transform .18s steps(3); cursor: zoom-in; }
+.print canvas { display: block; width: 100%; height: auto; image-rendering: auto; box-shadow: 4px 6px 0 #00000040, 0 0 0 2px #00000014; }
+.print::before { content: ""; position: absolute; z-index: 1; left: 50%; top: -8px; width: 16px; height: 16px; margin-left: -8px; background: var(--pin, var(--pink));
+  box-shadow: inset -4px -4px 0 #00000033, inset 3px 3px 0 #ffffff66, 0 0 0 3px var(--ink), 2px 5px 0 #00000040; }
+.print:hover, .print:focus-visible { transform: rotate(0deg) translateY(-6px) scale(1.03); z-index: 2; }
+.print .who { display: block; margin-top: 8px; color: #2a1608; font: 600 14px/1.2 var(--f-pixel); text-align: center; opacity: .85; }
+.board-empty { grid-column: 1 / -1; align-self: center; justify-self: center; max-width: 440px; padding: 22px 24px; background: var(--paper); color: var(--ink); text-align: center; box-shadow: var(--edge-1), 6px 8px 0 #00000040; transform: rotate(-1.5deg); }
+.board-empty b { display: block; margin-bottom: 6px; font: 700 24px/1.1 var(--f-pixel); }
+.more { display: flex; justify-content: center; padding: 22px 0 26px; background: #6b4120; }
+.more button, .viewer-actions button, .viewer-actions a { padding: 8px 14px 9px; border: 0; background: var(--cream); color: var(--ink); font: 600 16px/1 var(--f-pixel); box-shadow: var(--edge-1); text-decoration: none; }
+.more button:hover, .viewer-actions button:hover, .viewer-actions a:hover { background: var(--sun); }
+/* one photo, big */
+.viewer { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 24px 16px calc(var(--bar-h) + 16px); background: #120d1ce6; }
+.viewer[hidden] { display: none; }
+.viewer-box { display: flex; flex-direction: column; align-items: center; gap: 14px; max-width: min(520px, 100%); }
+.viewer canvas { width: 100%; max-height: calc(100vh - 220px); object-fit: contain; image-rendering: auto; box-shadow: 8px 10px 0 #00000055; }
+.viewer-meta { color: var(--moonlit); font: 600 17px/1.3 var(--f-pixel); text-align: center; }
+.viewer-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.viewer-actions .quiet { background: none; color: var(--muted); box-shadow: none; }
+.viewer-actions .quiet:hover { background: none; color: var(--pink); }
+.taskbar .tb-apps a span { display: inline; }
+.taskbar .tb-apps a { color: var(--moonlit); }
+.photographer { position: absolute; right: 30px; bottom: 100%; width: 96px; height: auto; margin-bottom: 4px; pointer-events: none; }
+@media (max-width: 560px) { .board { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 16px; padding: 30px 14px 36px; } .wall-desk { padding-top: 44px; } .photographer { width: 64px; right: 16px; } }
+</style>
+</head>
+<body>
+
+<main class="wall-desk">
+  <p class="stamp"><span>wall.png · from the Roamies photo booth</span></p>
+  <h1 class="sky-type">The photo wall.</h1>
+  <p class="caption">Every photo here was taken in the Roamies photo booth and pinned up by its pet's owner. Pets in their best outfits, alone or with a friend. To pin up your own: <b>Wardrobe › Photo booth › Post to the wall</b>.</p>
+
+  <article class="win wall-win" style="--bar: var(--orange)">
+    <canvas class="photographer" id="photographer" width="16" height="23" aria-hidden="true"></canvas>
+    <header class="win-bar"><b id="wallTitle">wall.png</b></header>
+    <div class="win-body">
+      <div class="board" id="board" aria-live="polite"></div>
+      <div class="more" id="more" hidden><button type="button" id="moreBtn">Older photos</button></div>
+    </div>
+  </article>
+</main>
+
+<div class="viewer" id="viewer" hidden role="dialog" aria-modal="true" aria-label="A photo from the wall">
+  <div class="viewer-box">
+    <div id="viewerPic"></div>
+    <div class="viewer-meta" id="viewerMeta"></div>
+    <div class="viewer-actions">
+      <button type="button" id="copyLink">Copy link</button>
+      <a href="./#get" id="getIt">Get Roamies</a>
+      <button type="button" id="closeViewer">Close</button>
+      <button type="button" class="quiet" id="report">Report</button>
+    </div>
+  </div>
+</div>
+
+<nav class="taskbar" aria-label="Back">
+  <a class="tb-start" href="./" aria-label="Roamies, back to the desktop"><canvas id="brandFace" width="16" height="14"></canvas><b>Roamies</b></a>
+  <div class="tb-apps"><a href="./"><span>Back to the desktop</span></a><a class="on" href="photos.html"><span>wall.png</span></a></div>
+</nav>
+
+<script src="js/sprites.js"></script>
+<script src="js/photo-art.js"></script>
+<script>
+// The wall: photos as the friend server keeps them (backend/photos.mjs: a recipe each, never a picture), drawn here
+// with the app's own art (photo-art.js), the newest first, 60 at a time. ?api= points it at a friend server on this
+// computer, for trying it; nothing else is taken from the address.
+(() => {
+  'use strict';
+  const asked = new URLSearchParams(location.search).get('api');
+  const API = asked && /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(asked) ? asked : 'https://roamies.roamiesapp.workers.dev';
+  const $ = (id) => document.getElementById(id);
+  const PINS = ['#ff7a90', '#6ec1ff', '#ffd34d', '#7fd6b0', '#b08bff'];
+  const seen = new Map();          // id -> photo
+  let oldest = null, open = null;
+
+  const titleOf = (p) => (p.with ? `${p.name} & ${p.with}` : p.name);
+  function draw(p) {
+    const r = p.recipe || {};
+    return PHOTO_ART.photo({ pets: Array.isArray(r.pets) ? r.pets.slice(0, 2) : [{}], backdrop: r.backdrop, pose: r.pose, line: PHOTO_ART.LINES[r.line] || '', title: titleOf(p) });
+  }
+  function pin(p) {
+    const seed = PHOTO_ART.seedOf(p.id), b = document.createElement('button');
+    b.className = 'print'; b.type = 'button';
+    b.style.setProperty('--r', `${((seed % 9) - 4) * 0.9}deg`);
+    b.style.setProperty('--pin', PINS[seed % PINS.length]);
+    b.setAttribute('aria-label', `Photo of ${titleOf(p)}`);
+    b.append(draw(p));
+    b.addEventListener('click', () => show(p.id));
+    return b;
+  }
+  function empty() {
+    const e = document.createElement('div'); e.className = 'board-empty';
+    const b = document.createElement('b'); b.textContent = 'Nothing pinned up yet';
+    e.append(b, 'Be the first: in Roamies, open the Wardrobe, then the photo booth, and post your pet to the wall.');
+    return e;
+  }
+  async function load() {
+    $('moreBtn').disabled = true;
+    try {
+      const r = await fetch(`${API}/photos${oldest ? `?before=${oldest}` : ''}`, { cache: 'no-store' });
+      const { photos = [] } = r.ok ? await r.json() : {};
+      for (const p of photos) {
+        if (!p || typeof p.id !== 'string' || seen.has(p.id)) continue;
+        seen.set(p.id, p);
+        $('board').appendChild(pin(p));
+        oldest = p.id;
+      }
+      $('more').hidden = photos.length < 60;
+      if (!seen.size) $('board').replaceChildren(empty());
+      $('wallTitle').textContent = seen.size ? `wall.png · ${seen.size}${photos.length < 60 ? '' : '+'} photo${seen.size === 1 ? '' : 's'}` : 'wall.png';
+    } catch {
+      if (!seen.size) { const e = empty(); e.querySelector('b').textContent = "The wall couldn't be reached"; e.lastChild.textContent = 'Try again in a minute.'; $('board').replaceChildren(e); }
+    }
+    $('moreBtn').disabled = false;
+    const want = /^#p(\d{1,18})$/.exec(location.hash);
+    if (want && seen.has(want[1]) && !open) show(want[1]);
+  }
+  function show(id) {
+    const p = seen.get(id);
+    if (!p) return;
+    open = id;
+    $('viewerPic').replaceChildren(draw(p));
+    $('viewerMeta').textContent = `${titleOf(p)} · ${new Date(p.at).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })}`;
+    $('report').textContent = 'Report'; $('report').disabled = false;
+    $('viewer').hidden = false;
+    history.replaceState(null, '', `#p${id}`);
+    $('closeViewer').focus();
+  }
+  function close() { open = null; $('viewer').hidden = true; history.replaceState(null, '', location.pathname + location.search); }
+  $('closeViewer').addEventListener('click', close);
+  $('viewer').addEventListener('click', (e) => { if (e.target === $('viewer')) close(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && open) close(); });
+  $('copyLink').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(location.href); $('copyLink').textContent = 'Copied!'; } catch { $('copyLink').textContent = location.href; }
+    setTimeout(() => { $('copyLink').textContent = 'Copy link'; }, 2000);
+  });
+  $('report').addEventListener('click', async () => {
+    const b = $('report'), id = open;
+    if (b.textContent === 'Report') { b.textContent = 'Report this photo?'; return; }
+    b.disabled = true;
+    try {
+      const r = await fetch(`${API}/photos/report`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id }) });
+      b.textContent = r.ok ? 'Thanks. We will look at it.' : 'Try again later.';
+    } catch { b.textContent = 'Try again later.'; }
+  });
+  $('moreBtn').addEventListener('click', load);
+
+  // A pet in a beret (the one taking the photos) sitting on the window's title bar, and the face on the taskbar.
+  const cam = sprite({ char: 'cat', skin: 'classic', hat: 'beret', face: '' }, 'happy');
+  const ph = $('photographer'); ph.width = cam.width; ph.height = cam.height; ph.getContext('2d').drawImage(cam, 0, 0);
+  const face = $('brandFace'), plain = sprite({ char: 'cat', skin: 'classic', hat: '', face: '' }, 'base');
+  face.getContext('2d').drawImage(plain, 0, plain.height - 14, 16, 14, 0, 0, 16, 14);
+  load();
+})();
+</script>
+</body>
+</html>

@@ -1,4 +1,7 @@
-// Roamies sound effects. Everything is synthesized with Web Audio, so there are no audio files to ship or license.
+// Roamies sound effects. Most are synthesized with Web Audio. A few that want to sound like real things (the capsule
+// machine, coins, a purchase, a reveal, the breaks) are recorded sounds in src/sounds/, played instead of their
+// synthesized version once a page has said where they are (SFX.samples). Where a file can't be played, or a page never
+// says (the website), the synthesized one plays: every sound has one.
 // SFX.play('coin')            a UI or world sound
 // SFX.voice('ow', 'duck')     something a pet says, in that character's voice
 // SFX.talk('hello', 'cat')    a short babble, one blip per syllable or so
@@ -6,6 +9,19 @@ const SFX = (() => {
   'use strict';
   let ctx = null, master = null, volume = .6, enabled = true, duck = 1;   // duck: turned down while the user's music plays
   const last = new Map();   // sound name -> last start time, to stop machine-gunning
+  // The recorded sounds and how loud each plays (next to the synthesized ones, which are quieter than a recording at
+  // full scale). Each is an <audio> element, which every page's content policy lets load from its own folder.
+  const SAMPLES = { crank: .5, capdrop: .55, rattle: .45, crack: .6, pop: .5, premium: .55, fanfare: .5, buy: .5, coins: .45, unlock: .5, reward: .5, clack: .25, calm: .45, breakdone: .5, opening: .5, openbig: .55 };
+  const recorded = new Map();   // name -> a loaded <audio> to copy, or false once it has failed
+  function sample(name) {
+    const el = recorded.get(name);
+    if (!el) return false;
+    const a = el.cloneNode();
+    a.volume = Math.max(0, Math.min(1, volume * duck * SAMPLES[name] * 1.6));
+    const p = a.play();
+    if (p && p.catch) p.catch(() => { recorded.set(name, false); });   // (then the synthesized one, from next time)
+    return true;
+  }
 
   function audio() {
     if (!ctx) {
@@ -132,6 +148,17 @@ const SFX = (() => {
     rattle: () => { for (let i = 0; i < 5; i++) tone({ type: 'sine', f: 300 + Math.random() * 500, f2: 200, t: i * .06 + Math.random() * .02, dur: .05, gain: .1 }); },
     drop: () => { tone({ type: 'sine', f: 700, f2: 180, dur: .22, gain: .16 }); noise({ t: .22, dur: .07, gain: .2, f: 220, type: 'lowpass' }); tone({ type: 'sine', f: 150, f2: 70, t: .22, dur: .1, gain: .2 }); },
     pop: () => { tone({ type: 'sine', f: 400, f2: 1200, dur: .05, gain: .2 }); noise({ dur: .04, gain: .12, f: 2500, type: 'highpass' }); sparkle(.04, 6); },
+    capdrop: () => { noise({ dur: .03, gain: .14, f: 2400, q: 2 }); tone({ type: 'triangle', f: 900, f2: 700, dur: .06, gain: .1 }); noise({ t: .12, dur: .03, gain: .08, f: 2000, q: 2 }); },   // a capsule lands in the tray
+    crack: () => noise({ dur: .035, gain: .18, f: 3200, q: 1.5 }),   // its shell gives
+    premium: () => { arp([12, 16, 19, 24, 28, 31], { step: .07, dur: .4, type: 'sine', gain: .09 }); sparkle(.2, 8); },   // the gold one, glowing
+    // A capsule about to open: a swell that is loudest as it pops (ui-capsule.js starts it early by SWELL), bigger for
+    // an epic or legendary one.
+    opening: () => { tone({ type: 'sine', f: 300, f2: 1400, dur: 1.15, gain: .07, attack: 1 }); noise({ dur: 1.15, gain: .05, f: 800, f2: 6000, q: .7, attack: 1 }); },
+    openbig: () => { tone({ type: 'sawtooth', f: 90, f2: 260, dur: 1.3, gain: .05, attack: 1.1 }); tone({ type: 'sine', f: 400, f2: 2000, dur: 1.3, gain: .07, attack: 1.1 }); noise({ dur: 1.3, gain: .06, f: 600, f2: 7000, q: .7, attack: 1.1 }); },
+    clack: () => { const f = 1500 + Math.random() * 600; tone({ type: 'triangle', f, f2: f * .9, dur: .04, gain: .06 }); },   // two capsules in the dome
+    // breaks
+    calm: () => { [24, 28, 31, 35].forEach((n, i) => tone({ type: 'sine', f: hz(n), t: i * .16, dur: .9, gain: .05 })); },   // wind chimes: let's take a break
+    breakdone: () => { arp([12, 16, 19, 24], { step: .08, dur: .3, type: 'sine', gain: .09 }); sparkle(.3, 4); },
     // world
     jump: () => tone({ type: 'square', f: 300, f2: 620, dur: .09, gain: .05 }),
     land: () => { noise({ dur: .05, gain: .1, f: 260, type: 'lowpass' }); tone({ type: 'sine', f: 130, f2: 70, dur: .07, gain: .12 }); },
@@ -181,6 +208,20 @@ const SFX = (() => {
     spike: () => { noise({ dur: .05, gain: .16, f: 900, q: 2 }); tone({ type: 'square', f: 300, f2: 90, dur: .16, gain: .12 }); },
     go: () => { tone({ type: 'square', f: hz(3), dur: .09, gain: .08 }); tone({ type: 'square', f: hz(3), t: .16, dur: .09, gain: .08 }); tone({ type: 'square', f: hz(15), t: .32, dur: .26, gain: .09, hold: .08 }); },
     timeup: () => { [12, 7, 3].forEach((n, i) => tone({ type: 'triangle', f: hz(n), t: i * .13, dur: i === 2 ? .4 : .14, gain: .12 })); },
+    // the town (ui-town.js). g: how loud, 0 to 1, for sounds that come from a distance or sit under everything
+    grass: (g = 1) => noise({ dur: .05, gain: .05 * g, f: 900, f2: 500, q: .9, attack: .006 }),                                // a soft step on grass
+    path: (g = 1) => { noise({ dur: .03, gain: .07 * g, f: 2200, q: 1.4 }); tone({ type: 'triangle', f: 320, f2: 240, dur: .03, gain: .04 * g }); },   // a tap on stone
+    sand: (g = 1) => noise({ dur: .08, gain: .06 * g, f: 1400, f2: 700, q: .6, attack: .01 }),                                 // a scuff in sand
+    wood: (g = 1) => { tone({ type: 'triangle', f: 180, f2: 120, dur: .05, gain: .09 * g }); noise({ dur: .02, gain: .04 * g, f: 1200 }); },   // a hollow knock on boards
+    puddle: (g = 1) => { noise({ dur: .12, gain: .09 * g, f: 1800, f2: 3800, q: .7, attack: .004 }); tone({ type: 'sine', f: 520, f2: 760, dur: .06, gain: .05 * g }); },   // a splash
+    chirp: (g = 1) => { for (let i = 0; i < 2 + Math.floor(Math.random() * 3); i++) tone({ type: 'sine', f: 2400 + Math.random() * 900, f2: 3200 + Math.random() * 800, t: i * .09 + Math.random() * .03, dur: .07, gain: .035 * g }); },   // a bird
+    cricket: (g = 1) => { for (let i = 0; i < 6; i++) tone({ type: 'sine', f: 4200, dur: .025, t: i * .05, gain: .02 * g, attack: .002 }); },   // one chirr
+    bleep: (g = 1) => { const f = [660, 880, 1046, 1320][Math.floor(Math.random() * 4)]; tone({ type: 'square', f, f2: f * 1.5, dur: .07, gain: .035 * g }); },   // a cabinet, heard from outside
+    rain: (g = 1) => noise({ dur: .6, gain: .035 * g, f: 2600, f2: 2200, q: .4, type: 'bandpass', attack: .15 }),            // a moment of rain; played again and again it is a shower
+    gust: (g = 1) => noise({ dur: 1.4, gain: .04 * g, f: 300, f2: 900, q: .5, type: 'bandpass', attack: .5 }),               // wind
+    caw: (g = 1) => { tone({ type: 'sawtooth', f: 520, f2: 380, dur: .11, gain: .03 * g }); tone({ type: 'sawtooth', f: 500, f2: 360, t: .14, dur: .11, gain: .025 * g }); },   // birds taking off
+    meow: (g = 1) => tone({ type: 'triangle', f: 620, f2: 440, dur: .28, gain: .05 * g, vib: { rate: 9, depth: 18 } }),
+    woof: (g = 1) => { tone({ type: 'sawtooth', f: 260, f2: 170, dur: .09, gain: .06 * g }); tone({ type: 'sawtooth', f: 240, f2: 160, t: .13, dur: .1, gain: .05 * g }); },
   };
 
   /* ---------- pet voices: every character has a pitch and a timbre ---------- */
@@ -211,6 +252,8 @@ const SFX = (() => {
   // The Avatar pack: three people, a sky bison that rumbles and a lemur that chitters.
   Object.assign(VOICES, { aang: { type: 'triangle', f: 700, chiff: .4, air: .2 }, katara: { type: 'triangle', f: 830, chiff: .4 }, sokka: { type: 'square', f: 500, soft: .5, chiff: .4 },
     appa: { type: 'sawtooth', f: 105, soft: .75, drop: .85, air: .35 }, momo: { type: 'triangle', f: 1250, chiff: .4 } });
+  // Totoro: low and big, and when he is pleased he roars.
+  VOICES.totoro = { type: 'sawtooth', f: 95, soft: .7, drop: .85, air: .4 };
   const voiceOf = (ch) => VOICES[ch] || VOICES.cat;
   function say(v, { up = 1, down = 1, t = 0, dur = .12, gain = .16 }) {
     const g = gain * (v.soft || 1), end = down * (v.drop || 1);
@@ -281,6 +324,9 @@ const SFX = (() => {
     momo: {
       happy: (v) => { for (let i = 0; i < 5; i++) say(v, { up: i % 2 ? 1.3 : 1, down: i % 2 ? 1 : 1.3, t: i * .06, dur: .04, gain: .12 }); },   // chittering
     },
+    totoro: {
+      happy: (v) => { tone({ type: 'sawtooth', f: v.f * .8, f2: v.f * 1.6, dur: .7, gain: .15, trem: 18, attack: .08 }); noise({ dur: .7, gain: .1, f: 300, q: 2, attack: .08 }); },   // the big roar
+    },
     axolotl: {
       purr: () => { for (let i = 0; i < 6; i++) { const f = 500 + Math.random() * 500; tone({ type: 'sine', f, f2: f * 2.2, t: i * .1 + Math.random() * .03, dur: .05, gain: .07 }); } },   // content bubbles
     },
@@ -297,7 +343,19 @@ const SFX = (() => {
 
   return {
     // n: for the few sounds that change as something builds up (the streak in Snack Catch).
-    play(name, n) { const s = SOUNDS[name]; if (s && ok(name)) attempt(() => s(n)); },
+    play(name, n) { const s = SOUNDS[name]; if (s && ok(name)) attempt(() => { if (!sample(name)) s(n); }); },
+    // Where the recorded sounds are (the app's pages: 'sounds/'). They are loaded now, so the first play is quick.
+    samples(base) {
+      for (const name of Object.keys(SAMPLES)) {
+        if (recorded.has(name)) continue;
+        const a = new Audio(); a.preload = 'auto';
+        recorded.set(name, false);
+        a.addEventListener('canplaythrough', () => recorded.set(name, a), { once: true });
+        a.addEventListener('error', () => recorded.set(name, false), { once: true });
+        a.src = base + name + '.mp3';
+      }
+    },
+    recorded: () => [...recorded].filter(([, a]) => a).map(([name]) => name),
     voice(name, ch) { const s = VOICED[name] && lineOf(name, ch); if (s && ok('v:' + name, .12)) attempt(() => s(voiceOf(ch))); },
     // Babble: the longer the line, the more blips. Robots stick to a few fixed pitches.
     talk(text, ch) {

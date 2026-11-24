@@ -77,6 +77,7 @@ const ICONS = {
   monitor: ["oooooooo", "oxxxxxxo", "oxxxxxxo", "oxxxxxxo", "oooooooo", "...oo...", "..oooo..", "........"],
   down: ["...oo...", "...oo...", "...oo...", "oooooooo", ".oooooo.", "..oooo..", "...oo...", "oooooooo"],
   paw: [".o....o.", ".o.oo.o.", "...oo...", "........", "..oooo..", ".oooooo.", ".oooooo.", "..o..o.."],
+  photo: ["........", "..ooo...", "oooooooo", "oxxooxxo", "oxoxxoxo", "oxxooxxo", "oooooooo", "........"],
   sun: ["...o....", ".o...o..", "..ooo...", "o.ooo.o.", "..ooo...", ".o...o..", "...o....", "........"],
   moon: ["..ooo...", ".ooo....", "ooo.....", "ooo.....", "ooo....o", ".ooo..oo", "..ooooo.", "........"],
   coin: ["..oooo..", ".oxxxxo.", "oxxooxxo", "oxxoxxxo", "oxxoxxxo", "oxxooxxo", ".oxxxxo.", "..oooo.."],

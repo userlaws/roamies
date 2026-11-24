@@ -38,6 +38,8 @@ const WING_FEET={base:"....oo...oo.....",A:"...oo....oo.....",B:"....oo..oo.....
    alt:   the rows of a second frame, and altOn says when it shows: 'beat' all the time, `beat` times a second (wings,
           a flame), 'scare' while it is held or falling (the puffer blows up), 'happy' (the toast pops up)
    trail: what it leaves in the air behind it ('cloud': puffs of it)    ink, fire, lamp, climber, leap: see pet.js
+   flaps: what its beat moves, so the town's figure of it can flap them: 'wings' (what it has out past both sides of
+          its body, in the rows the second frame redraws) or 'tail' (out past one side)
    quick: how many times as fast it walks    dust: the color of what it kicks up as it goes    tough: a long drop doesn't hurt it
    size:  how many times as big it is drawn    sun: it grows with the day, and is at its biggest at noon
    And one doesn't wear every color:
@@ -119,7 +121,7 @@ const CHARS={
     feet:{base:"..b..p.b.p..b...",A:".b..p..b..p..b..",B:"...b.p.b.p.b....",sit:"..b..p.b.p..b...",sleep:"................",D1:".b..p..b..p..b..",D2:"...b.p.b.p.b...."},
     rows:{0:"................",1:"....ooooooo.....",2:"..oobbbbbbboo...",3:".obbwbbbbbbbbo..",4:".obwbbbbbbbbbo..",9:".obbbbbbbbbbbo..",10:"..ooooooooooo...",11:"...b.p.b.p.b....",12:"..b.p..b..p.b..."},
     alt:{11:"....bp.b.pb.....",12:"....bp.b.pb.....",13:".....b.p.b......"}},
-  moth:{name:'Moth',price:420,voice:'moth',hatY:-1,eyes:{x1:5,x2:8},hover:30,altOn:'beat',beat:10,lamp:true,feet:WING_FEET,
+  moth:{name:'Moth',price:420,voice:'moth',hatY:-1,eyes:{x1:5,x2:8},hover:30,altOn:'beat',beat:10,flaps:'wings',lamp:true,feet:WING_FEET,
     rows:{0:"..o.........o...",1:"...o.......o....",2:"....ooooooo.....",3:"oo.obbbbbbbo.oo.",4:"oloobbbbbbboolo.",5:"ollobbbbbbbollo.",6:"olpobewbewboplo.",7:"ollobeebeebollo.",8:"oloopbbnbbpoolo.",9:"olloblllllbollo.",10:".oooblllllbooo..",11:"...obbbbbbbo....",12:"....obbbbbo....."},
     alt:{3:"...obbbbbbbo....",4:"...obbbbbbbo....",5:".ooobbbbbbbooo..",9:"olloblllllbollo.",10:"olooblllllboolo.",11:".oo.obbbbbo.oo.."}},
   shark:{name:'Shark',price:450,voice:'shark',hatY:-1,fin:true,
@@ -129,7 +131,7 @@ const CHARS={
     feet:{base:"................",A:".......o........",B:"......o.o.......",sit:"................",sleep:"................",D1:".......o........",D2:"................"},
     rows:{0:".......o........",1:"......obo.......",2:".....obbo.......",3:".....obbbo..o...",4:"....obblbbo.....",5:"...obblllbbo....",6:"..obewlllewbo...",7:"..obeellleebo...",8:"..obpllnllpbo...",9:"..oblllllllbo...",10:"...oblllllbo....",11:"....obbbbbo.....",12:".....ooooo......"},
     alt:{0:"........o.......",1:".......obo......",2:"......obbo......",3:"..o..obbbo......",13:".......o........"}},
-  dragon:{name:'Dragon',price:500,voice:'dragon',hatY:-1,eyes:{x1:5,x2:8},hover:26,altOn:'beat',beat:7,fire:true,feet:WING_FEET,
+  dragon:{name:'Dragon',price:500,voice:'dragon',hatY:-1,eyes:{x1:5,x2:8},hover:26,altOn:'beat',beat:7,flaps:'wings',fire:true,feet:WING_FEET,
     rows:{0:"....o.....o.....",1:"...olo...olo....",2:"...olooooolo....",3:"o..obbbbbbbo..o.",4:"oo.obbbbbbbo.oo.",5:"oloobbbbbbboolo.",6:"ollobewbewbollo.",7:".ooobeebeebooo..",8:"...opbnbnbpo....",9:"...obbbbbbbo.o..",10:"...oblllllbooo..",11:"...oblllllbbo...",12:"....obbbbbo....."},
     alt:{3:"...obbbbbbbo....",4:"...obbbbbbbo....",5:".ooobbbbbbbooo..",6:"ollobewbewbollo.",7:"oloobeebeeboolo.",8:"oo.opbnbnbpo.oo."}},
   monkey:{name:'Monkey',price:270,voice:'monkey',hatY:-2,eyes:{x1:4,x2:9,bg:'l'},climber:true,
@@ -143,18 +145,25 @@ const CHARS={
     rows:{0:"................",1:".....ooooo......",2:"...oobbbbboo....",3:"..obbbbbbbbbo...",4:".obbbbbbbbbbbo..",5:".obbooooooobbo..",6:"obbblewlewlbbbo.",7:"obbbleeleelbbbo.",
       8:"oobbllnlnllbboo.",9:"obblllllllllbbo.",10:"obbllooooollbbo.",11:"obotttccctttobo.",12:"obotttttttttobo."}},
   // The characters that come out of packs (game.mjs: PACKS). None is ever for sale.
-  batty:{name:'Batty',price:null,rarity:'legendary',season:'Halloween',unlock:'Fill the Halloween pack in October',voice:'batty',hatY:-1,eyes:{x1:5,x2:8},hover:28,altOn:'beat',beat:8,feet:WING_FEET,
+  batty:{name:'Batty',price:null,rarity:'legendary',season:'Halloween',unlock:'Win it in the Halloween pack (October)',voice:'batty',hatY:-1,eyes:{x1:5,x2:8},hover:28,altOn:'beat',beat:8,flaps:'wings',feet:WING_FEET,
     rows:{0:"...o.......o....",1:"...oo.....oo....",2:"...obooooobo....",3:"o..obbbbbbbo..o.",4:"oo.obbbbbbbo.oo.",5:"oboobbbbbbboobo.",6:"obbobewbewbobbo.",7:"obbobeebeebobbo.",
       8:"obooobwnwbooobo.",9:"oo.obblllbbo.oo.",10:"o..obblllbbo..o.",11:"...obbbbbbbo....",12:"....obbbbbo....."},
     alt:{3:"...obbbbbbbo....",4:"...obbbbbbbo....",5:".ooobbbbbbbooo..",9:"oboobblllbboobo.",10:"oo.obblllbbo.oo.",11:"o..obbbbbbbo..o."}},
-  reindeer:{name:'Reindeer',price:null,rarity:'legendary',season:'Christmas',unlock:'Fill the Christmas pack in December',voice:'reindeer',hatY:-2,pal:{n:'#ff3b3b',t:'#a8794f'},
+  reindeer:{name:'Reindeer',price:null,rarity:'legendary',season:'Christmas',unlock:'Win it in the Christmas pack (December)',voice:'reindeer',hatY:-2,pal:{n:'#ff3b3b',t:'#a8794f'},
     top:["..t.t.....t.t...","..ttt.....ttt...","...t.......t...."],
     rows:{0:"...t.......t....",1:"...tooooooot....",2:"oo.obbbbbbbo.oo.",3:"oboobbbbbbboobo.",4:".oobbbbbbbbboo..",8:".obpbllnnllbpo..",9:".obbbbllllbbbo..",10:".obbllllllbbboo.",11:".obbllllllbbbo.."}},
   // Santa wears red until he is given another color: his suit and hat take it, his beard stays white.
-  santa:{name:'Santa',price:null,rarity:'legendary',season:'Christmas',unlock:'Fill the Christmas pack in December',voice:'santa',hatY:-3,eyes:{bg:'l'},
+  santa:{name:'Santa',price:null,rarity:'legendary',season:'Christmas',unlock:'Win it in the Christmas pack (December)',voice:'santa',hatY:-3,eyes:{bg:'l'},
     coat:{o:'#4a0f14',b:'#d8303a',l:'#ffe0c4',e:'#2b1d22',w:'#ffffff',p:'#f2777a',n:'#e58a6f'},
     rows:{0:"......oooo......",1:"....oobbbboo....",2:"...obbbbbbbbooo.",3:"..obbbbbbbbbowwo",4:".owwwwwwwwwwwoo.",5:".olllllllllllo..",6:".olllewlllewlo..",7:".ollleellleelo..",
       8:".owpwwwnnwwpwo..",9:".owwwwwwwwwwwo..",10:".obbwwwwwwwbbo..",11:".obbbwwwwwbbbo.."}},
+  tanuki:{name:'Tanuki',price:null,rarity:'legendary',unlock:'Comes with the Lantern Market drop',voice:'dog',hatY:-1,eyes:{x1:4,x2:9,bg:'o',line:'l',ink:'w'},
+    rows:{0:"..oo.......oo...",1:".oboo.....oobo..",2:".obbbooooobbbo..",3:".obbbbbbbbbbbo..",4:".obbllbbbllbbo..",5:".obooooboooobo..",6:".oooewoloewooo..",7:".oooeeoloeeooo..",
+      8:".obooolnloooboo.",9:".obbblllllbbobbo",10:"obblllllllbboooo",11:"obblllllllbbobbo",12:".obbbbbbbbbboo.."}},
+  starwhale:{name:'Star whale',price:null,rarity:'legendary',unlock:'Comes with the Starfall drop',voice:'boo',hatY:0,eyes:{y:7,x1:3,x2:8},hover:14,trail:'spark',
+    feet:{base:"...oo...oo......",A:"..oo....oo......",B:"....oo...oo.....",sit:"..ooo...ooo.....",sleep:"..oooooooooo....",D1:"...o.....o......",D2:"..o.......o....."},
+    rows:{0:"................",1:"..........oo..oo",2:"..........oboobo",3:"...ooooooo.obbo.",4:"..obblbbbbobbbo.",5:".obbbbbblbbbbbo.",6:".obbbbbbbbbbbo..",7:"obbewbbbewbbbo..",
+      8:"obbeebbbeebbbo..",9:"obpbbbnbbbpbbo..",10:"obllllllllbbo...",11:".obllllllbbo....",12:"..oooooooooo...."}},
   // The Naruto pack (game.mjs: PACKS): seven heads on one small body. s is skin, h hair, i the iris,
   // t and c a headband's cloth and plate: all their own, whatever color is worn. What a color changes is b, what
   // they wear, and each has a coat of its own for Classic. The two packs after it are drawn the same way.
@@ -222,15 +231,24 @@ const CHARS={
     rows:{0:"................",1:"....ooooooo.....",2:"..oohhhhhhhoo...",3:".ohhhhhhhhhhho..",4:".ohhhssssshhho..",5:".ohkssssssskho..",6:".ohssiwsssiwho..",7:".ohssiisssiiho..",8:".ohpssssssspho..",9:".obbbccwccbbho..",10:".obbbbbwbbbbho..",11:".owwwwwwwwwwko.."}},
   sokka:{...AIR,name:'Sokka',rarity:'epic',voice:'sokka',pal:{h:'#4a2e22',d:'#8f6044',s:'#c98d62',i:'#3f8fe0'},coat:{o:'#16213f',b:'#4a66b0',l:'#4a66b0',e:'#2b2738',w:'#ffffff',p:'#e07a6a',n:'#16213f'},
     rows:{0:".......ooo......",1:"....ooohhho.....",2:"..ooddhhhddoo...",3:".odddhhhhhdddo..",4:".osssshhhsssso..",5:".ossssssssssso..",6:".osssiwsssiwso..",7:".osssiisssiiso..",8:".ossssssssssso..",9:".obbbwwwwwbbbo..",10:".obbbbwwbbbbbo..",11:".obbbbbbbbbbbo.."}},
-  appa:{name:'Appa',price:null,rarity:'legendary',season:'Avatar',unlock:'Fill the Avatar pack',voice:'appa',hatY:-2,size:1.5,hover:40,trail:'cloud',altOn:'beat',beat:3,eyes:{x1:4,x2:9},pal:{a:'#9a735a',t:'#d8c7a0'},
+  appa:{name:'Appa',price:null,rarity:'legendary',season:'Avatar',unlock:'Fill the Avatar pack',voice:'appa',hatY:-2,size:1.5,hover:40,trail:'cloud',altOn:'beat',beat:3,flaps:'tail',eyes:{x1:4,x2:9},pal:{a:'#9a735a',t:'#d8c7a0'},
     coat:{o:'#5a4a3c',b:'#f3ecdc',l:'#ffffff',e:'#2b1d22',w:'#ffffff',p:'#f2b0a0',n:'#3a2a22'},
     feet:{base:"..o.o.o..o.o.o..",A:"..o.o.o...o.o.o.",B:"...o.o.o.o.o.o..",sit:".ooo.oo..oo.ooo.",sleep:"..oooooooooooo..",D1:"...o.o.o.o.o.o..",D2:".o.o.o....o.o.o."},
     rows:{0:"oo...........oo.",1:"oto..ooooo..oto.",2:"ottoobaaabootto.",3:".otbbbaaabbbto..",4:".obbbaaaaabbbo..",5:".obbbbaaabbbbo..",6:".obbewbabewbbo..",7:".obbeebbbeebbo..",8:".obbbbnnnbbbbo..",9:".obbbbbbbbbbbooo",10:".obbllllllbbbbao",11:".obbllllllbbbooo"},
     alt:{9:".obbbbbbbbbbbo..",10:".obbllllllbbbooo",11:".obbllllllbbbbao",12:"..obbbbbbbbbbooo"}},
-  momo:{name:'Momo',price:null,rarity:'epic',season:'Avatar',unlock:'Fill the Avatar pack',voice:'momo',hatY:-2,size:.8,hover:30,altOn:'beat',beat:7,feet:WING_FEET,eyes:{x1:5,x2:8,bg:'d',ink:'g'},pal:{d:'#4a362c',g:'#9be03a',m:'#e2d3bd'},
+  momo:{name:'Momo',price:null,rarity:'epic',season:'Avatar',unlock:'Fill the Avatar pack',voice:'momo',hatY:-2,size:.8,hover:30,altOn:'beat',beat:7,flaps:'wings',feet:WING_FEET,eyes:{x1:5,x2:8,bg:'d',ink:'g'},pal:{d:'#4a362c',g:'#9be03a',m:'#e2d3bd'},
     coat:{o:'#3a2a22',b:'#f4efe6',l:'#ffffff',e:'#1d1a2b',w:'#ffffff',p:'#c98f7a',n:'#1d1a2b'},
     rows:{0:".oo.........oo..",1:"oppo.ooooo.oppo.",2:"oppoobbbbbooppo.",3:"oppobbbbbbboppo.",4:".ooobbbbbbbooo..",5:"o..obdddddbo..o.",6:"oo.odgedgedo.oo.",7:"omoodggdggdoomo.",8:"ommodblnlbdommo.",9:"ommoobbbbboommo.",10:"oo.obblllbbo.oo.",11:"o..obblllbbo..o.",12:"....obbbbbo....."},
-    alt:{5:"...obdddddbo....",6:"...odgedgedo....",7:"...odggdggdo....",8:"...odblnlbdo....",9:".ooobbbbbbbooo..",10:"omoobblllbboomo.",11:"oo.obblllbbo.oo.",12:"o...obbbbbo...o."}}
+    alt:{5:"...obdddddbo....",6:"...odgedgedo....",7:"...odggdggdo....",8:"...odblnlbdo....",9:".ooobbbbbbbooo..",10:"omoobblllbboomo.",11:"oo.obblllbbo.oo.",12:"o...obbbbbo...o."}},
+  // Totoro: the big forest spirit, round and grey, with the marks on his belly (v) and a grin. Like Kurama he is in no
+  // pack and has no price: he and his Catbus (a buddy) are handed out from the admin console (locks.mjs: EXCLUSIVE).
+  // A color changes his fur; his belly and its marks stay as they are.
+  totoro:{name:'Totoro',price:null,rarity:'legendary',voice:'totoro',hatY:-1,size:1.4,leap:true,tough:true,eyes:{y:4,x1:3,x2:11},
+    pal:{v:'#9a968a',m:'#3a3c44'},coat:{o:'#2e3037',b:'#8e939c',l:'#efe6cf',e:'#1b1b20',w:'#ffffff',p:'#8e939c',n:'#2e3037'},
+    top:["....o......o....","...obo....obo..."],
+    feet:{base:"..ooo......ooo..",A:".ooo......ooo...",B:"...ooo......ooo.",sit:".oooo....oooo...",sleep:".oooooooooooooo.",D1:"..o.o......o.o..",D2:".o.o........o.o."},
+    rows:{0:"...obo....obo...",1:"...obboooobbo...",2:"..obbbbbbbbbbo..",3:".obbbbbbbbbbbbo.",4:".obwwbbnnbbwwbo.",5:".obwebbbbbbewbo.",6:".obbmmmmmmmmbbo.",
+      7:"obbbllllllllbbbo",8:"obbllvllvllvlbbo",9:"obblvlvvlvvlvbbo",10:"obbllllllllllbbo",11:"obbllllllllllbbo",12:".obbllllllllbbo."}}
 };
 function eyesOf(C){ return Object.assign({y:6,x1:5,x2:10,bg:'b',line:'o',ink:'e'},C.eyes); }
 // Whether a character is on its second frame right now. t: a clock in seconds. mood: 'scare', 'happy' or nothing.
@@ -296,7 +314,7 @@ const SKINS={
   ember:{name:'Ember',price:360,pal:{o:'#1a0d0a',b:'#56322a',l:'#f0561d',e:'#ffe27a',w:'#ffffff',p:'#ff8a2f',n:'#ffb04d'}},
   galaxy:{name:'Galaxy',price:420,pal:{o:'#0e0828',b:'#3a2a8c',l:'#8f52e0',e:'#aef4ff',w:'#ffffff',p:'#ff7ad9',n:'#aef4ff'}},
   void:{name:'Void',price:500,pal:{o:'#000000',b:'#1d1d26',l:'#34344a',e:'#ffe14d',w:'#fff6b0',p:'#5b3a8a',n:'#000000'}},
-  gold:{name:'Gold',price:null,rarity:'legendary',unlock:'Collect 12 colors',fx:'sheen',pal:{o:'#6b4a00',b:'#ffcf3f',l:'#fff3b0',e:'#3a2800',w:'#ffffff',p:'#ff9a3d',n:'#6b4a00'}},
+  gold:{name:'Gold',price:null,rarity:'legendary',unlock:'Collect 6 plain colors',fx:'sheen',pal:{o:'#6b4a00',b:'#ffcf3f',l:'#fff3b0',e:'#3a2800',w:'#ffffff',p:'#ff9a3d',n:'#6b4a00'}},
   sunset:{name:'Sunset',price:null,rarity:'legendary',unlock:'Reach a 7-day streak',pal:{o:'#3a1c5c',b:'#ff6f6f',l:'#ffc857',e:'#2a1038',w:'#ffffff',p:'#ff3d8b',n:'#3a1c5c'}},
   copper:{name:'Copper',price:240,pal:{o:'#3a1c10',b:'#c8713a',l:'#7fd1ae',e:'#22100a',w:'#ffffff',p:'#ffd08a',n:'#3a1c10'}},
   toxic:{name:'Toxic',price:280,pal:{o:'#1c2b0a',b:'#b6ff3b',l:'#f4ffc2',e:'#1c2b0a',w:'#ffffff',p:'#a14bff',n:'#1c2b0a'}},
@@ -304,10 +322,14 @@ const SKINS={
   aurora:{name:'Aurora',price:340,pal:{o:'#12243a',b:'#2bd9a8',l:'#b79cff',e:'#0a1626',w:'#ffffff',p:'#ff8ad8',n:'#12243a'}},
   deepsea:{name:'Deep sea',price:380,pal:{o:'#051a2e',b:'#0f4c75',l:'#3fe0d0',e:'#b6fff5',w:'#ffffff',p:'#ff5fa2',n:'#3fe0d0'}},
   blueprint:{name:'Blueprint',price:440,pal:{o:'#e8f1ff',b:'#2456c9',l:'#3f74e6',e:'#e8f1ff',w:'#2456c9',p:'#7fb0ff',n:'#e8f1ff'}},
-  darkmatter:{name:'Dark matter',price:null,rarity:'legendary',unlock:'Collect every color',fx:'plasma',pal:{o:'#05020a',b:'#0d0620',l:'#3a0f78',e:'#ffffff',w:'#ff7ae6',p:'#ff3df2',n:'#e9ccff'}},
-  diamond:{name:'Diamond',price:null,rarity:'legendary',unlock:'Collect 22 colors',fx:'facet',pal:{o:'#2a5d8f',b:'#bfeaff',l:'#f2fcff',e:'#12324f',w:'#ffffff',p:'#ff9fd6',n:'#2a5d8f'}},
-  brew:{name:"Witch's brew",price:null,rarity:'epic',season:'Halloween',unlock:'Fill the Halloween pack in October',fx:'bubbles',pal:{o:'#12081f',b:'#4a1f7a',l:'#7be04a',e:'#ffb02e',w:'#fff3b0',p:'#ff7a1f',n:'#b8ff7a'}},
-  snowglobe:{name:'Snow globe',price:null,rarity:'epic',season:'Christmas',unlock:'Fill the Christmas pack in December',fx:'snow',pal:{o:'#0f2a4a',b:'#2f7fc4',l:'#a8dcff',e:'#0a1b30',w:'#ffffff',p:'#ff8fb0',n:'#0f2a4a'}},
+  darkmatter:{name:'Dark matter',price:null,rarity:'legendary',unlock:'Collect every plain color',fx:'plasma',pal:{o:'#05020a',b:'#0d0620',l:'#3a0f78',e:'#ffffff',w:'#ff7ae6',p:'#ff3df2',n:'#e9ccff'}},
+  diamond:{name:'Diamond',price:null,rarity:'legendary',unlock:'Collect 10 plain colors',fx:'facet',pal:{o:'#2a5d8f',b:'#bfeaff',l:'#f2fcff',e:'#12324f',w:'#ffffff',p:'#ff9fd6',n:'#2a5d8f'}},
+  brew:{name:"Witch's brew",price:null,rarity:'epic',season:'Halloween',unlock:'Win it in the Halloween pack (October)',fx:'bubbles',pal:{o:'#12081f',b:'#4a1f7a',l:'#7be04a',e:'#ffb02e',w:'#fff3b0',p:'#ff7a1f',n:'#b8ff7a'}},
+  snowglobe:{name:'Snow globe',price:null,rarity:'epic',season:'Christmas',unlock:'Win it in the Christmas pack (December)',fx:'snow',pal:{o:'#0f2a4a',b:'#2f7fc4',l:'#a8dcff',e:'#0a1b30',w:'#ffffff',p:'#ff8fb0',n:'#0f2a4a'}},
+  lantern:{name:'Lantern',price:null,rarity:'epic',unlock:'Comes with the Fireworks Night drop',fx:'lantern',pal:{o:'#4a0f0a',b:'#d8321f',l:'#ffd04d',e:'#2b0a06',w:'#ffffff',p:'#ffcf4d',n:'#4a0f0a'}},
+  polar:{name:'Polar',price:null,rarity:'epic',unlock:'Comes with the Northern Lights drop',pal:{o:'#21405e',b:'#e8f6ff',l:'#ffffff',e:'#16324d',w:'#ffffff',p:'#8fd3ff',n:'#21405e'}},
+  stardust:{name:'Stardust',price:null,rarity:'legendary',unlock:'Comes with the Starfall drop',fx:'stars',pal:{o:'#05081c',b:'#18265e',l:'#3d5cc0',e:'#ffe27a',w:'#ffffff',p:'#ff8ad8',n:'#9fc4ff'}},
+  oatmeal:{name:'Oatmeal',price:null,rarity:'rare',unlock:'Win it in the Cozy pack',pal:{o:'#5e4a38',b:'#e2d2b6',l:'#f8f0e1',e:'#33261b',w:'#ffffff',p:'#efa595',n:'#8a6a50'}},
 };
 /* ---------- hats and face items (y0 is the first row, relative to the top of the cat's head) ---------- */
 const HATPAL={y:'#ffd34d',r:'#ff5d73',w:'#ffffff',k:'#2b2738',g:'#7fd6b0',a:'#ff7a90',o:'#ff8a3d',b:'#4b8bff',n:'#8a5a3c',p:'#8b5cf6',e:'#9aa3b2',d:'#3f9b6c',m:'#c93a52',s:'#ffe9c9',t:'#e0a868'};
@@ -346,7 +368,7 @@ const HATS={
   unicorn:{name:'Unicorn horn',price:320,y0:-3,rows:[".......w........",".......y........","......ww........","......yy........",".....www........",".....yyy........"]},
   crown:{name:'Crown',price:350,y0:-1,rows:[".....y.y.y......",".....yyyyy......",".....yryry......"]},
   starcrown:{name:'Star crown',price:420,y0:-6,rows:[".......y........","......yyy.......",".....yywyy......","..y...yyy...y...",".yyy...y...yyy..","..y.........y..."]},
-  nightcap:{name:'Nightcap',price:null,rarity:'epic',unlock:'Take 10 stretch breaks',y0:-1,rows:["..........bw....",".......bbbb.....","....bbbbbbb.....","...wwwwwwwww...."]},
+  nightcap:{name:'Nightcap',price:null,rarity:'epic',unlock:'Take 10 breaks with your pet',y0:-1,rows:["..........bw....",".......bbbb.....","....bbbbbbb.....","...wwwwwwwww...."]},
   yuzu:{name:'Yuzu',price:150,y0:-2,rows:["........d.......",".......dd.......","......oooo......",".....oyoooo.....",".....oooooo....."]},
   boat:{name:'Paper boat',price:170,y0:-2,rows:[".......w........","......www.......","..wwwwwwwwwww...","...weeeeeeew....","....wwwwwww....."]},
   ramen:{name:'Ramen bowl',price:210,y0:-3,rows:["..n...n.........","...n..n.........","....yyyyyyy.....","...wwwwwwwww....","...wrwrwrwrw....","....wwwwwww....."]},
@@ -354,8 +376,11 @@ const HATS={
   storm:{name:'Storm cloud',price:300,y0:-5,rows:["....wwww........","..wwwwwwwww.....",".wwwwwwwwwwww...","..eeeeeeeeee....",".......yy.......","......yy........",".......y........"]},
   sword:{name:'Stuck sword',price:360,y0:-4,rows:[".......y........",".......n........",".....yyyyy......","......wee.......","......wee.......","......wee.......","......wee......."]},
   bubble:{name:'Bubble helmet',price:400,y0:-3,rows:["....wwwwwww.....","..ww.......ww...",".w..ww.......w..","w.w...........w.","w.............w.","w.............w.","w.............w.","w.............w.","w.............w.","w.............w.","w.............w.","w.............w.","w.............w.",".eeeeeeeeeeeee.."]},
-  witch:{name:'Witch hat',price:null,rarity:'rare',season:'Halloween',unlock:'Fill the Halloween pack in October',c:'#54437f',y0:-4,rows:[".........c......",".......ccc......","......cccc......","......cccc......",".....ooyyoo.....",".....cccccc.....","..cccccccccccc.."]},
-  santa:{name:'Santa hat',price:null,rarity:'rare',season:'Christmas',unlock:'Fill the Christmas pack in December',y0:-2,rows:["..........ww....",".......rrrww....",".....rrrrrr.....","....rrrrrrrr....","...wwwwwwwwww..."]},
+  witch:{name:'Witch hat',price:null,rarity:'rare',season:'Halloween',unlock:'Win it in the Halloween pack (October)',c:'#54437f',y0:-4,rows:[".........c......",".......ccc......","......cccc......","......cccc......",".....ooyyoo.....",".....cccccc.....","..cccccccccccc.."]},
+  santa:{name:'Santa hat',price:null,rarity:'rare',season:'Christmas',unlock:'Win it in the Christmas pack (December)',y0:-2,rows:["..........ww....",".......rrrww....",".....rrrrrr.....","....rrrrrrrr....","...wwwwwwwwww..."]},
+  paperlantern:{name:'Paper lantern',price:null,rarity:'rare',unlock:'Comes with the Lantern Market drop',pal:{r:'#e8412c',m:'#a3221a',y:'#ffc93c',w:'#ffe7a8'},y0:-4,rows:[".......k........","......yyy.......",".....rrrrr......",".....mmmmm......",".....rwrrr......",".....mmmmm......",".....rrrrr......","......yyy......."]},
+  shootingstar:{name:'Shooting star',price:null,rarity:'epic',unlock:'Comes with the Starfall drop',y0:-4,rows:["...........sww..","......y...ssw...",".....yyy.ss.....","....yyyyys......",".....yyy........",".....y.y........"]},
+  bobble:{name:'Bobble hat',price:null,rarity:'rare',unlock:'Win it in the Cozy pack',pal:{r:'#d9473f',w:'#fbf3e4',m:'#a8322c'},y0:-4,rows:["......www.......",".....wwwww......","......www.......",".....rrrrr......","....wwwwwww.....","...rrrrrrrrr....","...mrmrmrmrm...."]},
   band:{name:'Leaf headband',price:null,rarity:'rare',season:'Naruto',unlock:'Fill the Naruto pack',y0:3,pal:{t:'#4b8bff',d:'#3f6fe0',c:'#c9d3df',w:'#ffffff',e:'#8f9bb0',k:'#4a556e'},rows:[".tttwccccettt...",".dddckkccedddt..",".............dt.","..............t."]}
 };
 const FACES={
@@ -380,8 +405,9 @@ const FACES={
   beard:{name:'Wizard beard',price:280,y0:9,rows:["..wwwwwwwwwww...","..wwewwwwewww...","...wwwewwwww....","....wwwwwww.....",".....wwwww......"]},
   snorkel:{name:'Snorkel',price:320,eye:true,c:'#9fe3ff',y0:1,rows:[".............oo.",".............o..",".............o..","...kkkkkkkkkko..","...kccckkccck...","...kc..kkc..k...","...kc..kkc..k...","....kkk..kkk...."]},
   starry:{name:'Starstruck',price:400,eye:true,y0:5,rows:[".....y.....y....","....yyy...yyy...","....yyy...yyy...",".....y.....y...."]},
-  skull:{name:'Skull mask',price:null,rarity:'epic',season:'Halloween',unlock:'Fill the Halloween pack in October',eye:true,y0:4,rows:["...wwwwwwwww....","..wwwwwwwwwww...","..www..www..w...","..www..www..w...","..wwwwwkkwwww...","...wkwkwkwkw...."]},
-  scarf:{name:'Cozy scarf',price:null,rarity:'epic',season:'Christmas',unlock:'Fill the Christmas pack in December',y0:9,pal:{r:'#d8303a',m:'#a3202c',w:'#ffffff'},rows:[".rrwrrrwrrrwrr..",".mmwmmmwmmmwmm..","..rwr...........","..w.w..........."]},
+  skull:{name:'Skull mask',price:null,rarity:'epic',season:'Halloween',unlock:'Win it in the Halloween pack (October)',eye:true,y0:4,rows:["...wwwwwwwww....","..wwwwwwwwwww...","..www..www..w...","..www..www..w...","..wwwwwkkwwww...","...wkwkwkwkw...."]},
+  scarf:{name:'Cozy scarf',price:null,rarity:'epic',season:'Christmas',unlock:'Win it in the Christmas pack (December)',y0:9,pal:{r:'#d8303a',m:'#a3202c',w:'#ffffff'},rows:[".rrwrrrwrrrwrr..",".mmwmmmwmmmwmm..","..rwr...........","..w.w..........."]},
+  festmask:{name:'Festival mask',price:null,rarity:'rare',unlock:'Comes with the Lantern Market drop',eye:true,pal:{w:'#ffffff',r:'#e8392e',k:'#2b2738'},y0:4,rows:["........w....w..","........wr..rw..",".......wwwwww...",".......wkwwkw...",".......rwwwwr...","........wwww....",".........kk....."]},
   ninjamask:{name:'Ninja mask',price:null,rarity:'epic',season:'Naruto',unlock:'Fill the Naruto pack',eye:true,y0:7,pal:{h:'#454a61',m:'#2a2c3e'},rows:["..mm.......m....","..hhhhhhhhhhh...","..mmmmmmmmmmm...","..mmmmmmmmmmm...","...mmmmmmmmm...."]}
 };
 // True only for ids that are really in a catalog. A friend's copy can send any text as an outfit,
@@ -515,6 +541,18 @@ const FX={
   snow(x,y,t,lift){
     const c=lift?mix('#a8dcff','#8fcdf7',.5+.5*Math.sin(x*.6+t*.7)):mix('#3a8fd6','#215f9f',clamp(y/13+.1*Math.sin(x*.5+t*.6),0,1));
     return speck(x,y,t,1,.15)?'#ffffff':c;
+  },
+  lantern(x,y,t,lift){
+    const f=.5+.25*Math.sin(t*5.3)+.25*Math.sin(t*8.1+1.7), d=Math.hypot(x-7,(y-8)*1.2)/9;
+    if(lift) return mix('#ffc23a','#ffe58a',clamp(.2+.6*f-d*.4,0,1));
+    const c=mix('#9c1a14','#e63a22',clamp(1.05-d+.2*f,0,1));
+    return ((y%4)+4)%4===2?mix(c,'#5a120c',.35):c;
+  },
+  stars(x,y,t,lift){
+    const c=lift?mix('#2f4fa8','#4a6fd0',.5+.5*Math.sin(x*.5+t*.6)):mix('#0f1a46','#1e2f72',clamp(.5+.35*Math.sin(x*.35+y*.25+t*.4)+.15*Math.sin(y*.7-t*.9),0,1));
+    const s=noise(x+3,y+11);
+    if(s>.88){ const k=Math.sin(t*2.6+s*40); if(k>0) return mix(c,s>.95?'#fff3b0':'#ffffff',Math.min(1,.35+k)); }
+    return c;
   }
 };
 // What a moving color's body (or its belly) looks like, near enough, whatever the time: five shades from the darkest
@@ -530,25 +568,38 @@ function shadesOf(fx,belly){
 const LIFT=.22;         // how much lighter a moving color's belly is
 const FX_MS=90;         // how long one picture of a moving color lasts
 const fxTick=()=>Math.floor((typeof performance==='undefined'?0:performance.now())/FX_MS);
-const cache=new Map();
-function sprite(look,frame){
+// The palette that names each pixel by its own key: bodyPixels with it says what every pixel of the body is.
+const KEYS=new Proxy({},{get:(t,k)=>k});
+// A pet in a pose, pixel by pixel, before it is drawn: what sprite() draws, and what each pixel is, for whoever builds
+// the pet in another way (the town's figures, town-figure.js). cells: "x,y" -> color, the picture. keys: "x,y" -> the
+// body's palette key there. worn: "x,y" -> 'hat' or 'face', the item's pixels. rim: "x,y" -> 'hat' or 'face', the
+// outline drawn round an item where it sticks out past the body. tick: which picture of a moving color.
+function spritePlan(look,frame,tick){
   const ch=has(CHARS,look.char)?look.char:'cat', skin=has(SKINS,look.skin)&&wears(ch,look.skin)?look.skin:'classic';
   const hat=has(HATS,look.hat)?HATS[look.hat]:null, face=has(FACES,look.face)?FACES[look.face]:null;
-  const key=[ch,skin,frame,hat?look.hat:'',face?look.face:''].join('|');
-  const fx=SKINS[skin].fx, tick=fx?fxTick():0;
-  let c=cache.get(key); if(c&&c.tick===tick) return c;
-  c=document.createElement('canvas'); c.width=SPR_W; c.height=SPR_H; c.tick=tick;
-  const x=c.getContext('2d'); const C=CHARS[ch]; const pal=palOf(ch,skin);
+  const fx=SKINS[skin].fx, C=CHARS[ch], pal=palOf(ch,skin);
   // A moving color's body is marked here and colored at the very end, so what the pet wears is laid out as usual.
-  const px=bodyPixels(C,fx?Object.assign({},pal,{b:'~',l:'~l'}):pal,frame), worn=new Set();
-  const wear=(item,kind,id)=>{ const t=tintOf(ch,skin,kind,id); for(const [i,y,k] of itemPixels(item,kind==='hat',C)){ const cell=i+','+y; px.set(cell,(t.edge.has(cell)&&t.ink[k])||inkOf(item,k)); worn.add(cell); } };
+  const px=bodyPixels(C,fx?Object.assign({},pal,{b:'~',l:'~l'}):pal,frame), worn=new Map(), rim=new Map();
+  const wear=(item,kind,id)=>{ const t=tintOf(ch,skin,kind,id); for(const [i,y,k] of itemPixels(item,kind==='hat',C)){ const cell=i+','+y; px.set(cell,(t.edge.has(cell)&&t.ink[k])||inkOf(item,k)); worn.set(cell,kind); } };
   if(face) wear(face,'face',look.face);
   if(hat) wear(hat,'hat',look.hat);
   if(worn.size){
     const air=openAir(px);
-    for(const cell of worn){ const [i,y]=cell.split(',').map(Number); for(const [dx,dy] of AROUND){ const n=(i+dx)+','+(y+dy); if(air.has(n)) px.set(n,pal.o); } }
+    for(const [cell,kind] of worn){ const [i,y]=cell.split(',').map(Number); for(const [dx,dy] of AROUND){ const n=(i+dx)+','+(y+dy); if(air.has(n)){ px.set(n,pal.o); rim.set(n,kind); } } }
   }
-  for(const [cell,color] of px){ const [i,y]=cell.split(',').map(Number); if(i<0||i>=SPR_W||y<0||y>=SPR_H) continue; x.fillStyle=color[0]==='~'?FX[fx](i,y-PAD,tick*.11,color==='~l'?LIFT:0):color; x.fillRect(i,y,1,1); }
+  const cells=new Map();
+  for(const [cell,color] of px){ const [i,y]=cell.split(',').map(Number); if(i<0||i>=SPR_W||y<0||y>=SPR_H) continue; cells.set(cell,color[0]==='~'?FX[fx](i,y-PAD,tick*.11,color==='~l'?LIFT:0):color); }
+  return {cells,keys:bodyPixels(C,KEYS,frame),worn,rim,ch,skin,fx,pal,C,tick};
+}
+const cache=new Map();
+function sprite(look,frame){
+  const ch=has(CHARS,look.char)?look.char:'cat', skin=has(SKINS,look.skin)&&wears(ch,look.skin)?look.skin:'classic';
+  const key=[ch,skin,frame,has(HATS,look.hat)?look.hat:'',has(FACES,look.face)?look.face:''].join('|');
+  const fx=SKINS[skin].fx, tick=fx?fxTick():0;
+  let c=cache.get(key); if(c&&c.tick===tick) return c;
+  c=document.createElement('canvas'); c.width=SPR_W; c.height=SPR_H; c.tick=tick;
+  const x=c.getContext('2d');
+  for(const [cell,color] of spritePlan(look,frame,tick).cells){ const [i,y]=cell.split(',').map(Number); x.fillStyle=color; x.fillRect(i,y,1,1); }
   cache.set(key,c); return c;
 }
 
@@ -575,8 +626,15 @@ const BUDDIES={
   moon:{name:'Moon',price:370,hover:60,pal:{o:'#8a6a12',y:'#ffe27a',e:'#3a2800'},rows:["...ooo..","..oyyo..",".oyyo...",".oyeo...",".oyyo..o",".oyyyooo","..oyyyyo","...oooo."]},
   drone:{name:'Drone',price:420,hover:58,pal:{e:'#9aa3b2',k:'#2b2738',b:'#7fe7ff',r:'#ff5d73'},rows:["eee.....eee",".k.......k.",".kkkkkkkkk.","..kkbrbkk..","...kkkkk...","....k.k...."]},
   cursor:{name:'Lost cursor',price:450,hover:44,pal:{k:'#2b2738',w:'#ffffff',e:'#2b2738'},rows:["k.......","kk......","kwk.....","kwwk....","kwwwk...","kwwwwk..","kwewewk.","kwwwkkkk","kwkkwk..","kk.kwwk.","....kk.."]},
-  jack:{name:"Jack-o'-lantern",price:null,rarity:'rare',season:'Halloween',unlock:'Fill the Halloween pack in October',pal:{o:'#6b3208',b:'#ff8a2a',y:'#ffe14d',g:'#3f9b6c'},rows:["....gg....","..oooooo..",".obbbbbbo.","obyybbyybo","obbbbbbbbo","obybyybybo",".obbbbbbo.","..oooooo.."]},
-  snowman:{name:'Snowman',price:null,rarity:'rare',season:'Christmas',unlock:'Fill the Christmas pack in December',pal:{o:'#6f7f9a',w:'#ffffff',e:'#2b2738',n:'#ff9f1c',r:'#ff5d73',k:'#2b2738'},rows:["..kkkk..",".kkkkkk.",".owwwwo.",".oewewo.","nnwwwwo.",".rrrrrr.","owwwwwwo","owwkwwwo","owwkwwwo",".oooooo."]},
+  jack:{name:"Jack-o'-lantern",price:null,rarity:'rare',season:'Halloween',unlock:'Win it in the Halloween pack (October)',pal:{o:'#6b3208',b:'#ff8a2a',y:'#ffe14d',g:'#3f9b6c'},rows:["....gg....","..oooooo..",".obbbbbbo.","obyybbyybo","obbbbbbbbo","obybyybybo",".obbbbbbo.","..oooooo.."]},
+  snowman:{name:'Snowman',price:null,rarity:'rare',season:'Christmas',unlock:'Win it in the Christmas pack (December)',pal:{o:'#6f7f9a',w:'#ffffff',e:'#2b2738',n:'#ff9f1c',r:'#ff5d73',k:'#2b2738'},rows:["..kkkk..",".kkkkkk.",".owwwwo.",".oewewo.","nnwwwwo.",".rrrrrr.","owwwwwwo","owwkwwwo","owwkwwwo",".oooooo."]},
+  goldfish:{name:'Goldfish',price:null,rarity:'rare',unlock:'Comes with the Lantern Market drop',pal:{o:'#7f93ad',a:'#eaf6ff',l:'#bfe6ff',w:'#ffffff',f:'#ff7a2e',y:'#ffb347',e:'#2b2738',r:'#e8423a'},
+    rows:["..rr.rr..","....r....","...ooo...","..oaaao..",".oaaaaao.","oaaaaawao","ollllllwo","olfffllyo","ofefffylo","olfffllyo",".olllllo.","..ooooo.."]},
+  comet:{name:'Comet',price:null,rarity:'epic',unlock:'Comes with the Starfall drop',hover:52,spin:5,pal:{y:'#ffd34d',w:'#fffbe6',e:'#3a2800',s:'#fff3b0',b:'#7fd6ff',p:'#c39bff'},
+    rows:["..yyy...........",".ywwwysss.......","ywewewssssbbb.p.","ywwwwwsssbbb.p..",".ywwwyss........","..yyy..........."],
+    alt:["..yyy...........",".ywwwyss........","ywewewsssbbb.p..","ywwwwwssssbbb..p",".ywwwysss.......","..yyy..........."]},
+  teacup:{name:'Teacup',price:null,rarity:'rare',unlock:'Win it in the Cozy pack',pal:{o:'#6b5a52',w:'#fffaf2',t:'#b5652e',a:'#f2a3b3',s:'#e9dccb',e:'#3b2a2f',v:'#bccadb'},
+    rows:[".....v.....","....v......",".....v.....",".oooooooo..",".otttttto..",".owwwwwwooo",".owewwewo.o",".oaaaaaaooo","..owwwwo...","ossssssssso",".ooooooooo."]},
   shuriken:{name:'Shuriken',price:null,rarity:'rare',season:'Naruto',unlock:'Fill the Naruto pack',hover:44,spin:7,pal:{o:'#2b2738',e:'#9aa3b2',w:'#eef3f8',d:'#6b7488',k:'#2b2738'},
     rows:[".....o.....","....owo....","....owo....","...oweeo...",".oowweeeoo.","owweekeeddo",".ooeeeddoo.","...oeddo...","....odo....","....odo....",".....o....."],
     alt:[".o.......o.","owo.....oeo",".owoo.ooeo.","..owwoeeo..","..owweeeo..","...oekeo...","..oeeeddo..","..oddoddo..",".odoo.oodo.","odo.....odo",".o.......o."]},
@@ -588,7 +646,21 @@ const BUDDIES={
   // Sokka's: it comes along with him out of the Avatar pack, and turns over and over as it flies.
   boomerang:{name:'Boomerang',price:null,rarity:'rare',season:'Avatar',unlock:'Win Sokka in the Avatar pack: it comes with him',hover:42,spin:6,pal:{o:'#1f2a50',b:'#7fa8d8',l:'#d6e8fa'},
     rows:[".oo.....","obbo....","oblo....","oblo....","obloooo.","obllbbbo",".obbbbbo","..ooooo."],
-    alt:["..ooooo.",".obbbbbo","obllbbbo","obloooo.","oblo....","oblo....","obbo....",".oo....."]}
+    alt:["..ooooo.",".obbbbbo","obllbbbo","obloooo.","oblo....","oblo....","obbo....",".oo....."]},
+  // Totoro's, given from the admin console like him. A cat that is a bus, lit windows down its side, headlamp
+  // eyes and a grin, running on its many legs (the two pictures are its legs, one way and the other).
+  catbus:{name:'Catbus',price:null,rarity:'legendary',spin:6,
+    pal:{o:'#4a2a10',b:'#e9a440',s:'#b26f26',w:'#fff1c2',e:'#ffe14d',k:'#1d140c',r:'#8a2f22'},
+    rows:[".o..o.........o.","obooboooooooooo.","obbbbbbbbbbbbbo.","oeebswwswwswwbo.","oekbswwswwswwbo.","obbbbbbbbbbbbbo.",
+      "owwwwobsbbsbbbo.","orrrrobbbbbbbbo.",".owwwobbbbbbbo..","..ooooooooooo...","..o.o.o..o.o.o.."],
+    alt:[".o..o.........o.","obooboooooooooo.","obbbbbbbbbbbbbo.","oeebswwswwswwbo.","oekbswwswwswwbo.","obbbbbbbbbbbbbo.",
+      "owwwwobsbbsbbbo.","orrrrobbbbbbbbo.",".owwwobbbbbbbo..","..ooooooooooo...",".o.o.o..o.o.o..."]},
+  // For bringing a friend to Roamies: the friend server gives one to both of them once they are Good friends
+  // (backend/invites.mjs). A pigeon with a letter in its beak, flapping (the two pictures are its wings up and down).
+  pigeon:{name:'Carrier pigeon',price:null,rarity:'epic',unlock:'Bring a friend to Roamies and become Good friends',hover:46,spin:5,
+    pal:{o:'#3a3848',g:'#9aa0b4',l:'#cfd3df',p:'#6fae9c',q:'#a77bc4',e:'#1d1a2b',y:'#ffb347',w:'#fffdf7',r:'#ff5d73',f:'#ff8fa3'},
+    rows:["....ooo......","...oggeo.....","..yyggqo.....","oooyoppooooo.","owwoggglllloo","owroggggllggo","ooooggggggoo.","....oooooo...",".....f..f...."],
+    alt:["....ooo..oo..","...oggeo.olo.","..yyggqoollo.","oooyoppolllo.","owwoggggoooo.","owroggggggggo","ooooggggggoo.","....oooooo...",".....f..f...."]}
 };
 // Tails: a fan of them behind a character that says how many (`tails`). They reach well past the sides of its own
 // picture, which is why they are not part of it: whoever draws the pet draws these first, with the pet's feet at
@@ -640,8 +712,302 @@ function drawBuddy(ctx,id,x,y,px,flip,look){
   ctx.restore();
 }
 
+/* ---------- auras: a soft light behind the pet, and something moving round it ---------- */
+// Whoever draws the pet draws its aura in two halves: drawAura(ctx,look,px,t,'back') before the tails and the
+// picture, and drawAura(...,'front') after it. Same terms as drawTails: the feet at 0,0, px to a pixel, t in seconds.
+// Nothing is kept from one frame to the next: where every mote is comes from t alone, so the desktop, the app
+// window's preview, a card in the Store and a friend's pet on a visit all show the same thing with nothing to tidy up.
+//   glow   the light behind the pet: [color, how strong 0..1]
+//   motes  how the bits move: orbit (round the pet, behind it for half the way), rise, fall, drift, swirl (in towards
+//          it), confetti, petals (blown across), rays (turning slowly behind it), burst (fireworks going off over its
+//          head, two at a time), constellation (stars turning slowly round it, joined by faint lines), bubbles
+//          (wobbling up and popping), flutter (butterflies, wings opening and shutting), rain (a little cloud over
+//          its head, raining), wisps (lights with tails, chasing round it), aurora (a curtain of light rippling
+//          behind it), flare (flames all round it, licking upwards: calm makes them slow and thin, bolts adds
+//          lightning crackling over it, in the color `bolt`), halo (a ring of light over its head), static (little
+//          bolts of lightning jumping round it), glitch (bits of it breaking up, like a bad screen), galaxy (two
+//          arms of stars turning round it), twin (two stars chasing each other round it: see `paired`)
+//   paired the matching aura: drawn in full only while look.match says the two who matched are together (both
+//          wearing it, and online or visiting; main.mjs works that out). Otherwise one star, faint.
+//   n      how many; ink: their colors, in turn; shape: dot (the default), heart, star, petal, ring or note
+//   twinkle  a few stars that wink on and off nearby as well
+// The ones with no price are earned (game.mjs, ACHIEVEMENTS); a capsule never holds an aura.
+const AURAS={
+  kindred:{name:'Kindred',price:null,rarity:'epic',unlock:'Become Best friends with someone',glow:['#ff6b8a',.32],motes:'orbit',n:3,shape:'heart',ink:['#ff4d6d','#ff8fab','#ff6b8a']},
+  daybreak:{name:'Daybreak',price:null,rarity:'epic',unlock:'Reach a 30-day streak',glow:['#ffd34d',.38],motes:'rays',n:8,ink:['#ffd34d','#ffe9a8']},
+  festival:{name:'Festival',price:null,rarity:'epic',unlock:'Fill a whole pack',glow:['#7ec8e3',.22],motes:'confetti',n:14,ink:['#ff6b8a','#ffd34d','#8ee6a8','#7ec8e3','#c39bff']},
+  singularity:{name:'Singularity',price:null,rarity:'legendary',unlock:'Own 100 items',glow:['#5b2a86',.55],motes:'swirl',n:12,ink:['#c39bff','#9a6bff','#5b2a86']},
+  fireflies:{name:'Fireflies',price:1500,rarity:'rare',glow:['#d8ff7a',.16],motes:'drift',n:6,ink:['#f2ff9a','#c8f56a']},
+  snowfall:{name:'Snowfall',price:2000,rarity:'epic',glow:['#c9efff',.24],motes:'fall',n:12,ink:['#ffffff','#dff4ff']},
+  embers:{name:'Embers',price:2500,rarity:'epic',glow:['#ff7a2f',.3],motes:'rise',n:12,ink:['#ffd34d','#ff9a3c','#ff4d2e']},
+  petals:{name:'Petals',price:3000,rarity:'legendary',glow:['#ffb3c7',.24],motes:'petals',n:9,shape:'petal',ink:['#ffb3c7','#ff8fab','#fff0f3']},
+  starlight:{name:'Starlight',price:5000,rarity:'legendary',glow:['#9fd8ff',.45],motes:'orbit',n:4,shape:'star',ink:['#ffffff','#bfe6ff'],twinkle:true},
+  // Won in packs (PACKS in game.mjs).
+  leaves:{name:'Falling leaves',price:null,rarity:'epic',unlock:'Win it in the Cozy pack',glow:['#ffb25b',.18],motes:'petals',n:8,shape:'petal',ink:['#ff8a3d','#e0a868','#c93a52','#ffd34d']},
+  fireworks:{name:'Fireworks',price:null,rarity:'legendary',unlock:'Comes with the Fireworks Night drop',glow:['#ff9a3c',.2],motes:'burst',n:8,ink:['#ffd34d','#ff5d73','#7ec8e3','#8ee6a8']},
+  constellation:{name:'Constellation',price:null,rarity:'legendary',unlock:'Comes with the Fireworks Night drop',glow:['#7b8cff',.3],motes:'constellation',n:5,shape:'star',ink:['#ffffff','#9fb4ff']},
+  // For sale, from 1.7.
+  bubbles:{name:'Bubbles',price:1600,rarity:'rare',glow:['#9fe6ff',.14],motes:'bubbles',n:7,shape:'ring',ink:['#bff0ff','#e6faff','#c9b8ff']},
+  melody:{name:'Melody',price:1800,rarity:'rare',glow:['#c39bff',.16],motes:'rise',n:5,shape:'note',ink:['#ffffff','#ffd34d','#ff8fab','#9fd8ff']},
+  butterflies:{name:'Butterflies',price:2800,rarity:'epic',glow:['#ffd0f0',.18],motes:'flutter',n:3,ink:['#ff8fd0','#ffd34d','#8fd3ff']},
+  raincloud:{name:'Drizzle',price:2600,rarity:'epic',glow:['#9fb4cc',.12],motes:'rain',n:7,ink:['#d6dde8','#8fc8ff','#ffffff']},
+  // The Northern Lights drop.
+  wisps:{name:"Will-o'-wisps",price:null,rarity:'epic',unlock:'Comes with the Northern Lights drop',glow:['#6fe8ff',.26],motes:'wisps',n:3,ink:['#9ffcff','#6fe8ff','#c9a8ff']},
+  northern:{name:'Northern lights',price:null,rarity:'legendary',unlock:'Comes with the Northern Lights drop',glow:['#5dffb0',.22],motes:'aurora',n:31,ink:['#5dffb0','#3fe0c8','#6fa8ff','#b67bff']},
+  // Power-ups: flames all round it, as when a fighter in a cartoon powers up. Overcharge is earned (ACHIEVEMENTS in
+  // game.mjs: a 60-day streak); the rest are for sale.
+  goldflare:{name:'Golden flare',price:4500,rarity:'legendary',glow:['#ffd84d',.5],motes:'flare',n:18,ink:['#fffbe0','#ffe866','#ffc21a','#ff9d00']},
+  crimson:{name:'Crimson rage',price:3000,rarity:'epic',glow:['#ff3b3b',.42],motes:'flare',n:18,ink:['#ffe0d6','#ff6b5b','#e8202a','#9a0f1c']},
+  spiritfire:{name:'Spirit fire',price:3500,rarity:'epic',glow:['#3aa8ff',.4],motes:'flare',n:18,ink:['#e8fbff','#8fe3ff','#3aa8ff','#2a5cff']},
+  silvercalm:{name:'Silver calm',price:6000,rarity:'legendary',glow:['#cfd8e8',.38],motes:'flare',n:16,calm:true,twinkle:true,ink:['#ffffff','#e6ecf5','#b8c4d6','#8a97b0']},
+  overcharge:{name:'Overcharge',price:null,rarity:'legendary',unlock:'Reach a 60-day streak',glow:['#ffe066',.55],motes:'flare',n:20,bolts:true,bolt:'#9fe4ff',ink:['#ffffff','#fff07a','#ffd21f','#ffab00']},
+  // More for sale, from 1.7.
+  lovestruck:{name:'Lovestruck',price:1700,rarity:'rare',glow:['#ff7aa8',.2],motes:'rise',n:6,shape:'heart',ink:['#ff4d7d','#ff8fb0','#ffc2d4']},
+  halo:{name:'Halo',price:2200,rarity:'epic',glow:['#fff2b0',.3],motes:'halo',n:18,ink:['#fff6c8','#ffd84d','#ffffff']},
+  shadow:{name:'Shadow',price:2400,rarity:'epic',glow:['#7a3fc0',.45],motes:'rise',n:12,shape:'puff',ink:['#5a3388','#8a5cc8','#c49cf0']},
+  static:{name:'Static',price:2700,rarity:'epic',glow:['#6fc8ff',.32],motes:'static',n:5,ink:['#ffffff','#9fe4ff','#5fb0ff']},
+  glitch:{name:'Glitch',price:3200,rarity:'epic',glow:['#ff3df0',.18],motes:'glitch',n:9,ink:['#3dfcff','#ff3df0','#ffffff']},
+  galaxy:{name:'Galaxy',price:5500,rarity:'legendary',glow:['#6a4cff',.42],motes:'galaxy',n:12,ink:['#ffffff','#c9b8ff','#8f7dff','#ff8fd0'],twinkle:true},
+  // Matched with a Best friend (the Friends page): it can't be bought, and stays yours if the match ends.
+  twinstars:{name:'Twin stars',price:null,rarity:'legendary',unlock:'Match auras with a Best friend (the Friends page)',glow:['#ffb3e6',.3],motes:'twin',n:5,paired:true,ink:['#ffd84d','#ff8fd0','#ffffff']},
+};
+// The bits, as cells around their own middle.
+const AURA_SHAPES={dot:[[0,0]],heart:[[-1,-1],[1,-1],[-1,0],[0,0],[1,0],[0,1]],star:[[0,-1],[-1,0],[0,0],[1,0],[0,1]],petal:[[0,0],[1,0]],
+  ring:[[0,-1],[-1,0],[1,0],[0,1]], bigring:[[-1,-2],[0,-2],[-2,-1],[1,-1],[-2,0],[1,0],[-1,1],[0,1]], note:[[0,0],[1,0],[1,-1],[1,-2],[1,-3],[2,-3]],
+  wingsOpen:[[-2,-1],[-1,-1],[1,-1],[2,-1],[-1,0],[0,0],[1,0],[-1,1],[1,1]], wingsShut:[[0,-1],[0,0],[0,1],[-1,-1],[1,-1]],
+  puff:[[-1,0],[0,0],[1,0],[0,-1]], drop:[[0,0],[0,1]], block:[[0,0],[1,0],[0,1],[1,1]], bar:[[-2,0],[-1,0],[0,0],[1,0],[2,0]]};
+const auraSeed=(i)=>{ const x=Math.sin(i*127.1+311.7)*43758.5453; return x-Math.floor(x); };
+const auraU=(x)=>x-Math.floor(x);
+const AURA_MID=-7;   // the middle of the pet's body, a row up from its feet by half its height
+// Every bit of an aura at time t: [x, y, color, how solid 0..1, behind the pet?, shape], in pixels from the feet.
+// (shape: only where a bit is not the aura's own shape, as the dots of a constellation's lines.)
+function auraMotes(a,t,match){
+  const out=[], n=a.n;
+  if(a.motes==='twin'){
+    // Two stars chasing each other round it, each with a tail, and now and then a heart going up between them. Not
+    // matched (or the other one not about): only the first star, faint.
+    const both=!!match;
+    for(let s=0;s<(both?2:1);s++) for(let k=0;k<n;k++){
+      const ang=t*1.7-k*.2+s*Math.PI, r=12;
+      out.push([Math.cos(ang)*r,AURA_MID-2+Math.sin(ang)*4+Math.sin(t*2+s*3)*1.5,k?a.ink[s]:'#ffffff',(both?1:.35)*(1-k*.18),Math.sin(ang)<0,k?'dot':'star']);
+    }
+    if(both){ const u=auraU(t*.5); if(u<.6) out.push([Math.sin(t*3)*1.5,-19-u*10,a.ink[1],1-u/.6,false,'heart']); }
+    return out;
+  }
+  if(a.motes==='halo'){
+    // A ring of light over its head, bobbing a little, its back half behind the head; a glint running round it.
+    const y0=-21+Math.sin(t*2)*.8;
+    for(let i=0;i<n;i++){
+      const ang=i*2*Math.PI/n, glint=(1+Math.cos(ang-t*2.5))/2;
+      out.push([Math.cos(ang)*6,y0+Math.sin(ang)*1.6,glint>.85?a.ink[2]:a.ink[i%2],.55+.45*glint,Math.sin(ang)<0,'dot']);
+    }
+    for(let i=0;i<3;i++){ const u=auraU(t*.4+i/3); out.push([(auraSeed(i+5)*2-1)*7,y0+2+u*8,a.ink[0],(1-u)*.8,false,'dot']); }   // a little light falling from it
+    return out;
+  }
+  if(a.motes==='static'){
+    // Little bolts jumping about round it, a few at a time, each gone in a blink; and sparks.
+    for(let b=0;b<n;b++){
+      const cyc=t*3.1+b/n, k=Math.floor(cyc), u=auraU(cyc);
+      if(u>.6) continue;
+      const ang=auraSeed(k*13+b)*Math.PI*2;
+      let x=Math.round(Math.cos(ang)*12), y=Math.round(AURA_MID-2+Math.sin(ang)*9);
+      for(let j=0;j<7;j++){ out.push([x,y,j%2?a.ink[1]:a.ink[0],1-u*1.4,Math.sin(ang)<0,'dot']); x+=auraSeed(k*7+j)<.5?-1:1; y+=auraSeed(k*11+j)<.5?1:-1; }
+    }
+    for(let i=0;i<7;i++){ const on=Math.sin(t*9+i*2.7); if(on>.4) out.push([(auraSeed(i+31)*2-1)*13,AURA_MID-3+(auraSeed(i+37)*2-1)*10,a.ink[2],on,i%2===0,'dot']); }
+    return out;
+  }
+  if(a.motes==='glitch'){
+    // Blocks and lines round it that jump to a new place several times a second, in two colors, as a bad screen does.
+    const k=Math.floor(t*7);
+    for(let i=0;i<n;i++){
+      if(auraSeed(k*17+i)<.3) continue;   // some of them gone for this moment
+      const x=(auraSeed(k*5+i*3)*2-1)*14, y=-2-auraSeed(k*9+i*7)*24;
+      out.push([x,y,a.ink[i%2],.55+.45*auraSeed(k+i),i%2===0,auraSeed(k*3+i)<.35?'bar':'block']);
+    }
+    if(auraSeed(k)<.25) out.push([0,AURA_MID-2+(auraSeed(k*2)*2-1)*6,a.ink[2],.5,false,'bar']);
+    return out;
+  }
+  if(a.motes==='galaxy'){
+    // Two arms of stars turning round it, tilted, bright near the middle and fainter out along the arms.
+    for(let arm=0;arm<2;arm++) for(let i=0;i<n;i++){
+      const r=4+i*12/(n-1), ang=t*.6+arm*Math.PI+r*.34;
+      out.push([Math.cos(ang)*r,AURA_MID-1+Math.sin(ang)*r*.42,a.ink[Math.min(a.ink.length-1,Math.floor(i*a.ink.length/n))],1-i/(n+2),Math.sin(ang)<0,i===0?'star':'dot']);
+    }
+    for(let i=0;i<4;i++){ const s=auraSeed(i+77), s2=auraSeed(i+91), on=Math.sin(t*3+i*2.3); if(on>0) out.push([(s*2-1)*15,AURA_MID-3+(s2*2-1)*9,a.ink[0],on,i%2===0]); }
+    return out;
+  }
+  if(a.motes==='burst'){
+    for(let b=0;b<2;b++){
+      const cyc=t*.45+b*.5, u=auraU(cyc), k=Math.floor(cyc)*2+b, cx=(auraSeed(k+5)*2-1)*8, cy=-23+auraSeed(k+9)*6, r=1+u*7;
+      if(u<.08){ out.push([cx,cy+(.08-u)*60,a.ink[k%a.ink.length],.8,false]); continue; }   // the rocket going up
+      for(let i=0;i<n;i++){ const ang=i*2*Math.PI/n+k; out.push([cx+Math.cos(ang)*r,cy+Math.sin(ang)*r*.85+u*u*3,a.ink[(k+i)%a.ink.length],1-u,false]); }
+    }
+    return out;
+  }
+  if(a.motes==='rain'){
+    // A small cloud over its head, a little to and fro, and the rain out of it down to the ground.
+    const cx=Math.round(Math.sin(t*.5)*2), cy=-27;
+    const CLOUD=['...ww.....','..wwww.ww.','.wwwwwwwww','wwwwwwwwww','.ggggggggg','..gggggg..'];
+    CLOUD.forEach((row,r)=>{ for(let c=0;c<row.length;c++) if(row[c]!=='.') out.push([cx-5+c,cy-4+r,row[c]==='w'?a.ink[0]:'#a9b3c4',.95,false,'dot']); });
+    for(let i=0;i<n;i++){ const u=auraU(t*1.1+auraSeed(i+7)); out.push([cx+Math.round((auraSeed(i+19)*2-1)*4),cy+3+u*24,a.ink[1+(i%2)],u>.9?(1-u)*10:.85,i%2===0,'drop']); }
+    return out;
+  }
+  if(a.motes==='wisps'){
+    // Lights chasing each other round it, each with a tail that fades behind.
+    for(let i=0;i<n;i++) for(let k=0;k<5;k++){
+      const ang=t*1.6-k*.22+i*2*Math.PI/n, r=13+Math.sin(t*1.1+i)*2;
+      out.push([Math.cos(ang)*r,AURA_MID-2+Math.sin(ang)*5+Math.sin(t*3+i+k*.4)*1.5,k?a.ink[i%a.ink.length]:'#ffffff',1-k*.2,Math.sin(ang)<0,k?'dot':'star']);
+    }
+    return out;
+  }
+  if(a.motes==='aurora'){
+    // A curtain of light behind it: bands that ripple, their colors running along them.
+    // (n columns, a cell apart: the light is one sheet, folding as it ripples)
+    for(let i=0;i<n;i++){
+      const x=-15+i*30/(n-1), top=Math.round(-28.5+Math.sin(x*.3+t*1.3)*2.4), len=6+Math.round(3+3*Math.sin(x*.22-t*1.1));
+      const ink=a.ink[Math.floor(auraU(x/60+t*.06)*a.ink.length)];
+      for(let d=0;d<len;d++) out.push([x,top+d,ink,(1-d/len)*(.32+.22*Math.sin(t*1.6+x*.25)),true,'dot']);
+    }
+    return out;
+  }
+  if(a.motes==='flare'){
+    // Tongues of flame out of an oval round its body, from beside its feet, over its head, and down the other side:
+    // each one flickers and sways on its own, the ones over its head the tallest, so the whole is a tall flame. Each
+    // is two cells wide at the root; a hot white core flashes now and then at the root (ink[0]), the rest runs from
+    // ink[1] next to the pet to the last ink at the tips. Sparks go up through it.
+    const sp=a.calm?.45:1, rx=11, ry=11, cy=AURA_MID-2;
+    for(let i=0;i<n;i++){
+      const ang=-Math.PI-.9+(Math.PI+1.8)*i/(n-1), bx=Math.cos(ang)*rx, by=Math.min(-1,cy+Math.sin(ang)*ry);
+      const fl=.5+.5*Math.sin(t*9*sp+i*2.1+Math.sin(t*5*sp+i*1.3)), up=1+.6*Math.max(0,-Math.sin(ang));
+      const len=Math.min(Math.round(by)+31,Math.round(((a.calm?2:3)+fl*(a.calm?3:4))*up)), ox=Math.cos(ang)*.35;   // (never over the top of the room)
+      for(let d=0;d<len;d++){
+        const f=d/len, x=bx+ox*d+Math.sin(t*6*sp+i+d*.6)*.7*f, ink=d===0&&fl>.75?a.ink[0]:a.ink[1+Math.min(a.ink.length-2,Math.floor(f*(a.ink.length-1)))];
+        const al=(1-f*.7)*(a.calm?.7:.95);
+        out.push([x,by-d,ink,al,true,'dot']);
+        if(f<.45) out.push([x+(bx<0?1:-1),by-d,ink,al*.8,true,'dot']);
+      }
+    }
+    const sparks=a.calm?4:6;
+    for(let i=0;i<sparks;i++){ const u=auraU(t*(a.calm?.35:.7)+auraSeed(i+61)); out.push([(auraSeed(i+71)*2-1)*10,-2-u*24,a.ink[0],u>.8?(1-u)*5:.9,i%2===0,'dot']); }
+    // Lightning: a flash now and then, zigzagging down through the flames on one side or the other, two at a time,
+    // each with a white core and a glow of `bolt` beside it.
+    if(a.bolts) for(let b=0;b<2;b++){
+      const cyc=t*2.2+b*.5, k=Math.floor(cyc), u=auraU(cyc);
+      if(u>.4) continue;
+      const side=(k+b)%2?1:-1, al=u<.1?1:1-(u-.1)/.3;
+      let x=side*(9+Math.round(auraSeed(k*3+b)*3)), y=-27+Math.round(auraSeed(k*5+b)*6);
+      for(let j=0;j<11;j++){
+        out.push([x,y,'#ffffff',al,false,'dot'],[x+side,y,a.bolt,al*.85,false,'dot']);
+        y+=1; if(j%2) x+=Math.abs(x)>=14?-side:auraSeed(k*7+j+b*11)<.5?-1:1;   // (zigzagging, and back in at the edge)
+      }
+    }
+    if(a.twinkle) for(let i=0;i<4;i++){
+      const s=auraSeed(i+77), s2=auraSeed(i+91), on=Math.sin(t*3+i*2.3);
+      if(on>0) out.push([(s*2-1)*15,AURA_MID-3+(s2*2-1)*9,a.ink[0],on,i%2===0]);
+    }
+    return out;
+  }
+  if(a.motes==='flutter'){
+    // Butterflies on a wandering loop round it, beating their wings, never quite together.
+    for(let i=0;i<n;i++){
+      const ang=t*.9+i*2*Math.PI/n, x=Math.cos(ang)*12+Math.sin(t*2.3+i)*3, y=AURA_MID-3+Math.sin(ang*2+i)*6+Math.sin(t*4+i)*1;
+      out.push([x,y,a.ink[i%a.ink.length],1,Math.sin(ang)<0,Math.sin(t*14+i*2)>0?'wingsOpen':'wingsShut']);
+    }
+    return out;
+  }
+  if(a.motes==='constellation'){
+    const at=[];
+    for(let i=0;i<n;i++){
+      const ang=t*.18+i*2*Math.PI/n+auraSeed(i+3)*.6, r=12+auraSeed(i+13)*2;
+      at.push([Math.cos(ang)*r,AURA_MID-2+Math.sin(ang)*r*.7,Math.sin(ang)<0]);
+    }
+    for(let i=0;i<n;i++){   // the lines: a few dots from each star to the next
+      const [x1,y1,b1]=at[i], [x2,y2]=at[(i+1)%n];
+      for(let j=1;j<4;j++) out.push([x1+(x2-x1)*j/4,y1+(y2-y1)*j/4,a.ink[1],.35,b1,'dot']);
+    }
+    at.forEach(([x,y,back],i)=>out.push([x,y,a.ink[0],.55+.45*Math.sin(t*2.2+i*1.7),back]));
+    return out;
+  }
+  for(let i=0;i<n;i++){
+    const s=auraSeed(i+1), s2=auraSeed(i+41), ink=a.ink[i%a.ink.length];
+    let x=0, y=0, al=1, back=false;
+    if(a.motes==='orbit'){
+      const ang=t*1.3+i*2*Math.PI/n;
+      x=Math.cos(ang)*12; y=AURA_MID-1+Math.sin(ang)*4+Math.sin(t*2.4+i)*.8; back=Math.sin(ang)<0;
+    } else if(a.motes==='rise'){
+      const u=auraU(t*.32+s); x=(s2*2-1)*9+Math.sin(t*3+i)*1.2; y=-1-u*21; al=1-u; back=i%2===0;
+    } else if(a.motes==='fall'){
+      const u=auraU(t*.22+s); x=(s2*2-1)*12+Math.sin(t*1.4+i*2)*1.6; y=-27+u*27; al=u<.12?u/.12:u>.85?(1-u)/.15:1; back=i%3===0;
+    } else if(a.motes==='drift'){
+      const f=.55*(1+s), ang=t*f+i*1.7;
+      x=Math.sin(ang)*12; y=AURA_MID+Math.sin(t*.42*(1+s2)+i)*9; al=.25+.75*Math.max(0,Math.sin(t*2.1+i*1.9)); back=Math.cos(ang)<0;
+    } else if(a.motes==='swirl'){
+      const u=auraU(t*.28+s), r=(1-u)*15+2, ang=t*2+i*2*Math.PI/n+u*5;
+      x=Math.cos(ang)*r; y=AURA_MID+Math.sin(ang)*r*.55; al=u<.15?u/.15:1-u*.55; back=Math.sin(ang)<0;
+    } else if(a.motes==='confetti'){
+      const u=auraU(t*.3+s); x=(s2*2-1)*12+Math.sin(t*4+i)*1.5; y=-29+u*30; al=u>.85?(1-u)/.15:1; back=i%2===0;
+    } else if(a.motes==='bubbles'){
+      const u=auraU(t*.25+s); x=(s2*2-1)*11+Math.sin(t*2.2+i*1.7)*2; y=-2-u*27; al=u>.88?(1-u)/.12:.85; back=i%2===0;
+      if(u>.96) continue;   // popped
+      if(i%3===0){ out.push([x,y,ink,al,back,'bigring']); continue; }
+    } else if(a.motes==='petals'){
+      const u=auraU(t*.2+s); x=-15+u*30; y=-25+u*21+Math.sin(t*2+i*1.3)*2.5+(s2-.5)*6; al=u<.1?u/.1:u>.88?(1-u)/.12:1; back=i%2===0;
+    } else continue;   // rays are drawn on their own, below
+    out.push([x,y,ink,al,back]);
+  }
+  if(a.twinkle) for(let i=0;i<4;i++){
+    const s=auraSeed(i+77), s2=auraSeed(i+91), on=Math.sin(t*3+i*2.3);
+    if(on>0) out.push([(s*2-1)*15,AURA_MID-3+(s2*2-1)*9,a.ink[0],on,i%2===0]);
+  }
+  return out;
+}
+function drawAura(ctx,look,px,t,layer){
+  const id=look&&look.aura; if(!has(AURAS,id)) return;
+  const a=AURAS[id], was=ctx.globalAlpha, back=layer==='back'; t=t||0;
+  if(back){
+    // The light: a round glow, breathing a little.
+    const r=15*px, cy=AURA_MID*px, g=ctx.createRadialGradient(0,cy,0,0,cy,r), k=a.glow[1]*(.85+.15*Math.sin(t*1.8))*(a.paired&&!look.match?.35:1);
+    const hex=a.glow[0], rgb=[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16)).join(',');
+    g.addColorStop(0,'rgba('+rgb+','+k+')'); g.addColorStop(1,'rgba('+rgb+',0)');
+    ctx.fillStyle=g; ctx.fillRect(-r,cy-r,r*2,r*2);
+  }
+  drawAuraBits(ctx,look,px,t,layer);
+}
+// The aura without its light: what moves round the pet, the half for one layer. (The town lights a pet its own way,
+// and draws these on two cards, one behind the pet and one in front.)
+function drawAuraBits(ctx,look,px,t,layer){
+  const id=look&&look.aura; if(!has(AURAS,id)) return;
+  const a=AURAS[id], was=ctx.globalAlpha, back=layer==='back'; t=t||0;
+  if(back){
+    if(a.motes==='rays') for(let i=0;i<a.n;i++){
+      const ang=t*.35+i*2*Math.PI/a.n;
+      ctx.fillStyle=a.ink[i%a.ink.length];
+      for(let d=9;d<=16;d++){
+        const y=Math.round(AURA_MID+Math.sin(ang)*d*.8); if(y>0) break;   // nothing shines up out of the ground
+        ctx.globalAlpha=was*(1-(d-9)/8)*.9; ctx.fillRect(Math.round(Math.cos(ang)*d)*px,y*px,px,px);
+      }
+    }
+  }
+  const own=AURA_SHAPES[a.shape]||AURA_SHAPES.dot;
+  for(const [x,y,ink,al,behind,shape] of auraMotes(a,t,look.match)){
+    if(behind!==back) continue;
+    ctx.globalAlpha=was*Math.max(0,Math.min(1,al)); ctx.fillStyle=ink;
+    const cx=Math.round(x), cy=Math.round(y), cells=shape?AURA_SHAPES[shape]:own;
+    for(const [dx,dy] of cells) ctx.fillRect((cx+dx)*px,(cy+dy)*px,px,px);
+  }
+  ctx.globalAlpha=was;
+}
+// The same at one moment as plain cells, [x, y, color] from the feet, for a still picture (the admin console's).
+function auraCells(id,t){
+  if(!has(AURAS,id)) return [];
+  const a=AURAS[id], out=[], cells=AURA_SHAPES[a.shape]||AURA_SHAPES.dot;
+  if(a.motes==='rays') for(let i=0;i<a.n;i++){ const ang=t*.35+i*2*Math.PI/a.n; for(let d=9;d<=13;d++){ const y=Math.round(AURA_MID+Math.sin(ang)*d*.8); if(y>0) break; out.push([Math.round(Math.cos(ang)*d),y,a.ink[i%a.ink.length]]); } }
+  for(const [x,y,ink,al,,shape] of auraMotes(a,t,true)) if(al>.3) for(const [dx,dy] of (shape?AURA_SHAPES[shape]:cells)) out.push([Math.round(x)+dx,Math.round(y)+dy,ink]);
+  return out;
+}
+
 /* ---------- the catalog: what can be worn, and how rare it is ---------- */
-const KINDS={char:CHARS,skin:SKINS,hat:HATS,face:FACES,buddy:BUDDIES};
+const KINDS={char:CHARS,skin:SKINS,hat:HATS,face:FACES,buddy:BUDDIES,aura:AURAS};
 const RARITIES=['common','rare','epic','legendary'];
 function rarityOf(item){
   if(item.rarity) return item.rarity;
