@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roamies status</title>
+<meta name="description" content="Whether the Roamies friend server and downloads are up right now, the last thirty days, and anything we know is wrong.">
+<meta property="og:title" content="Roamies status">
+<meta property="og:description" content="Whether the friend server and downloads are up right now, and the last thirty days.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Roamies">
+<meta property="og:url" content="https://userlaws.github.io/roamies/status.html">
+<meta property="og:image" content="https://userlaws.github.io/roamies/preview.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@roamiesapp">
+<link rel="canonical" href="https://userlaws.github.io/roamies/status.html">
+<meta name="theme-color" content="#131017">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preload" href="fonts/Allo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/pages.css">
+</head>
+<body data-no-latest="1">
+
+<header class="top">
+  <a class="brand" href="./" aria-label="Roamies, to the front page"><canvas id="brandFace" width="16" height="14"></canvas><span>Roamies</span></a>
+  <nav class="tabs" aria-label="Pages">
+    <a href="info.html"><canvas data-ico="info"></canvas>Info</a>
+    <a href="changelog.html"><canvas data-ico="box"></canvas>What's new</a>
+    <a class="on" href="status.html" aria-current="page"><canvas data-ico="pulse"></canvas>Status<i class="lamp wait" id="tabLamp"></i></a>
+    <a href="privacy.html"><canvas data-ico="lock"></canvas>Privacy</a>
+  </nav>
+  <div class="top-end"><a class="btn" href="https://github.com/userlaws/roamies/releases/latest/download/Roamies-Setup.exe"><canvas data-ico="down"></canvas><span>Get Roamies</span></a></div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div aria-live="polite">
+      <p class="kick">Status</p>
+      <h1 id="headline">Having a look…</h1>
+      <p class="lede" id="lede">Asking the friend server and the downloads how they are.</p>
+    </div>
+    <div class="stage fair" id="stage" aria-hidden="true">
+      <p class="says" id="says"></p>
+      <canvas class="pet" id="pet" data-pet="cat" data-pose="base" width="16" height="23"></canvas>
+    </div>
+  </section>
+
+  <noscript><p class="noscript">This page looks at the friend server from your browser, which needs JavaScript. Without it: if friends and visits don't work in the app while everything else does, the friend server is likely down, and your pet is fine.</p></noscript>
+
+  <aside class="notice" id="notice" hidden></aside>
+
+  <section class="card" id="now">
+    <header><span class="gi"><canvas data-ico="pulse"></canvas></span><h2>Right now</h2></header>
+    <ul class="checks">
+      <li id="rowRelay" class="wait"><i class="lamp wait"></i><b>Friend server</b><em>looking…</em><small>Friends and who is online, visits, hangouts, other players in the town, Discord sign-in, top scores, feedback.</small></li>
+      <li id="rowGet" class="wait"><i class="lamp wait"></i><b>Downloads and updates</b><em>looking…</em><small>The installer and the app's own updates.</small></li>
+      <li id="rowSite" class="ok"><i class="lamp ok"></i><b>This website</b><em>you're reading it</em><small>The front page, these pages and the demo pet.</small></li>
+    </ul>
+    <div class="checked"><span id="checkedAt">Looking from your browser.</span><button class="btn ghost" id="again" type="button" disabled>Look again</button></div>
+  </section>
+
+  <section class="card" id="history">
+    <header><span class="gi"><canvas data-ico="clock"></canvas></span><h2>The last 30 days</h2></header>
+    <div class="days-row">
+      <div class="days-head"><b>Friend server</b><span id="pctRelay">…</span></div>
+      <div class="days" id="daysRelay" role="img" aria-label="Friend server, day by day"></div>
+    </div>
+    <div class="days-row">
+      <div class="days-head"><b>Downloads and updates</b><span id="pctGet">…</span></div>
+      <div class="days" id="daysGet" role="img" aria-label="Downloads, day by day"></div>
+      <div class="days-foot"><span>30 days ago</span><span>today</span></div>
+    </div>
+    <ul class="key">
+      <li><i class="ok"></i>every check passed</li><li><i class="some"></i>some failed</li><li><i class="bad"></i>half or more failed</li><li><i></i>no checks</li>
+    </ul>
+    <p class="muted small" id="logNote" style="margin-top: 12px"></p>
+  </section>
+
+  <section class="card" id="without">
+    <header><span class="gi"><canvas data-ico="paw"></canvas></span><h2>If the friend server is down</h2></header>
+    <p class="muted" style="margin-bottom: 18px">Your pet doesn't need it. Everything it owns is in a save on your computer, and the app keeps trying the server by itself until it's back.</p>
+    <div class="two" style="margin-bottom: 0">
+      <div>
+        <h3>Still works</h3>
+        <ul class="dots">
+          <li>The pet on your desktop, and looking after it</li>
+          <li>Coins, the daily reward and quests</li>
+          <li>The wardrobe, the Store and capsules</li>
+          <li>Stretch breaks and the arcade</li>
+          <li>The town, by yourself</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Waits</h3>
+        <ul class="dots waits">
+          <li>Seeing who is online, and friend requests</li>
+          <li>Visits and hangouts</li>
+          <li>Other players in the town, and its bulletin board</li>
+          <li>Signing in with Discord</li>
+          <li>Top scores, gifts from Roamies, and sending feedback</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="two">
+    <section class="card" id="knownCard">
+      <header><span class="gi"><canvas data-ico="gear"></canvas></span><h2>Known problems</h2></header>
+      <ul class="entries" id="known"><li class="empty">…</li></ul>
+    </section>
+    <section class="card" id="past">
+      <header><span class="gi"><canvas data-ico="doc"></canvas></span><h2>Past incidents</h2></header>
+      <ul class="entries" id="incidents"><li class="empty">…</li></ul>
+    </section>
+  </div>
+
+  <section class="card get">
+    <div>
+      <h2>Seeing something this page isn't?</h2>
+      <p>Tell us from the speech bubble in the app once it's connected, or straight away on X or GitHub.</p>
+    </div>
+    <div class="btn-row">
+      <a class="btn big ghost" href="https://x.com/roamiesapp">@roamiesapp on X</a>
+      <a class="btn big ghost" href="https://github.com/userlaws/roamies/issues">Open an issue</a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <span>Roamies status</span>
+  <a href="./">Front page</a><a href="changelog.html">What's new</a><a href="privacy.html">Privacy</a>
+</footer>
+
+<script src="js/sprites.js"></script>
+<script src="js/pages.js"></script>
+<script src="js/status.js"></script>
+</body>
+</html>

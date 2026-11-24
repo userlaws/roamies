@@ -1,0 +1,39 @@
+# Keeps the status page's log: every half hour, look at the friend server, the downloads and the website, and add
+# one line to log.json on the status-log branch. status.html reads that file. The branch holds one commit, replaced
+# each time, so the log never grows the repository's history. See tools/status-check.mjs.
+name: status
+on:
+  schedule:
+    - cron: '7,37 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: status-log
+  cancel-in-progress: false
+jobs:
+  look:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Fetch the log so far
+        run: |
+          mkdir -p ../log
+          if git fetch --depth 1 origin status-log; then git show FETCH_HEAD:log.json > ../log/log.json; fi
+      - name: Look
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node tools/status-check.mjs ../log/log.json
+      - name: Keep the log
+        run: |
+          cd ../log
+          git init -q -b status-log
+          git config user.name "status"
+          git config user.email "status@users.noreply.github.com"
+          git add log.json
+          git commit -q -m "The status log"
+          git push -q --force "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" status-log

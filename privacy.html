@@ -46,7 +46,7 @@ body { background: var(--night); color: var(--moonlit);
 <body>
 
 <main class="fine-desk">
-  <p class="stamp"><span>privacy.txt · last changed 14 November 2026</span></p>
+  <p class="stamp"><span>privacy.txt · last changed 24 November 2026</span></p>
   <h1 class="sky-type">The fine print, in plain words.</h1>
   <p class="caption">Roamies is a pet that lives on your desktop. Most of what it knows stays on your computer. This page says what doesn't, where it goes, and how to have it removed.</p>
 
@@ -135,6 +135,7 @@ body { background: var(--night); color: var(--moonlit);
       <ul>
         <li><b>Updates.</b> A copy from the installer looks for new versions on GitHub and downloads them from there. A copy from the Microsoft Store is updated by the Store. So that Settings can say when a newer version is out, that copy also asks GitHub for the newest version's number, when it starts and then twice a day. The request carries nothing about you or your copy beyond what any web request carries. GitHub and Microsoft see those requests as they see any download.</li>
         <li><b>This website.</b> The demo pet's coins and outfit are kept in your own browser and sent nowhere. The page asks GitHub what the newest version is. It sets no cookies and has no analytics. It is hosted by GitHub Pages, and its fonts come from Google Fonts.</li>
+        <li><b>The status page.</b> To say whether the friend server is up, the <a href="status.html">status page</a> opens a connection to it from your browser and closes it again without sending anything. It also asks GitHub for the newest version and for our log of earlier checks. None of that carries anything about you beyond what any web request carries.</li>
       </ul>
     </div>
   </article>
@@ -167,7 +168,7 @@ body { background: var(--night); color: var(--moonlit);
 
 <nav class="taskbar" aria-label="Back">
   <a class="tb-start" href="./" aria-label="Roamies, back to the desktop"><canvas id="brandFace" width="16" height="14"></canvas><b>Roamies</b></a>
-  <div class="tb-apps"><a href="./"><span>Back to the desktop</span></a><a class="on" href="privacy.html"><span>privacy.txt</span></a></div>
+  <div class="tb-apps"><a href="./"><span>Back to the desktop</span></a><a href="info.html"><span>Info</span></a><a href="changelog.html"><span>What's new</span></a><a href="status.html"><span>Status</span></a><a class="on" href="privacy.html"><span>privacy.txt</span></a></div>
 </nav>
 
 <script src="js/sprites.js"></script>
