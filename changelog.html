@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roamies: what's new</title>
+<meta name="description" content="Every version of the Roamies desktop pet, newest first, in a few lines each.">
+<meta property="og:title" content="Roamies: what's new">
+<meta property="og:description" content="Every version of the desktop pet, newest first, in a few lines each.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Roamies">
+<meta property="og:url" content="https://userlaws.github.io/roamies/changelog.html">
+<meta property="og:image" content="https://userlaws.github.io/roamies/preview.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@roamiesapp">
+<link rel="canonical" href="https://userlaws.github.io/roamies/changelog.html">
+<meta name="theme-color" content="#131017">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preload" href="fonts/Allo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+
+<header class="top">
+  <a class="brand" href="./" aria-label="Roamies, to the front page"><canvas id="brandFace" width="16" height="14"></canvas><span>Roamies</span></a>
+  <nav class="tabs" aria-label="Pages">
+    <a href="info.html"><canvas data-ico="info"></canvas>Info</a>
+    <a class="on" href="changelog.html" aria-current="page"><canvas data-ico="box"></canvas>What's new</a>
+    <a href="status.html"><canvas data-ico="pulse"></canvas>Status</a>
+    <a href="privacy.html"><canvas data-ico="lock"></canvas>Privacy</a>
+  </nav>
+  <div class="top-end"><a class="btn" href="https://github.com/userlaws/roamies/releases/latest/download/Roamies-Setup.exe"><canvas data-ico="down"></canvas><span>Get Roamies</span></a></div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <p class="kick">What's new · latest <span data-version>v1.6.0</span></p>
+      <h1>Every version, in a few lines.</h1>
+      <p class="lede">Newest first. In the app, a new version arrives as <b>a crate on a parachute</b>, and your pet reads you the list. The long notes for each one are on <a href="https://github.com/userlaws/roamies/releases">GitHub</a>.</p>
+    </div>
+    <div class="stage" aria-hidden="true">
+      <i class="star" style="left: 14%; top: 20%"></i><i class="star" style="left: 82%; top: 14%; animation-delay: -1.4s"></i><i class="star" style="left: 90%; top: 52%; animation-delay: -.6s"></i>
+      <canvas class="pet by" data-pet="cat" data-pose="happy" width="16" height="23"></canvas>
+      <canvas class="drop" data-art="drop" width="20" height="24"></canvas>
+    </div>
+  </section>
+
+  <!-- A version is one <li class="rel">: its number and day, a few words for a heading, and up to four lines.
+       The newest goes first and carries class="newest". Tags: t-new (New), t-chg (Changed), t-fix (Fixed). -->
+  <ol class="log" reversed>
+    <li class="rel newest" id="v1.6.0">
+      <div class="rel-when"><b>v1.6.0</b><time datetime="2026-11-14">14 Nov 2026</time></div>
+      <article class="card">
+        <h2>The town</h2>
+        <ul class="changes">
+          <li><i class="t-new">New</i><span>The park is now a town in 3D: a street of lamps, an arcade, a playground, a pond and a hill, with weather and a real sky.</span></li>
+          <li><i class="t-new">New</i><span>Meet other players there if you turn it on in Settings, or pin a note to the bulletin board.</span></li>
+          <li><i class="t-chg">Changed</i><span>A calmer app window with its own title bar, tidier Settings, and far less work while it sits open.</span></li>
+          <li><i class="t-fix">Fixed</i><span>A pet that couldn't be picked up after the screens went dark, and a pet lost on a visit.</span></li>
+        </ul>
+      </article>
+    </li>
+
+    <li class="rel" id="v1.5.1">
+      <div class="rel-when"><b>v1.5.1</b><time datetime="2026-11-14">14 Nov 2026</time></div>
+      <article class="card">
+        <h2>A quick fix</h2>
+        <ul class="changes">
+          <li><i class="t-fix">Fixed</i><span>Your pet could stop letting you grab, pet or toss it until you restarted Roamies.</span></li>
+        </ul>
+      </article>
+    </li>
+
+    <li class="rel" id="v1.5.0">
+      <div class="rel-when"><b>v1.5.0</b><time datetime="2026-10-21">21 Oct 2026</time></div>
+      <article class="card">
+        <h2>Out of the way, and a new server</h2>
+        <ul class="changes">
+          <li><i class="t-chg">Changed</i><span>The pet keeps clear of anything full screen, videos and slides too, not only games. A setting keeps it out over videos if you'd rather.</span></li>
+          <li><i class="t-chg">Changed</i><span>The friend server has a new home, so friends, visits and sign-in <a href="status.html">stay up</a> all month.</span></li>
+        </ul>
+      </article>
+    </li>
+
+    <li class="rel" id="v1.4.0">
+      <div class="rel-when"><b>v1.4.0</b><time datetime="2026-10-14">14 Oct 2026</time></div>
+      <article class="card">
+        <h2>The park</h2>
+        <ul class="changes">
+          <li><i class="t-new">New</i><span>A park to steer your pet around, with your friends in it. Race to the flag, or play tag.</span></li>
+          <li><i class="t-new">New</i><span>The Play tab shows the top score of everyone in each arcade game.</span></li>
+          <li><i class="t-new">New</i><span>A pet can have more than one sweetheart, in secret, with rumours and confessions.</span></li>
+          <li><i class="t-chg">Changed</i><span>A tidier Play tab, with the arcade in view without scrolling.</span></li>
+        </ul>
+      </article>
+    </li>
+
+    <li class="rel" id="v1.3.0">
+      <div class="rel-when"><b>v1.3.0</b><time datetime="2026-10-14">14 Oct 2026</time></div>
+      <article class="card">
+        <h2>Stretch breaks</h2>
+        <ul class="changes">
+          <li><i class="t-new">New</i><span>Half a minute of stretching with your pet, worth 40 coins. It suggests one after an hour at the computer.</span></li>
+          <li><i class="t-chg">Changed</i><span>The video break is gone: for many of you it never went off.</span></li>
+          <li><i class="t-new">New</i><span>Signing in with Discord is worth 200 coins, once.</span></li>
+        </ul>
+      </article>
+    </li>
+
+    <li class="rel" id="v1.2.0">
+      <div class="rel-when"><b>v1.2.0</b><time datetime="2026-10-13">13 Oct 2026</time></div>
+      <article class="card">
+        <h2>The Store, and packs</h2>
+        <ul class="changes">
+          <li><i class="t-new">New</i><span>A Store tab for what you don't own yet. The Wardrobe is what's yours.</span></li>
+          <li><i class="t-new">New</i><span>Packs fill as you claim your daily reward and quests, and you pick each prize.</span></li>
+          <li><i class="t-new">New</i><span>Gold, Diamond and Dark matter: three colors to work up to.</span></li>
+          <li><i class="t-chg">Changed</i><span>The capsule machine makes up for bad luck, and easy mode lightens things on a modest computer.</span></li>
+        </ul>
+      </article>
+    </li>
+
+    <li class="rel" id="v1.1.0">
+      <div class="rel-when"><b>v1.1.0</b><time datetime="2026-10-12">12 Oct 2026</time></div>
+      <article class="card">
+        <h2>Hangouts</h2>
+        <ul class="changes">
+          <li><i class="t-new">New</i><span>Start a hangout and your friends' pets come over to your desktop. Gather calls the whole gang together.</span></li>
+        </ul>
+      </article>
+    </li>
+
+    <li class="rel" id="v1.0.0">
+      <div class="rel-when"><b>v1.0.0</b><time datetime="2026-10-12">12 Oct 2026</time></div>
+      <article class="card">
+        <h2>One point oh</h2>
+        <ul class="changes">
+          <li><i class="t-new">New</i><span>The version that went to the Microsoft Store.</span></li>
+          <li><i class="t-new">New</i><span>A speech bubble in the app sends us a bug, an idea or a kind word.</span></li>
+        </ul>
+      </article>
+    </li>
+
+    <li class="rel" id="v0.1.5">
+      <div class="rel-when"><b>v0.1.5</b><time datetime="2026-10-12">12 Oct 2026</time></div>
+      <article class="card">
+        <h2>Looking after it</h2>
+        <ul class="changes">
+          <li><i class="t-new">New</i><span>Food, Fun and Love meters, and mischief when a pet is left wanting.</span></li>
+          <li><i class="t-new">New</i><span>Sky Hop, a second arcade game, and 42 more things to wear.</span></li>
+          <li><i class="t-new">New</i><span>Friendship levels and sweethearts.</span></li>
+          <li><i class="t-new">New</i><span>Updates arrive as a crate on a parachute.</span></li>
+        </ul>
+      </article>
+    </li>
+
+    <li class="rel" id="v0.1.0">
+      <div class="rel-when"><b>v0.1</b><time datetime="2026-10-11">11 Oct 2026</time></div>
+      <article class="card">
+        <h2>The first one</h2>
+        <ul class="changes">
+          <li><i class="t-new">New</i><span>A pet that roams your desktop, a wardrobe, a capsule machine, and visits to friends.</span></li>
+        </ul>
+      </article>
+    </li>
+  </ol>
+</main>
+
+<footer class="foot">
+  <span>Roamies <span data-version>v1.6.0</span></span>
+  <a href="./">Front page</a><a href="https://github.com/userlaws/roamies/releases">Full notes on GitHub</a><a href="https://x.com/roamiesapp">X</a>
+</footer>
+
+<script src="js/sprites.js"></script>
+<script src="js/pages.js"></script>
+</body>
+</html>

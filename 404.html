@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roamies: this page wandered off</title>
+<meta name="robots" content="noindex">
+<!-- This page is shown for any wrong address, however deep, so everything it loads is named from the site's root:
+     /roamies/ where the site is published, / when it is run with `node serve.mjs`. -->
+<meta name="theme-color" content="#131017">
+<script>
+// Written out by script, after the base, so the browser never goes looking for them beside the wrong address.
+var ROOT = location.pathname.indexOf('/roamies/') === 0 ? '/roamies/' : '/';
+document.write('<base href="' + ROOT + '"><link rel="icon" type="image/png" href="' + ROOT + 'favicon.png"><link rel="stylesheet" href="' + ROOT + 'css/pages.css">');
+</script>
+</head>
+<body data-no-latest="1">
+
+<header class="top">
+  <a class="brand" href="./" aria-label="Roamies, to the front page"><canvas id="brandFace" width="16" height="14"></canvas><span>Roamies</span></a>
+  <nav class="tabs" aria-label="Pages">
+    <a href="info.html"><canvas data-ico="info"></canvas>Info</a>
+    <a href="changelog.html"><canvas data-ico="box"></canvas>What's new</a>
+    <a href="status.html"><canvas data-ico="pulse"></canvas>Status</a>
+    <a href="privacy.html"><canvas data-ico="lock"></canvas>Privacy</a>
+  </nav>
+  <div class="top-end"><a class="btn" href="https://github.com/userlaws/roamies/releases/latest/download/Roamies-Setup.exe"><canvas data-ico="down"></canvas><span>Get Roamies</span></a></div>
+</header>
+
+<main class="wrap lost">
+  <div class="field" id="field">
+    <div class="big404" aria-hidden="true">404</div>
+    <canvas class="print" data-ico="paw" style="left: 52%" aria-hidden="true"></canvas>
+    <canvas class="print" data-ico="paw" style="left: 62%; margin-bottom: 8px" aria-hidden="true"></canvas>
+    <canvas class="print" data-ico="paw" style="left: 72%" aria-hidden="true"></canvas>
+    <canvas class="print" data-ico="paw" style="left: 82%; margin-bottom: 8px" aria-hidden="true"></canvas>
+    <canvas class="print" data-ico="paw" style="left: 92%" aria-hidden="true"></canvas>
+    <span class="edge" id="edge" aria-hidden="true">it went that way →</span>
+    <canvas class="walker" id="walker" width="16" height="23" hidden aria-label="The pet. Click it."></canvas>
+  </div>
+
+  <h1 id="title">This page wandered off.</h1>
+  <p class="lede" id="lede">Nothing lives at <code id="where">this address</code>. All that's left is a trail of paw prints. A pet that leaves always comes back, though, if you call it.</p>
+  <div class="btn-row">
+    <button class="btn big" id="call" type="button"><canvas data-ico="paw"></canvas>Call the pet</button>
+    <a class="btn big ghost" href="./">Front page</a>
+  </div>
+  <p class="hint" id="hint">Or press <kbd>Ctrl</kbd> <kbd>Alt</kbd> <kbd>P</kbd>, the way you would in the app.</p>
+  <noscript><p class="hint">The <a href="./">front page</a> is this way.</p></noscript>
+</main>
+
+<footer class="foot">
+  <span>Roamies</span>
+  <a href="./">Front page</a><a href="info.html">Info</a><a href="status.html">Status</a>
+</footer>
+
+<script>document.write('<script src="' + ROOT + 'js/sprites.js"><\/script><script src="' + ROOT + 'js/pages.js"><\/script>');</script>
+<script>
+// The pet that walked off with the page. Calling it (the button, or the app's own Ctrl+Alt+P) brings it back in
+// from the edge it left by. It never does find the page.
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const field = $('field'), walker = $('walker'), calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const look = { char: 'cat', skin: 'classic', hat: '', face: '' };
+  const draw = (pose) => { const img = sprite(look, pose); walker.width = img.width; walker.height = img.height; const x = walker.getContext('2d'); x.clearRect(0, 0, img.width, img.height); x.drawImage(img, 0, 0); };
+  const where = location.pathname.length > 48 ? location.pathname.slice(0, 46) + '…' : location.pathname;
+  $('where').textContent = where;
+
+  // the trail, one print after another
+  [...document.querySelectorAll('.print')].forEach((p, i) => setTimeout(() => p.classList.add('on'), calm ? 0 : 350 + i * 260));
+
+  let bubble = null, home = false, called = false, x = 0;
+  const place = () => { walker.style.setProperty('--x', x + 'px'); if (bubble) bubble.style.setProperty('--x', x + 'px'); };
+  function say(text, ms) {
+    if (bubble) bubble.remove();
+    bubble = document.createElement('p'); bubble.className = 'bubble'; bubble.textContent = text; bubble.setAttribute('role', 'status');
+    field.append(bubble); place();
+    const mine = bubble; if (ms) setTimeout(() => { if (bubble === mine) { mine.remove(); bubble = null; } }, ms);
+  }
+  function arrived() {
+    home = true; draw('happy');
+    say('you called?', 1700);
+    setTimeout(() => { draw('base'); say("I looked everywhere. that page isn't here."); }, 1900);
+    setTimeout(() => {
+      $('title').textContent = 'Found the pet. Not the page.';
+      $('lede').textContent = 'It checked behind every window. Whatever used to be at this address has moved or never was. The front page is the way home.';
+      const call = $('call'); call.replaceChildren('Take me home'); call.onclick = () => { location.href = './'; };
+      $('hint').textContent = 'Go on, give it a pat for coming back.';
+      $('edge').hidden = true;
+    }, 2100);
+  }
+  function call() {
+    if (called) return; called = true;
+    $('call').disabled = true;
+    const target = () => Math.round(field.clientWidth / 2 - walker.clientWidth / 2);
+    walker.hidden = false; draw('walkA');
+    if (calm) { x = target(); place(); $('call').disabled = false; arrived(); return; }
+    x = field.clientWidth + 12; place();
+    let last = performance.now(), step = 0;
+    const timer = setInterval(() => {
+      const now = performance.now(), dt = Math.min(.1, (now - last) / 1000); last = now;
+      x -= 190 * dt; step += dt;
+      draw(Math.floor(step / .13) % 2 ? 'walkB' : 'walkA');
+      if (x <= target()) { x = target(); clearInterval(timer); $('call').disabled = false; arrived(); }
+      place();
+    }, 33);
+  }
+  $('call').addEventListener('click', call);
+  addEventListener('keydown', (e) => { if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 'p') { e.preventDefault(); call(); } });
+  addEventListener('resize', () => { if (home) { x = Math.round(field.clientWidth / 2 - walker.clientWidth / 2); place(); } });
+
+  // a pat, once it is back
+  const QUIPS = ['aw, thanks', 'not under here either', '404 snacks found', 'the front page has a ball', 'purr'];
+  let pats = 0;
+  walker.addEventListener('click', () => {
+    if (!home) return;
+    draw('happy'); say(QUIPS[pats++ % QUIPS.length], 1500);
+    setTimeout(() => draw('base'), 700);
+  });
+})();
+</script>
+</body>
+</html>

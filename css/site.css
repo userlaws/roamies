@@ -403,6 +403,9 @@ html:not(.js) .town-picks { display: none; }
 .tb-apps a.on::after { width: 28px; }
 .tb-apps .ico { opacity: .6; }
 .tb-apps a.on .ico, .tb-apps a:hover .ico { opacity: 1; }
+/* the one tab that leaves the desktop for another page: set apart by a line */
+.tb-apps a.tb-out { margin-left: 8px; }
+.tb-apps a.tb-out::before { content: ""; position: absolute; left: -5px; top: 16px; bottom: 16px; width: 2px; background: var(--line); }
 .tb-tray { display: flex; align-items: center; gap: 10px; margin-left: auto; padding-top: var(--px); }
 .tb-pill { display: flex; align-items: center; gap: 8px; padding: 5px 11px 6px 9px; background: var(--night); border: 2px solid var(--line); color: var(--sun); text-decoration: none; font-variant-numeric: tabular-nums; }
 .tb-pill:hover { border-color: var(--sun); }

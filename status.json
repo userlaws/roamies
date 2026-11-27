@@ -1,0 +1,24 @@
+{
+  "notice": null,
+  "known": [
+    {
+      "title": "Windows blocks the installer on some PCs",
+      "body": "The installer isn't code-signed, so a new version can be refused, sometimes with a message about permissions. Right-click Roamies-Setup.exe, choose Properties, tick Unblock, press OK, then run it. The Microsoft Store's copy is not affected."
+    },
+    {
+      "title": "Screens with different scaling side by side",
+      "body": "Monitors set to different scaling next to each other, like 100% beside 150%, are not handled yet."
+    },
+    {
+      "title": "The Microsoft Store's copy runs a little behind",
+      "body": "Each version reaches the Store after Microsoft has checked it, which takes from a few hours to a few days."
+    }
+  ],
+  "incidents": [
+    {
+      "when": "21 to 22 October 2026",
+      "title": "The friend server stopped answering",
+      "body": "A problem at its host took it down, so friends, visits and sign-in were out for about a day. It was moved to a new host that evening, and version 1.5.0 points the app there. Pets, saves and coins were not affected: those live on your computer."
+    }
+  ]
+}

@@ -12,7 +12,8 @@ const CONFIG = {
 };
 
 // The sprite sheet holds a few characters the app keeps back: a pack that isn't open yet, and a fox that is only
-// ever handed out. Nobody can get them in the app, so they aren't on this page either.
+// ever handed out. Nobody can get them in the app, so they aren't on this page either. (js/pages.js has the same
+// line for the side pages: change both together.)
 for (const id of Object.keys(CHARS)) if (CHARS[id].season === 'SAO' || id === 'kurama') delete CHARS[id];
 
 const $ = (id) => document.getElementById(id);
@@ -85,6 +86,7 @@ const ICONS = {
   chat: [".oooooo.", "oxxxxxxo", "oxoxoxxo", "oxxxxxxo", ".oooooo.", "..oo....", ".o......", "........"],
   hand: ["...o....", "..ooo...", ".ooooo..", "...o....", "...o....", ".ooooo..", "..ooo...", "...o...."],
   stretch: ["o..oo..o", ".o.oo.o.", "..oooo..", "...oo...", "...oo...", "..o..o..", ".o....o.", ".o....o."],
+  info: ["..oooo..", ".oo..oo.", "oooooooo", "ooo..ooo", "ooo..ooo", "ooo..ooo", ".oooooo.", "..oooo.."],
   tree: ["...oo...", "..oooo..", ".oooooo.", "oooooooo", ".oooooo.", "..oooo..", "...xx...", "...xx..."],
 };
 function paintIcon(c) {
