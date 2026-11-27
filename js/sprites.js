@@ -739,9 +739,9 @@ const AURAS={
   singularity:{name:'Singularity',price:null,rarity:'legendary',unlock:'Own 100 items',glow:['#5b2a86',.55],motes:'swirl',n:12,ink:['#c39bff','#9a6bff','#5b2a86']},
   fireflies:{name:'Fireflies',price:1500,rarity:'rare',glow:['#d8ff7a',.16],motes:'drift',n:6,ink:['#f2ff9a','#c8f56a']},
   snowfall:{name:'Snowfall',price:2000,rarity:'epic',glow:['#c9efff',.24],motes:'fall',n:12,ink:['#ffffff','#dff4ff']},
-  embers:{name:'Embers',price:2500,rarity:'epic',glow:['#ff7a2f',.3],motes:'rise',n:12,ink:['#ffd34d','#ff9a3c','#ff4d2e']},
-  petals:{name:'Petals',price:3000,rarity:'legendary',glow:['#ffb3c7',.24],motes:'petals',n:9,shape:'petal',ink:['#ffb3c7','#ff8fab','#fff0f3']},
-  starlight:{name:'Starlight',price:5000,rarity:'legendary',glow:['#9fd8ff',.45],motes:'orbit',n:4,shape:'star',ink:['#ffffff','#bfe6ff'],twinkle:true},
+  embers:{name:'Embers',price:6000,rarity:'epic',glow:['#ff7a2f',.3],motes:'rise',n:12,ink:['#ffd34d','#ff9a3c','#ff4d2e']},
+  petals:{name:'Petals',price:7500,rarity:'legendary',glow:['#ffb3c7',.24],motes:'petals',n:9,shape:'petal',ink:['#ffb3c7','#ff8fab','#fff0f3']},
+  starlight:{name:'Starlight',price:9000,rarity:'legendary',glow:['#9fd8ff',.45],motes:'orbit',n:4,shape:'star',ink:['#ffffff','#bfe6ff'],twinkle:true},
   // Won in packs (PACKS in game.mjs).
   leaves:{name:'Falling leaves',price:null,rarity:'epic',unlock:'Win it in the Cozy pack',glow:['#ffb25b',.18],motes:'petals',n:8,shape:'petal',ink:['#ff8a3d','#e0a868','#c93a52','#ffd34d']},
   fireworks:{name:'Fireworks',price:null,rarity:'legendary',unlock:'Comes with the Fireworks Night drop',glow:['#ff9a3c',.2],motes:'burst',n:8,ink:['#ffd34d','#ff5d73','#7ec8e3','#8ee6a8']},
@@ -756,18 +756,18 @@ const AURAS={
   northern:{name:'Northern lights',price:null,rarity:'legendary',unlock:'Comes with the Northern Lights drop',glow:['#5dffb0',.22],motes:'aurora',n:31,ink:['#5dffb0','#3fe0c8','#6fa8ff','#b67bff']},
   // Power-ups: flames all round it, as when a fighter in a cartoon powers up. Overcharge is earned (ACHIEVEMENTS in
   // game.mjs: a 60-day streak); the rest are for sale.
-  goldflare:{name:'Golden flare',price:4500,rarity:'legendary',glow:['#ffd84d',.5],motes:'flare',n:18,ink:['#fffbe0','#ffe866','#ffc21a','#ff9d00']},
-  crimson:{name:'Crimson rage',price:3000,rarity:'epic',glow:['#ff3b3b',.42],motes:'flare',n:18,ink:['#ffe0d6','#ff6b5b','#e8202a','#9a0f1c']},
-  spiritfire:{name:'Spirit fire',price:3500,rarity:'epic',glow:['#3aa8ff',.4],motes:'flare',n:18,ink:['#e8fbff','#8fe3ff','#3aa8ff','#2a5cff']},
-  silvercalm:{name:'Silver calm',price:6000,rarity:'legendary',glow:['#cfd8e8',.38],motes:'flare',n:16,calm:true,twinkle:true,ink:['#ffffff','#e6ecf5','#b8c4d6','#8a97b0']},
+  goldflare:{name:'Golden flare',price:8000,rarity:'legendary',glow:['#ffd84d',.5],motes:'flare',n:18,ink:['#fffbe0','#ffe866','#ffc21a','#ff9d00']},
+  crimson:{name:'Crimson rage',price:7000,rarity:'epic',glow:['#ff3b3b',.42],motes:'flare',n:18,ink:['#ffe0d6','#ff6b5b','#e8202a','#9a0f1c']},
+  spiritfire:{name:'Spirit fire',price:7500,rarity:'epic',glow:['#3aa8ff',.4],motes:'flare',n:18,ink:['#e8fbff','#8fe3ff','#3aa8ff','#2a5cff']},
+  silvercalm:{name:'Silver calm',price:9500,rarity:'legendary',glow:['#cfd8e8',.38],motes:'flare',n:16,calm:true,twinkle:true,ink:['#ffffff','#e6ecf5','#b8c4d6','#8a97b0']},
   overcharge:{name:'Overcharge',price:null,rarity:'legendary',unlock:'Reach a 60-day streak',glow:['#ffe066',.55],motes:'flare',n:20,bolts:true,bolt:'#9fe4ff',ink:['#ffffff','#fff07a','#ffd21f','#ffab00']},
   // More for sale, from 1.7.
   lovestruck:{name:'Lovestruck',price:1700,rarity:'rare',glow:['#ff7aa8',.2],motes:'rise',n:6,shape:'heart',ink:['#ff4d7d','#ff8fb0','#ffc2d4']},
   halo:{name:'Halo',price:2200,rarity:'epic',glow:['#fff2b0',.3],motes:'halo',n:18,ink:['#fff6c8','#ffd84d','#ffffff']},
   shadow:{name:'Shadow',price:2400,rarity:'epic',glow:['#7a3fc0',.45],motes:'rise',n:12,shape:'puff',ink:['#5a3388','#8a5cc8','#c49cf0']},
-  static:{name:'Static',price:2700,rarity:'epic',glow:['#6fc8ff',.32],motes:'static',n:5,ink:['#ffffff','#9fe4ff','#5fb0ff']},
-  glitch:{name:'Glitch',price:3200,rarity:'epic',glow:['#ff3df0',.18],motes:'glitch',n:9,ink:['#3dfcff','#ff3df0','#ffffff']},
-  galaxy:{name:'Galaxy',price:5500,rarity:'legendary',glow:['#6a4cff',.42],motes:'galaxy',n:12,ink:['#ffffff','#c9b8ff','#8f7dff','#ff8fd0'],twinkle:true},
+  static:{name:'Static',price:6000,rarity:'epic',glow:['#6fc8ff',.32],motes:'static',n:5,ink:['#ffffff','#9fe4ff','#5fb0ff']},
+  glitch:{name:'Glitch',price:6500,rarity:'epic',glow:['#ff3df0',.18],motes:'glitch',n:9,ink:['#3dfcff','#ff3df0','#ffffff']},
+  galaxy:{name:'Galaxy',price:10000,rarity:'legendary',glow:['#6a4cff',.42],motes:'galaxy',n:12,ink:['#ffffff','#c9b8ff','#8f7dff','#ff8fd0'],twinkle:true},
   // Matched with a Best friend (the Friends page): it can't be bought, and stays yours if the match ends.
   twinstars:{name:'Twin stars',price:null,rarity:'legendary',unlock:'Match auras with a Best friend (the Friends page)',glow:['#ffb3e6',.3],motes:'twin',n:5,paired:true,ink:['#ffd84d','#ff8fd0','#ffffff']},
 };
