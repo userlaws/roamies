@@ -40,6 +40,13 @@ body { background: var(--night); color: var(--moonlit);
 /* two things on this taskbar, so their names always fit */
 .taskbar .tb-apps a span { display: inline; }
 .taskbar .tb-apps a { color: var(--moonlit); }
+/* on a phone the pet button already goes back, so the other four get the room, each as wide as its name */
+@media (max-width: 620px) {
+  .taskbar .tb-apps a[href="./"] { display: none; }
+  .taskbar .tb-apps { overflow-x: auto; }
+  .taskbar .tb-apps a, .taskbar .tb-apps a.tb-out { flex: 1 0 auto; padding: 2px 8px 7px; }
+  .taskbar .tb-apps span { font-size: 13px; white-space: nowrap; }
+}
 @media (max-width: 560px) { .reader { width: 64px; right: 16px; } .fine-desk { padding-top: 48px; } }
 </style>
 </head>
