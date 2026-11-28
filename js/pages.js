@@ -115,6 +115,24 @@ const face = document.getElementById('brandFace'); if (face) paintFace(face);
 if (!calm) setInterval(blink, 3400);
 if (document.querySelector('[data-version]') && !document.body.dataset.noLatest) latest();
 
+// On a phone the installer goes nowhere (Roamies runs on Windows), so its buttons send the site's address on instead.
+if (matchMedia('(max-width: 620px), (hover: none) and (pointer: coarse)').matches) {
+  const url = 'https://userlaws.github.io/roamies/';
+  for (const a of document.querySelectorAll('a[href$="Roamies-Setup.exe"]')) {
+    const label = a.querySelector('span') || [...a.childNodes].reverse().find(n => n.nodeType === 3 && n.textContent.trim());
+    if (!label) continue;
+    const said = label.textContent = a.closest('.top-end') ? 'Send to PC' : 'Send it to my PC';
+    a.addEventListener('click', async (e) => {
+      e.preventDefault();
+      try { if (navigator.share) { await navigator.share({ title: 'Roamies', text: 'Roamies, a pixel pet for my desktop. Open this on the PC:', url }); return; } }
+      catch (err) { if (err && err.name === 'AbortError') return; }
+      let copied = false; try { await navigator.clipboard.writeText(url); copied = true; } catch {}
+      label.textContent = copied ? 'Link copied' : 'Open it on your PC';
+      setTimeout(() => { label.textContent = said; }, 2600);
+    });
+  }
+}
+
 // How many of each thing there is to wear, counted from the sheet.
 const counts = () => ({ characters: Object.keys(CHARS).length, colors: Object.keys(SKINS).length, hats: Object.keys(HATS).length, faces: Object.keys(FACES).length, buddies: Object.keys(BUDDIES).length });
 

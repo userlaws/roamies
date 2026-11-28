@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Roamies: a pet that lives on top of your desktop</title>
 <meta name="description" content="A pixel pet that walks your taskbar, climbs your windows, gets you to stretch when you've been at the screen a while, and can walk off your screen onto a friend's.">
 <meta property="og:title" content="Roamies: a pet that lives on top of your desktop">
@@ -247,7 +247,7 @@
         </div>
       </article>
 
-      <article class="win w-b" data-perch="keys" data-title="keys.txt" style="--bar: var(--sun)">
+      <article class="win w-b pc-only" data-perch="keys" data-title="keys.txt" style="--bar: var(--sun)">
         <header class="win-bar"><canvas class="ico" data-ico="doc"></canvas><b>keys.txt</b></header>
         <div class="win-body">
           <h3 class="win-h">Keys, and the mouse</h3>
@@ -313,7 +313,7 @@
         </div>
       </article>
 
-      <article class="win term w-f" data-perch="graphics" data-title="graphics" style="--bar: var(--sky)">
+      <article class="win term w-f pc-only" data-perch="graphics" data-title="graphics" style="--bar: var(--sky)">
         <header class="win-bar"><canvas class="ico" data-ico="gear"></canvas><b>graphics</b></header>
         <div class="win-body">
           <dl class="readout tall">
@@ -472,7 +472,7 @@
   </section>
 
   <!-- ============ 10:30 PM · wardrobe ============ -->
-  <section class="scene" id="wardrobe" data-hour="22.5">
+  <section class="scene pc-only" id="wardrobe" data-hour="22.5">
     <div class="scene-head">
       <p class="stamp"><canvas class="ico" data-ico="moon"></canvas><time>10:30 PM</time></p>
       <h2 class="sky-type">Any character wears any color, any hat.</h2>
@@ -500,7 +500,7 @@
   </section>
 
   <!-- ============ 11:20 PM · capsules ============ -->
-  <section class="scene" id="capsules" data-hour="23.3">
+  <section class="scene pc-only" id="capsules" data-hour="23.3">
     <div class="scene-head narrow">
       <p class="stamp"><canvas class="ico" data-ico="moon"></canvas><time>11:20 PM</time></p>
       <h2 class="sky-type">A capsule machine with the odds printed on it.</h2>
@@ -609,12 +609,12 @@
   <a class="tb-start" href="#top" data-snd="click" aria-label="Roamies, back to the top"><canvas id="brandFace" width="16" height="14"></canvas><b>Roamies</b></a>
   <div class="tb-apps" id="tbApps">
     <a href="#roam" data-snd="tab"><canvas class="ico" data-ico="win"></canvas><span>Roam</span></a>
-    <a href="#play" data-snd="tab"><canvas class="ico" data-ico="pad"></canvas><span>Play</span></a>
+    <a class="pc-only" href="#play" data-snd="tab"><canvas class="ico" data-ico="pad"></canvas><span>Play</span></a>
     <a href="#town" data-snd="tab"><canvas class="ico" data-ico="tree"></canvas><span>Town</span></a>
-    <a href="#breaks" data-snd="tab"><canvas class="ico" data-ico="stretch"></canvas><span>Breaks</span></a>
+    <a class="pc-only" href="#breaks" data-snd="tab"><canvas class="ico" data-ico="stretch"></canvas><span>Breaks</span></a>
     <a href="#friends" data-snd="tab"><canvas class="ico" data-ico="heart"></canvas><span>Friends</span></a>
-    <a href="#wardrobe" data-snd="tab"><canvas class="ico" data-ico="shirt"></canvas><span>Wardrobe</span></a>
-    <a href="#capsules" data-snd="tab"><canvas class="ico" data-ico="capsule"></canvas><span>Capsules</span></a>
+    <a class="pc-only" href="#wardrobe" data-snd="tab"><canvas class="ico" data-ico="shirt"></canvas><span>Wardrobe</span></a>
+    <a class="pc-only" href="#capsules" data-snd="tab"><canvas class="ico" data-ico="capsule"></canvas><span>Capsules</span></a>
     <a href="photos.html" data-snd="tab"><canvas class="ico" data-ico="photo"></canvas><span>Wall</span></a>
     <a class="tb-out" href="info.html" data-snd="tab" title="Roamies in short, what's new, and status"><canvas class="ico" data-ico="info"></canvas><span>Info</span></a>
   </div>

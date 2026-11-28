@@ -489,16 +489,7 @@ html:not(.js) .town-picks { display: none; }
   :root { --bar-h: 56px; }
   body { font-size: 16px; }
   .caption { font-size: 16px; }
-  .taskbar { padding: 0 4px; gap: 2px; }
-  .tb-start b, .tb-clock, .tb-get { display: none; }
-  .tb-start { padding: 5px 6px 7px; margin: 4px 4px 0 2px; }
-  .tb-apps a { padding: 0 5px 3px; }
-  .tb-apps .ico { width: 18px; height: 18px; }
-  .tb-apps a.on::after { width: 16px; }
-  .tb-tray { gap: 6px; }
-  .tb-pill { padding: 5px 8px 6px 7px; gap: 6px; }
-  .tb-btn { width: 32px; height: 32px; }
-  .tb-btn[aria-pressed="false"]::after { left: 4px; top: 13px; }
+  .scatter { gap: 48px; margin-top: 36px; }
   .scatter > .win:nth-child(even) { margin-left: 8px; }
   .scatter > .win:nth-child(odd) { margin-right: 8px; }
   .voices { grid-template-columns: repeat(4, 1fr); }
@@ -516,6 +507,28 @@ html:not(.js) .town-picks { display: none; }
   .btn.big { font-size: 19px; padding: 11px 16px 13px; }
   .capsule-wrap { padding: 26px 14px 30px; }
   .grid { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); max-height: 440px; }
+}
+/* ---------- phones ----------
+   Roamies is a Windows app, so a phone gets the tour, not the toys: no wardrobe, no capsule machine, no coins,
+   nothing that only means something with a keyboard. Five labelled tabs instead of nine bare icons. */
+@media (max-width: 620px) {
+  .pc-only, .tb-tray { display: none !important; }
+  body { padding-bottom: calc(var(--bar-h) + env(safe-area-inset-bottom, 0px)); }
+  .taskbar { height: calc(var(--bar-h) + env(safe-area-inset-bottom, 0px)); padding: 0 6px env(safe-area-inset-bottom, 0px); gap: 4px; }
+  .tb-start b { display: none; }
+  .tb-start { padding: 5px 7px 7px; margin: 4px 4px 0 0; }
+  .tb-start canvas { width: 28px; height: 24px; }
+  .tb-apps { overflow: visible; }
+  .tb-apps a, .tb-apps a.tb-out { flex: 1 1 0; min-width: 0; flex-direction: column; justify-content: center; gap: 4px; margin: 0; padding: 2px 0 7px; }
+  .tb-apps a.tb-out::before { display: none; }
+  .tb-apps span { display: block; font-size: 12px; line-height: 1; letter-spacing: .02em; }
+  .tb-apps .ico { width: 20px; height: 20px; }
+  .tb-apps a.on::after { width: 20px; bottom: 2px; }
+  #toasts { left: 12px; right: 12px; bottom: calc(var(--bar-h) + env(safe-area-inset-bottom, 0px) + 14px); align-items: center; }
+  /* a long window shows its top and a button for the rest */
+  .win.folded .win-body { max-height: 340px; overflow: hidden; -webkit-mask: linear-gradient(#000 70%, transparent); mask: linear-gradient(#000 70%, transparent); }
+  .unfold { display: block; width: calc(100% - 32px); margin: 0 16px 16px; padding: 8px 12px 10px; border: 0; background: var(--paper-2); color: var(--ink); font: 700 15px var(--f-pixel); box-shadow: var(--edge-1); }
+  .win.term .unfold { background: var(--raised); color: var(--moonlit); }
 }
 @media (pointer: coarse) { .win-bar { touch-action: auto; cursor: default; } }
 /* no mouse to rub with, and windows don't drag under a finger (that's a scroll) */

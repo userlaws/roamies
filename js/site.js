@@ -257,7 +257,7 @@ const Sky = (() => {
 const scenes = [...document.querySelectorAll('.scene')];
 const navLinks = [...document.querySelectorAll('#tbApps a')];
 let stops = [];
-function measure() { stops = scenes.map(s => ({ id: s.id, top: s.offsetTop, y: s.offsetTop + innerHeight * .5, hour: Number(s.dataset.hour) })); }
+function measure() { stops = scenes.filter(s => s.offsetHeight).map(s => ({ id: s.id, top: s.offsetTop, y: s.offsetTop + innerHeight * .5, hour: Number(s.dataset.hour) })); }
 function clockText(h) {
   h %= 24; const hh = Math.floor(h), mm = Math.floor((h - hh) * 60);
   return `${hh % 12 || 12}:${String(mm).padStart(2, '0')} ${hh >= 12 ? 'PM' : 'AM'}`;
@@ -882,6 +882,46 @@ if (CONFIG.windowsUrl) {
     $('download').after(a);
   }
 }
+
+/* ---------- on a phone ---------- */
+// Roamies runs on Windows, so an installer on a phone goes nowhere. The buttons there send the page's
+// address to wherever the visitor reads things on their computer (the share sheet, or the clipboard).
+const phone = matchMedia('(max-width: 620px)');
+const touchOnly = matchMedia('(hover: none) and (pointer: coarse)');
+const onPhone = () => phone.matches || touchOnly.matches;
+const siteUrl = 'https://userlaws.github.io/roamies/';
+async function sendToPc() {
+  const data = { title: 'Roamies', text: 'Roamies, a pixel pet for my desktop. Open this on the PC:', url: siteUrl };
+  try { if (navigator.share) { await navigator.share(data); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
+  try { await navigator.clipboard.writeText(siteUrl); toast('Link copied. Open it on your PC: Roamies is for Windows.'); }
+  catch { toast('Roamies is for Windows. Open userlaws.github.io/roamies on your PC.'); }
+}
+if (CONFIG.windowsUrl && onPhone()) {
+  for (const a of document.querySelectorAll(`a[href="${CONFIG.windowsUrl}"]`)) {
+    const label = a.querySelector('#downloadLabel') || [...a.childNodes].reverse().find(n => n.nodeType === 3 && n.textContent.trim());
+    if (label) label.textContent = 'Send it to my PC';
+    a.addEventListener('click', (e) => { e.preventDefault(); sendToPc(); });
+  }
+  $('downloadNote').prepend(el('b', null, 'Roamies is for Windows PCs.'), ' Send yourself the link and grab it there. ', el('br'));
+}
+// Long windows show their top half on a phone, with a button for the rest.
+function fold() {
+  for (const win of document.querySelectorAll('.win')) {
+    const body = win.querySelector('.win-body'); if (!body || win.dataset.unfolded) continue;
+    const want = phone.matches && body.scrollHeight > 460;
+    win.classList.toggle('folded', want);
+    let btn = win.querySelector(':scope > .unfold');
+    if (want && !btn) {
+      btn = el('button', 'unfold', 'Read the rest'); btn.dataset.snd = 'click';
+      btn.addEventListener('click', () => { win.dataset.unfolded = '1'; win.classList.remove('folded'); btn.remove(); measure(); });
+      body.after(btn);
+    } else if (!want && btn) btn.remove();
+  }
+  measure(); onScroll();
+}
+fold();
+phone.addEventListener('change', fold);
+addEventListener('load', fold);
 
 /* ---------- which version is out ---------- */
 // Every release is tagged v<version> on GitHub, so the page asks there and never needs editing for a release.
